@@ -10,6 +10,7 @@ public class WeaponBase : MonoBehaviour
     protected float shotDamage;             // 탄 데미지
 
     protected int reloadStepNum;            // 장전 단계
+    protected int currentReloadStepNum;     // 현재 장전 단계
 
     protected bool rhythmOK;                // true면 리듬 타이밍O, false면 리듬 타이밍X
 
