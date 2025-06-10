@@ -6,10 +6,13 @@ public class WeaponBase : MonoBehaviour
     protected int maxAmmo;                  // 재장전시 탄환 최대치 / -1 무제한
     protected int shotAmount;               // 발사시 나가는 탄환수
     protected float nextShotTime;           // 다음 발사까지 딜레이시간
-    protected float reloadTime;             // 재장전시간
     protected float shotDamage;             // 탄 데미지
 
+    protected Vector2 shotSpreadMin;        // 탄퍼짐 최솟값
+    protected Vector2 shotSpreadMax;        // 탄퍼짐 최댓값
+
     protected int reloadStepNum;            // 장전 단계
+    protected int currentReloadStepNum;     // 현재 장전 단계
 
     protected bool rhythmOK;                // true면 리듬 타이밍O, false면 리듬 타이밍X
 
