@@ -19,8 +19,8 @@ public class SoundManager : SingletonBehaviour<SoundManager>
     AudioSource bgmAudioSource;
     AudioSource sfxAudioSource;
 
-    public AudioClip[] bgmClip;
-    public AudioClip[] sfxClip;
+    public AudioClip[] bgmClipArray;
+    public AudioClip[] sfxClipArray;
 
 
 
@@ -36,7 +36,7 @@ public class SoundManager : SingletonBehaviour<SoundManager>
 
     public void PlayBGM(BGM _bgm)
     {
-        bgmAudioSource.clip = bgmClip[(int)_bgm];
+        bgmAudioSource.clip = bgmClipArray[(int)_bgm];
         bgmAudioSource.Play();
     }
 
@@ -49,7 +49,7 @@ public class SoundManager : SingletonBehaviour<SoundManager>
 
     public void PlaySFX(SFX _sfx)
     {
-        sfxAudioSource.clip = sfxClip[(int)_sfx];
+        sfxAudioSource.clip = sfxClipArray[(int)_sfx];
         sfxAudioSource.Play();
     }
 }

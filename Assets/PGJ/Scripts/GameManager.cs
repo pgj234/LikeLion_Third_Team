@@ -6,7 +6,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     double currentTime = 0d;
 
     [SerializeField] Transform noteAppear = null;
-    [SerializeField] GameObject NoteObj = null;
+    [SerializeField] GameObject noteObj = null;
 
     protected override void Init()
     {
@@ -21,8 +21,13 @@ public class GameManager : SingletonBehaviour<GameManager>
 
         if (currentTime >= 60d / bpm)
         {
-            GameObject noteObj = Instantiate(NoteObj, noteAppear.position, Quaternion.identity);
+            GameObject obj = Instantiate(noteObj, noteAppear.position, Quaternion.identity);
             currentTime -= 60d / bpm;
         }
+    }
+
+    public bool RhythmCheck()
+    {
+        //return
     }
 }
