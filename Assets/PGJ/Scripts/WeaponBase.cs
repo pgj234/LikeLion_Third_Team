@@ -8,6 +8,9 @@ public class WeaponBase : MonoBehaviour
     protected float nextShotTime;           // 다음 발사까지 딜레이시간
     protected float shotDamage;             // 탄 데미지
 
+    protected Vector2 shotSpreadMin;        // 탄퍼짐 최솟값
+    protected Vector2 shotSpreadMax;        // 탄퍼짐 최댓값
+
     protected int reloadStepNum;            // 장전 단계 (반박자 기준이므로 한박자는 2)
     protected int currentReloadStepNum;     // 현재 장전 단계
 
