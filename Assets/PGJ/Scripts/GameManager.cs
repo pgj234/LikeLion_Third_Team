@@ -28,6 +28,6 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public bool RhythmCheck()
     {
-        //return
+        return true;
     }
 }
