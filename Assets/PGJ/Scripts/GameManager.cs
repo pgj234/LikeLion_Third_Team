@@ -1,18 +1,55 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
-    int bpm = 0;
+    int bpm;
     double currentTime = 0d;
 
-    [SerializeField] Transform noteAppear = null;
-    [SerializeField] GameObject noteObj = null;
+    [SerializeField] Transform leftLineTr = null;
+    [SerializeField] Transform rightLineTr = null;
+
+    [SerializeField] Transform leftNoteAppearTr = null;
+    [SerializeField] Transform rightNoteAppearTr = null;
+
+    [SerializeField] GameObject leftNoteObj = null;
+    [SerializeField] GameObject rightNoteObj = null;
+
+    bool rhythmTiming = false;
+    bool noteDisable = false;       // true : 노트 꺼질 수 있는 상태 (막 누르면 저 멀리 있는 노트도 다 없어지는 현상 방지)
+
+    // 노트 오브젝트 저장소
+    Queue<GameObject> leftNoteObjQueue = new Queue<GameObject>();
+    Queue<GameObject> rightNoteObjQueue = new Queue<GameObject>();
+
+    // 노트 오브젝트 사용중인 큐
+    Queue<GameObject> leftNoteQueue = new Queue<GameObject>();
+    Queue<GameObject> rightNoteQueue = new Queue<GameObject>();
 
     protected override void Init()
     {
         base.Init();
+        bpm = 128;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
+        for (int i=0; i<20; i++)
+        {
+            GameObject noteObj = Instantiate(leftNoteObj, leftNoteAppearTr.position, Quaternion.identity, leftLineTr);
+            noteObj.SetActive(false);
+            leftNoteObjQueue.Enqueue(noteObj);
 
+            noteObj = Instantiate(rightNoteObj, rightNoteAppearTr.position, Quaternion.identity, rightLineTr);
+            noteObj.SetActive(false);
+            rightNoteObjQueue.Enqueue(noteObj);
+        }
+    }
 
+    internal void SetBPM(int _bpm)
+    {
+        bpm = _bpm;
+    }
+
+    internal int GetBPM()
+    {
+        return bpm;
     }
 
     void Update()
@@ -21,13 +58,68 @@ public class GameManager : SingletonBehaviour<GameManager>
 
         if (currentTime >= 60d / bpm)
         {
-            GameObject obj = Instantiate(noteObj, noteAppear.position, Quaternion.identity);
+            NotePull();
+
             currentTime -= 60d / bpm;
         }
     }
 
+    // 막 누르면 저 멀리 있는 노트도 다 없어지는 현상 방지하는 변수 설정 (리듬 타이밍에 가까운 노트만 상호작용 가능하게)
+    internal void SetNoteDisable(bool _isOK)
+    {
+        noteDisable = _isOK;
+    }
+
+    internal bool GetNoteDisable()
+    {
+        return noteDisable;
+    }
+
+    internal void SetRhythmTimimg(bool _timing)
+    {
+        rhythmTiming = _timing;
+    }
+
     public bool RhythmCheck()
     {
-        return true;
+        return rhythmTiming;
     }
+
+
+    #region 노트 풀링
+    internal void NotePull()
+    {
+        GameObject noteObj = leftNoteObjQueue.Dequeue();
+        leftNoteQueue.Enqueue(noteObj);
+        noteObj.transform.position = leftNoteAppearTr.position;
+        noteObj.SetActive(true);
+
+        noteObj = rightNoteObjQueue.Dequeue();
+        rightNoteQueue.Enqueue(noteObj);
+        noteObj.transform.position = rightNoteAppearTr.position;
+        noteObj.SetActive(true);
+    }
+
+    internal void NotePush()
+    {
+        if (false == noteDisable)
+        {
+            return;
+        }
+
+        SetNoteDisable(false);
+
+        GameObject noteObj = leftNoteQueue.Dequeue();
+        leftNoteObjQueue.Enqueue(noteObj);
+        noteObj.SetActive(false);
+        noteObj.transform.position = leftNoteAppearTr.position;
+
+        noteObj = rightNoteQueue.Dequeue();
+        rightNoteObjQueue.Enqueue(noteObj);
+        noteObj.SetActive(false);
+        noteObj.transform.position = rightNoteAppearTr.position;
+
+        SetRhythmTimimg(false);
+    }
+    #endregion
 }
