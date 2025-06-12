@@ -6,6 +6,11 @@ public class PlayerControllerTest_PGJ : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (false == GameManager.Instance.musicStart)
+            {
+                return;
+            }
+
             if (1 == GameManager.Instance.RhythmCheck())
             {
                 Debug.Log("정박 성공!");

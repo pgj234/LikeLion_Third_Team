@@ -18,6 +18,8 @@ public class GameManager : SingletonBehaviour<GameManager>
     [SerializeField] GameObject leftHalfNoteObj = null;
     [SerializeField] GameObject rightHalfNoteObj = null;
 
+    internal bool musicStart = false;
+
     int rhythmTimingNum = 0;        // 0 : 박자 타이밍 X, 1 : 정박 타이밍, 2 : 반박 타이밍
     bool noteDisable = false;       // true : 노트 꺼질 수 있는 상태 (막 누르면 저 멀리 있는 노트도 다 없어지는 현상 방지)
 
@@ -52,6 +54,12 @@ public class GameManager : SingletonBehaviour<GameManager>
                 leftNoteObjQueue.Enqueue(noteObj);
 
                 noteObj = Instantiate(rightNoteObj, rightNoteAppearTr.position, Quaternion.identity, rightLineTr);
+
+                if (0 == i)     // 가장 처음 정박은 오프셋 노트 활성화 (RightArrow 껄로)
+                {
+                    noteObj.transform.Find("OffsetTimingNote").gameObject.SetActive(true);
+                }
+
                 noteObj.SetActive(false);
                 rightNoteObjQueue.Enqueue(noteObj);
             }
