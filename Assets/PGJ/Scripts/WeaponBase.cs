@@ -16,10 +16,10 @@ public class WeaponBase : MonoBehaviour
 
     protected bool rhythmOK;                // true면 리듬 타이밍O, false면 리듬 타이밍X
 
-    protected virtual void Update()
-    {
-        rhythmOK = GameManager.Instance.RhythmCheck();
-    }
+    //protected virtual void Update()
+    //{
+    //    rhythmOK = GameManager.Instance.RhythmCheck();
+    //}
 
     protected virtual void Shoot()         // 발사 메서드
     {
