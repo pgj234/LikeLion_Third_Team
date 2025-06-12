@@ -1,8 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using TreeEditor;
 using UnityEngine;
+
+enum PlayType
+{
+    Loading,
+    Playing,
+    Pause,
+    End
+}
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
+    int score;
+    int combo;
+
     int bpm;
     double currentTime = 0d;
 
@@ -66,6 +80,11 @@ public class GameManager : SingletonBehaviour<GameManager>
         }
     }
 
+    //void Start()
+    //{
+    //setting   // fps 고정
+    //}
+
     internal void SetBPM(int _bpm)
     {
         bpm = _bpm;
@@ -109,6 +128,10 @@ public class GameManager : SingletonBehaviour<GameManager>
         return rhythmTimingNum;
     }
 
+    internal void PauseOnAndOff()
+    {
+    
+    }
 
     #region 노트 풀링
     internal void NotePull()
