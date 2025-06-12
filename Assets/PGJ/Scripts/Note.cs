@@ -4,7 +4,7 @@ public class Note : MonoBehaviour
 {
     float noteSpd;
 
-    [SerializeField] bool isLeftArrow = true;
+    [SerializeField] bool isLeftNote = true;
 
     void OnEnable()
     {
@@ -13,7 +13,7 @@ public class Note : MonoBehaviour
 
     void Update()
     {
-        if (true == isLeftArrow)
+        if (true == isLeftNote)
         {
             transform.Translate(Vector3.right * noteSpd * Time.deltaTime);
 

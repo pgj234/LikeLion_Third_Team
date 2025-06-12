@@ -15,15 +15,21 @@ public class NoteManager : MonoBehaviour
                 musicStart = true;
             }
 
-            GameManager.Instance.SetRhythmTimimg(true);
+            GameManager.Instance.SetRhythmTimimg(1);
+        }
+        else if (col.CompareTag("HalfNote"))
+        {
+            GameManager.Instance.SetRhythmTimimg(2);
         }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Note"))
+        if (col.CompareTag("Note") || col.CompareTag("HalfNote"))
         {
             GameManager.Instance.NotePush();
+
+            Debug.Log("놓침...");
         }
     }
 }

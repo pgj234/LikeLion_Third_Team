@@ -1626,6 +1626,8 @@ MonoBehaviour:
   rightNoteAppearTr: {fileID: 556295539}
   leftNoteObj: {fileID: 724622738014441184, guid: 16a4d6a3ae4e49841ba98b7ef1f969ee, type: 3}
   rightNoteObj: {fileID: 3411066341351241159, guid: 0557a9641b98d4b4b8411a861e06e33e, type: 3}
+  leftHalfNoteObj: {fileID: 724622738014441184, guid: 86836df9c48f8b0448397dff1de7a71b, type: 3}
+  rightHalfNoteObj: {fileID: 3411066341351241159, guid: d5184b9d8af51de48b49e315f2d605f8, type: 3}
 --- !u!1 &3814342646281557071
 GameObject:
   m_ObjectHideFlags: 0
