@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: eb8627752d984a349952e26a6d73aa42
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 197436
+  packageName: Sniper Set
+  packageVersion: 1.0.0
+  assetPath: Assets/Sniper Kit/Animations/BarrettM82/BarrettM82.controller
+  uploadId: 438750
