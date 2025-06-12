@@ -14,12 +14,12 @@ public class WeaponBase : MonoBehaviour
     protected int reloadStepNum;            // 장전 단계
     protected int currentReloadStepNum;     // 현재 장전 단계
 
-    protected bool rhythmOK;                // true면 리듬 타이밍O, false면 리듬 타이밍X
+    protected int rhythmTimingNum;          // 0 : 박자 타이밍 X, 1 : 정박 타이밍, 2 : 반박 타이밍
 
-    //protected virtual void Update()
-    //{
-    //    rhythmOK = GameManager.Instance.RhythmCheck();
-    //}
+    protected virtual void Update()
+    {
+        rhythmTimingNum = GameManager.Instance.RhythmCheck();
+    }
 
     protected virtual void Shoot()         // 발사 메서드
     {

@@ -2,28 +2,38 @@
 
 public class NoteManager : MonoBehaviour
 {
-    bool musicStart = false;
-
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Note"))
+        if (col.CompareTag("OffsetTimingNote"))
         {
-            if (false == musicStart)
+            if (false == GameManager.Instance.musicStart)
             {
                 SoundManager.Instance.StopBGM();
                 SoundManager.Instance.PlayBGM(BGM.Test_Bgm);
-                musicStart = true;
-            }
+                GameManager.Instance.musicStart = true;
 
-            GameManager.Instance.SetRhythmTimimg(true);
+                col.gameObject.SetActive(false);
+
+            }
+        }
+
+        if (col.CompareTag("Note"))
+        {
+            GameManager.Instance.SetRhythmTimimg(1);
+        }
+        else if (col.CompareTag("HalfNote"))
+        {
+            GameManager.Instance.SetRhythmTimimg(2);
         }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Note"))
+        if (col.CompareTag("Note") || col.CompareTag("HalfNote"))
         {
             GameManager.Instance.NotePush();
+
+            Debug.Log("놓침...");
         }
     }
 }

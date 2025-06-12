@@ -6,18 +6,25 @@ public class PlayerControllerTest_PGJ : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (true == GameManager.Instance.RhythmCheck())
+            if (false == GameManager.Instance.musicStart)
             {
-                Debug.Log("리듬 성공!");
+                return;
+            }
 
-                GameManager.Instance.NotePush();
+            if (1 == GameManager.Instance.RhythmCheck())
+            {
+                Debug.Log("정박 성공!");
+            }
+            else if (2 == GameManager.Instance.RhythmCheck())
+            {
+                Debug.Log("반박 성공!");
             }
             else
             {
-                Debug.Log("앗...");
-
-                GameManager.Instance.NotePush();
+                Debug.Log("박자 타이밍 실패...");
             }
+
+            GameManager.Instance.NotePush();
         }
     }
 }

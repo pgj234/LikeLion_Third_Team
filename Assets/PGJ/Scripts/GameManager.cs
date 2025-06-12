@@ -15,7 +15,12 @@ public class GameManager : SingletonBehaviour<GameManager>
     [SerializeField] GameObject leftNoteObj = null;
     [SerializeField] GameObject rightNoteObj = null;
 
-    bool rhythmTiming = false;
+    [SerializeField] GameObject leftHalfNoteObj = null;
+    [SerializeField] GameObject rightHalfNoteObj = null;
+
+    internal bool musicStart = false;
+
+    int rhythmTimingNum = 0;        // 0 : 박자 타이밍 X, 1 : 정박 타이밍, 2 : 반박 타이밍
     bool noteDisable = false;       // true : 노트 꺼질 수 있는 상태 (막 누르면 저 멀리 있는 노트도 다 없어지는 현상 방지)
 
     // 노트 오브젝트 저장소
@@ -30,15 +35,34 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         base.Init();
         bpm = 128;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
-        for (int i=0; i<20; i++)
+        for (int i=0; i<40; i++)
         {
-            GameObject noteObj = Instantiate(leftNoteObj, leftNoteAppearTr.position, Quaternion.identity, leftLineTr);
-            noteObj.SetActive(false);
-            leftNoteObjQueue.Enqueue(noteObj);
+            if (1 == i % 2)     // 반박 생성
+            {
+                GameObject noteObj = Instantiate(leftHalfNoteObj, leftNoteAppearTr.position, Quaternion.identity, leftLineTr);
+                noteObj.SetActive(false);
+                leftNoteObjQueue.Enqueue(noteObj);
 
-            noteObj = Instantiate(rightNoteObj, rightNoteAppearTr.position, Quaternion.identity, rightLineTr);
-            noteObj.SetActive(false);
-            rightNoteObjQueue.Enqueue(noteObj);
+                noteObj = Instantiate(rightHalfNoteObj, rightNoteAppearTr.position, Quaternion.identity, rightLineTr);
+                noteObj.SetActive(false);
+                rightNoteObjQueue.Enqueue(noteObj);
+            }
+            else                // 정박 생성
+            {
+                GameObject noteObj = Instantiate(leftNoteObj, leftNoteAppearTr.position, Quaternion.identity, leftLineTr);
+                noteObj.SetActive(false);
+                leftNoteObjQueue.Enqueue(noteObj);
+
+                noteObj = Instantiate(rightNoteObj, rightNoteAppearTr.position, Quaternion.identity, rightLineTr);
+
+                if (0 == i)     // 가장 처음 정박은 오프셋 노트 활성화 (RightArrow 껄로)
+                {
+                    noteObj.transform.Find("OffsetTimingNote").gameObject.SetActive(true);
+                }
+
+                noteObj.SetActive(false);
+                rightNoteObjQueue.Enqueue(noteObj);
+            }
         }
     }
 
@@ -56,11 +80,11 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         currentTime += Time.deltaTime;
 
-        if (currentTime >= 60d / bpm)
+        if (currentTime >= 30d / bpm)
         {
             NotePull();
 
-            currentTime -= 60d / bpm;
+            currentTime -= 30d / bpm;
         }
     }
 
@@ -75,14 +99,14 @@ public class GameManager : SingletonBehaviour<GameManager>
         return noteDisable;
     }
 
-    internal void SetRhythmTimimg(bool _timing)
+    internal void SetRhythmTimimg(int _timingNum)
     {
-        rhythmTiming = _timing;
+        rhythmTimingNum = _timingNum;
     }
 
-    public bool RhythmCheck()
+    public int RhythmCheck()
     {
-        return rhythmTiming;
+        return rhythmTimingNum;
     }
 
 
@@ -119,7 +143,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         noteObj.SetActive(false);
         noteObj.transform.position = rightNoteAppearTr.position;
 
-        SetRhythmTimimg(false);
+        SetRhythmTimimg(0);
     }
     #endregion
 }
