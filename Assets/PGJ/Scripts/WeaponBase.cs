@@ -11,7 +11,7 @@ public class WeaponBase : MonoBehaviour
     protected Vector2 shotSpreadMin;        // 탄퍼짐 최솟값
     protected Vector2 shotSpreadMax;        // 탄퍼짐 최댓값
 
-    protected int reloadStepNum;            // 장전 단계 (반박자 기준이므로 한박자는 2)
+    protected int reloadStepNum;            // 장전 단계
     protected int currentReloadStepNum;     // 현재 장전 단계
 
     protected bool rhythmOK;                // true면 리듬 타이밍O, false면 리듬 타이밍X

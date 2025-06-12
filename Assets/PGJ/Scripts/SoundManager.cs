@@ -3,7 +3,7 @@
 // BGM 목록 enum
 public enum BGM
 {
-    Bgm,
+    Test_Bgm,
 
 }
 
@@ -37,6 +37,7 @@ public class SoundManager : SingletonBehaviour<SoundManager>
     public void PlayBGM(BGM _bgm)
     {
         bgmAudioSource.clip = bgmClipArray[(int)_bgm];
+        bgmAudioSource.loop = true;
         bgmAudioSource.Play();
     }
 
@@ -49,7 +50,6 @@ public class SoundManager : SingletonBehaviour<SoundManager>
 
     public void PlaySFX(SFX _sfx)
     {
-        sfxAudioSource.clip = sfxClipArray[(int)_sfx];
-        sfxAudioSource.Play();
+        sfxAudioSource.PlayOneShot(sfxClipArray[(int)_sfx]);
     }
 }
