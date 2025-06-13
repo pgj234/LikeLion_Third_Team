@@ -1144,7 +1144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6102601771936745073, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.5065818
       objectReference: {fileID: 0}
     - target: {fileID: 6102601771936745073, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1152,7 +1152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6102601771936745073, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.8083868
       objectReference: {fileID: 0}
     - target: {fileID: 6102601771936745073, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1187,8 +1187,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6756814478373042792, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
+      propertyPath: maxAmmo
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6756814478373042792, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
       propertyPath: bulletSpeed
-      value: 1000
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6756814478373042792, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
       propertyPath: bulletPrefab
@@ -1213,6 +1217,18 @@ PrefabInstance:
     - target: {fileID: 8942775763467897097, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8958474387578222181, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8958474387578222181, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8958474387578222181, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 9000379548949523653, guid: 97b766b5b24196f43b86523cd0b0b973, type: 3}
       propertyPath: m_IsActive
