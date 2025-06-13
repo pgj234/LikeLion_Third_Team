@@ -26,14 +26,4 @@ public class NoteManager : MonoBehaviour
             GameManager.Instance.SetRhythmTimimg(2);
         }
     }
-
-    private void OnTriggerExit2D(Collider2D col)
-    {
-        if (col.CompareTag("Note") || col.CompareTag("HalfNote"))
-        {
-            GameManager.Instance.NotePush();
-
-            Debug.Log("놓침...");
-        }
-    }
 }

@@ -6,7 +6,7 @@ public class PlayerControllerTest_PGJ : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (false == GameManager.Instance.musicStart)
+            if (false == GameManager.Instance.musicStart || false == GameManager.Instance.GetNoteDisable())
             {
                 return;
             }
@@ -22,6 +22,7 @@ public class PlayerControllerTest_PGJ : MonoBehaviour
             else
             {
                 Debug.Log("박자 타이밍 실패...");
+                SoundManager.Instance.PlaySFX(SFX.RhythmFail);
             }
 
             GameManager.Instance.NotePush();

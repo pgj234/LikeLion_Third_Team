@@ -10,8 +10,7 @@ public enum BGM
 // SFX 목록 enum
 public enum SFX
 {
-    EscapeComplete,
-
+    RhythmFail,
 }
 
 public class SoundManager : SingletonBehaviour<SoundManager>

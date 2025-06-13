@@ -24,12 +24,10 @@ public class Note : MonoBehaviour
                     GameManager.Instance.SetNoteDisable(true);
                 }
             }
-            //transform.localPosition += Vector3.right * noteSpd * Time.deltaTime;
         }
         else
         {
             transform.Translate(-Vector3.right * noteSpd * Time.deltaTime);
-            //transform.localPosition -= Vector3.right * noteSpd * Time.deltaTime;
         }
     }
 }
