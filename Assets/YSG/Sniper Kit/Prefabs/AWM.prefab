@@ -859,19 +859,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a43793d3cf13a74884314ce61cc4251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nowAmmo: 5
-  maxAmmo: 15
-  shotAmount: 1
-  nextShotTime: 0
-  shotDamage: 0
-  shotSpreadMin: {x: 0, y: 0}
-  shotSpreadMax: {x: 0, y: 0}
-  reloadStepNum: 0
-  currentReloadStepNum: 0
-  rhythmTimingNum: 0
   bulletPrefab: {fileID: 3579277897161260478, guid: b0dd6915c5e03bb4cb1fce332b5e9a24, type: 3}
-  bulletScale: {x: 1, y: 1, z: 1}
-  bulletSpeed: {x: 1, y: 1, z: 1}
+  bulletSpeed: 1
   shootPoint: {fileID: 8958474387578222181}
 --- !u!1 &5261050563392001465
 GameObject:
@@ -1156,13 +1145,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5765151837281178089}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 10.3, z: -16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6102601771936745073}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &6319576918587957281
 GameObject:
   m_ObjectHideFlags: 0

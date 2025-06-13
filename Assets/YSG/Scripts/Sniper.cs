@@ -45,9 +45,6 @@ public class Sniper : WeaponBase
 
         nowAmmo -= shotAmount;
 
-        GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
-        bullet.GetComponent<Rigidbody>().AddForce(transform.forward * bulletSpeed);
-
         anim.SetTrigger("Shoot");
     }
 
@@ -62,6 +59,5 @@ public class Sniper : WeaponBase
 
     private void Zoom()
     {
-        Debug.Log("줌 상태입니다.");
     }
 }
