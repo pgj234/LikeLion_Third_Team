@@ -25,6 +25,7 @@ public class Weapon_ShotGun : WeaponBase
         {
             Vector3 dir = GetSpreadDirection();
             GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, new Quaternion(dir.x, dir.y, dir.z, transform.rotation.w));
+            bullet.transform.localScale = bulletScale; // 크기 설정
             bullet.GetComponent<Rigidbody>().AddForce(bulletSpeed); // 힘을 부여
         }
         
