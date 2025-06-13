@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using TreeEditor;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 enum PlayType
@@ -15,6 +12,8 @@ enum PlayType
 public class GameManager : SingletonBehaviour<GameManager>
 {
     int score;
+
+    const int maxCombo = 16;
     int combo;
 
     int bpm;
@@ -49,7 +48,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         base.Init();
         bpm = 128;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
-        for (int i=0; i<40; i++)
+        for (int i=0; i<20; i++)
         {
             if (1 == i % 2)     // 반박 생성
             {
@@ -80,10 +79,12 @@ public class GameManager : SingletonBehaviour<GameManager>
         }
     }
 
-    //void Start()
-    //{
-    //setting   // fps 고정
-    //}
+    void Start()
+    {
+        EventManager.Instance.OnPlayerComboAction += AddCombo;
+
+        //setting   // fps 고정
+    }
 
     internal void SetBPM(int _bpm)
     {
@@ -105,6 +106,13 @@ public class GameManager : SingletonBehaviour<GameManager>
 
             currentTime -= 30d / bpm;
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        EventManager.Instance.OnPlayerComboAction -= AddCombo;
     }
 
     // 막 누르면 저 멀리 있는 노트도 다 없어지는 현상 방지하는 변수 설정 (리듬 타이밍에 가까운 노트만 상호작용 가능하게)
@@ -131,6 +139,33 @@ public class GameManager : SingletonBehaviour<GameManager>
     internal void PauseOnAndOff()
     {
     
+    }
+
+    // 콤보 추가
+    internal void AddCombo()
+    {
+        if (combo < maxCombo)
+        {
+            combo++;
+        }
+        Debug.Log(combo);
+        EventManager.Instance.PlayerComboEvent();
+    }
+
+    // 콤보 반토막
+    internal void SetHalfCombo()
+    {
+        if (combo > 0)
+        {
+            combo /= 2;
+        }
+
+        EventManager.Instance.PlayerComboEvent();
+    }
+
+    internal int GetCombo()
+    {
+        return combo;
     }
 
     #region 노트 풀링

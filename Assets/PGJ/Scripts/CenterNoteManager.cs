@@ -7,8 +7,6 @@ public class CenterNoteManager : MonoBehaviour
         if (col.CompareTag("Note") || col.CompareTag("HalfNote"))
         {
             GameManager.Instance.NotePush();
-
-            Debug.Log("놓침...");
         }
     }
 }
