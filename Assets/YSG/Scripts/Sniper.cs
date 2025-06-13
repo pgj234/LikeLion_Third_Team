@@ -15,7 +15,7 @@ public class Sniper : WeaponBase
 
     protected override void Update()
     {
-        base.Update();
+        //base.Update();
 
         if (Input.GetKey(KeyCode.Mouse1)) // 우클릭 입력 중
         {
@@ -37,11 +37,11 @@ public class Sniper : WeaponBase
     {
         base.Shoot();
 
-        if (nowAmmo <= 0)
-        {
-            Reload();
-            return;
-        }
+        //if (nowAmmo <= 0)
+        //{
+        //    Reload();
+        //    return;
+        //}
 
         nowAmmo -= shotAmount;
 
