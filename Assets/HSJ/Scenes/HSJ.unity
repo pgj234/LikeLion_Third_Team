@@ -486,6 +486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aed9c0ba9066f341b3cc8ecfbd78faa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteAppear: {fileID: 0}
+  NoteObj: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
