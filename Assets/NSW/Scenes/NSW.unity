@@ -805,6 +805,8 @@ MonoBehaviour:
   rightNoteAppearTr: {fileID: 0}
   leftNoteObj: {fileID: 0}
   rightNoteObj: {fileID: 0}
+  leftHalfNoteObj: {fileID: 0}
+  rightHalfNoteObj: {fileID: 0}
 --- !u!1 &8787919216618339550
 GameObject:
   m_ObjectHideFlags: 0
