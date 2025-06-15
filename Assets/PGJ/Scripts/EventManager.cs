@@ -3,11 +3,17 @@ using UnityEngine;
 
 public class EventManager : SingletonBehaviour<EventManager>
 {
-    // 플레이어 데미지 이벤트
-    public event Action<int> OnPlayerDamageAction;
+    // 플레이어
+    // 데미지 이벤트
+    public Action<int> OnPlayerDamageAction;
 
-    // 플레이어 부활 이벤트
-    public event Action OnPlayerRevivalAction;
+    // 부활 이벤트
+    public Action OnPlayerRevivalAction;
+
+    // 콤보 증가
+    public Action OnPlayerAddComboAction;
+    // 콤보 감소
+    public Action OnPlayerReduceComboAction;
 
     protected override void Init()
     {
@@ -24,5 +30,17 @@ public class EventManager : SingletonBehaviour<EventManager>
     public void PlayerRevivalEvent()
     {
         OnPlayerRevivalAction?.Invoke();
+    }
+
+    // 플레이어 콤보 증가 이벤트 실행 메서드
+    public void PlayerAddComboEvent()
+    {
+        OnPlayerAddComboAction?.Invoke();
+    }
+
+    // 플레이어 콤보 증가 이벤트 실행 메서드
+    public void PlayerReduceComboEvent()
+    {
+        OnPlayerReduceComboAction?.Invoke();
     }
 }
