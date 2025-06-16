@@ -1,16 +1,18 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Weapon_ShotGun : WeaponBase
 {
-    GameManager gameManager = null; // 게임 매니저 인스턴스
-    [SerializeField] GameObject bulletPrefab = null;
+    GameManager gameManager; // 게임 매니저 인스턴스
+    [SerializeField] GameObject bulletPrefab;
     [SerializeField] Vector3 bulletScale = Vector3.one;
     [SerializeField] float bulletSpeed = 1f;
-    [SerializeField] Transform shootPoint = null;
-    Animator animator = null; // 애니메이터 컴포넌트
+    [SerializeField] Transform shootPoint;
+    Animator animator; // 애니메이터 컴포넌트
     [SerializeField] float shotSpread;
+    [SerializeField] List<AudioClip> gunSound = new();
 
     private void Start()
     {
