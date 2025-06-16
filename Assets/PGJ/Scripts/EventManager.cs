@@ -10,8 +10,10 @@ public class EventManager : SingletonBehaviour<EventManager>
     // 부활 이벤트
     public Action OnPlayerRevivalAction;
 
-    // 콤보 증감
-    public Action OnPlayerComboAction;
+    // 콤보 증가
+    public Action OnPlayerAddComboAction;
+    // 콤보 감소
+    public Action OnPlayerReduceComboAction;
 
     protected override void Init()
     {
@@ -30,8 +32,15 @@ public class EventManager : SingletonBehaviour<EventManager>
         OnPlayerRevivalAction?.Invoke();
     }
 
-    public void PlayerComboEvent()
+    // 플레이어 콤보 증가 이벤트 실행 메서드
+    public void PlayerAddComboEvent()
     {
-        OnPlayerComboAction?.Invoke();
+        OnPlayerAddComboAction?.Invoke();
+    }
+
+    // 플레이어 콤보 증가 이벤트 실행 메서드
+    public void PlayerReduceComboEvent()
+    {
+        OnPlayerReduceComboAction?.Invoke();
     }
 }
