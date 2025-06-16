@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Sword weapon script that handles swinging, reloading, and multiple sparkle effects.
+/// Overrides Update to guard against missing GameManager.
 /// </summary>
 public class Sword : WeaponBase
 {
@@ -20,16 +21,17 @@ public class Sword : WeaponBase
     [Tooltip("Particle System Prefabs for sparkle effect")]
     [SerializeField] protected List<ParticleSystem> sparklePrefabs;
     private List<ParticleSystem> sparkleInstances = new List<ParticleSystem>();
-    [SerializeField] protected int sparkleCount = 30; // Emit 개수 per system
+    [SerializeField] protected int sparkleCount = 30; // 한 번에 방출할 파티클 수
 
     [Header("References")]
     [SerializeField] protected Animator swordAnimator;
 
     private bool isReloading = false;
 
-    // 외부에서 사용할 수 있는 프로퍼티
+    // 외부에서 참조할 수 있는 리로드·스파클 지속 시간 프로퍼티
     public float ReloadRaiseDuration => reloadRaiseDuration;
     public float SparkleDuration => sparkleDuration;
+    public float ReloadLowerDuration => reloadLowerDuration;
 
     private void Awake()
     {
@@ -52,6 +54,18 @@ public class Sword : WeaponBase
                     sparkleInstances.Add(inst);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Override Update to prevent NullReference when GameManager is missing
+    /// </summary>
+    protected override void Update()
+    {
+        // Only call base.Update (rhythmTimingNum) if GameManager exists
+        if (GameManager.Instance != null)
+        {
+            base.Update();
         }
     }
 
@@ -115,13 +129,11 @@ public class Sword : WeaponBase
     /// <summary> 한 번만 Sparkle 효과 재생 (Draw 시 호출) </summary>
     public void PlaySparkleOnce()
     {
-        // Play() 를 사용하여 Burst 모듈 설정대로 방출
         foreach (var inst in sparkleInstances)
         {
             inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             inst.Play();
         }
-        // sparkleDuration 후 정리
         Invoke(nameof(StopSparkle), sparkleDuration);
     }
 
