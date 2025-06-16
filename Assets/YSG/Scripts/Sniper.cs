@@ -4,9 +4,7 @@ public class Sniper : WeaponBase
 {
     private Animator anim;
 
-    [SerializeField] GameObject bulletPrefab = null;
-    [SerializeField] float bulletSpeed;
-    [SerializeField] Transform shootPoint = null;
+    [SerializeField] private int reload = 0;
 
     private void Awake()
     {
@@ -54,10 +52,16 @@ public class Sniper : WeaponBase
 
         nowAmmo = maxAmmo;
 
-        anim.SetTrigger("Reload");
+        anim.SetInteger("Reload", reload++);
     }
 
     private void Zoom()
     {
+    }
+
+    private void ResetReload()
+    {
+        reload = 0;
+        anim.SetInteger("Reload", reload);
     }
 }
