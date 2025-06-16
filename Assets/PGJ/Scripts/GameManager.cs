@@ -77,14 +77,15 @@ public class GameManager : SingletonBehaviour<GameManager>
                 rightNoteObjQueue.Enqueue(noteObj);
             }
         }
+
+        EventManager.Instance.OnPlayerAddComboAction += AddCombo;
+        EventManager.Instance.OnPlayerReduceComboAction += SetHalfCombo;
     }
 
-    void Start()
-    {
-        EventManager.Instance.OnPlayerComboAction += AddCombo;
-
-        //setting   // fps 고정
-    }
+    //void Start()
+    //{
+    //    setting   // fps 고정
+    //}
 
     internal void SetBPM(int _bpm)
     {
@@ -112,7 +113,8 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         base.OnDestroy();
 
-        EventManager.Instance.OnPlayerComboAction -= AddCombo;
+        EventManager.Instance.OnPlayerAddComboAction -= AddCombo;
+        EventManager.Instance.OnPlayerReduceComboAction -= SetHalfCombo;
     }
 
     // 막 누르면 저 멀리 있는 노트도 다 없어지는 현상 방지하는 변수 설정 (리듬 타이밍에 가까운 노트만 상호작용 가능하게)
@@ -142,25 +144,23 @@ public class GameManager : SingletonBehaviour<GameManager>
     }
 
     // 콤보 추가
-    internal void AddCombo()
+    void AddCombo()
     {
         if (combo < maxCombo)
         {
             combo++;
         }
-        Debug.Log(combo);
-        EventManager.Instance.PlayerComboEvent();
+        Debug.Log("콤보 : " + combo);
     }
 
     // 콤보 반토막
-    internal void SetHalfCombo()
+    void SetHalfCombo()
     {
         if (combo > 0)
         {
             combo /= 2;
         }
-
-        EventManager.Instance.PlayerComboEvent();
+        Debug.Log("콤보 : " + combo);
     }
 
     internal int GetCombo()
