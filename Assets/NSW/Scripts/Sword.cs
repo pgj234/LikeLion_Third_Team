@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Sword weapon script that handles swinging, reloading, and multiple sparkle effects.
-/// Overrides Update to guard against missing GameManager.
+/// Sword weapon script that handles swinging, reloading, sparkle effects, hit detection,
+/// and rhythm-based draw phases. Press R to reload and replay sparkle.
 /// </summary>
 public class Sword : WeaponBase
 {
@@ -12,36 +12,40 @@ public class Sword : WeaponBase
     [SerializeField] protected int initialDurability = 100;
     [SerializeField] protected int durabilityPerSwing = 1;
     [SerializeField] protected float swingCooldown = 0.5f;
-    [SerializeField] protected float reloadRaiseDuration = 0.5f; // 검 들어올리는 애니메이션 길이
-    [SerializeField] protected float sparkleDuration = 0.3f; // 파티클 유지 시간
-    [SerializeField] protected float reloadLowerDuration = 0.5f; // 검 내리는 애니메이션 길이
+    [SerializeField] protected float reloadRaiseDuration = 0.5f;
+    [SerializeField] protected float sparkleDuration = 0.3f;
+    [SerializeField] protected float reloadLowerDuration = 0.5f;
     [SerializeField] protected int reloadShot = 100;
 
     [Header("Particle Settings")]
     [Tooltip("Particle System Prefabs for sparkle effect")]
     [SerializeField] protected List<ParticleSystem> sparklePrefabs;
     private List<ParticleSystem> sparkleInstances = new List<ParticleSystem>();
-    [SerializeField] protected int sparkleCount = 30; // 한 번에 방출할 파티클 수
+    [SerializeField] protected int sparkleCount = 30;
+
+    [Header("Hit Detection")]
+    [SerializeField] protected float hitRange = 5f;
+    [SerializeField] protected LayerMask targetLayer;
 
     [Header("References")]
     [SerializeField] protected Animator swordAnimator;
 
     private bool isReloading = false;
 
-    // 외부에서 참조할 수 있는 리로드·스파클 지속 시간 프로퍼티
+    // Public durations for external use
     public float ReloadRaiseDuration => reloadRaiseDuration;
     public float SparkleDuration => sparkleDuration;
     public float ReloadLowerDuration => reloadLowerDuration;
 
     private void Awake()
     {
-        // WeaponBase 초기화
+        // Initialize WeaponBase fields
         maxAmmo = initialDurability;
         nowAmmo = initialDurability;
         shotAmount = durabilityPerSwing;
         nextShotTime = 0f;
 
-        // Sparkle Prefabs 인스턴스화하여 자식으로 붙이고 초기화
+        // Instantiate sparkle systems as children and stop them
         sparkleInstances.Clear();
         if (sparklePrefabs != null)
         {
@@ -57,19 +61,23 @@ public class Sword : WeaponBase
         }
     }
 
-    /// <summary>
-    /// Override Update to prevent NullReference when GameManager is missing
-    /// </summary>
     protected override void Update()
     {
-        // Only call base.Update (rhythmTimingNum) if GameManager exists
+        // Rhythm timing update
         if (GameManager.Instance != null)
-        {
             base.Update();
+
+        // Reload on R key press
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            // Trigger reload routine
+            Reload();
         }
     }
 
-    /// <summary> 칼 휘두르기 (내구도 차감 + 애니) </summary>
+    /// <summary>
+    /// Swing action: deduct ammo, play animation, sparkle, and detect hits.
+    /// </summary>
     public void Swing()
     {
         if (isReloading || Time.time < nextShotTime || nowAmmo < shotAmount)
@@ -77,14 +85,25 @@ public class Sword : WeaponBase
 
         nowAmmo -= shotAmount;
         nextShotTime = Time.time + swingCooldown;
+
         swordAnimator?.SetTrigger("Swing");
-        Debug.Log($"Swing! Durability: {nowAmmo}");
+        PlaySparkleOnce();
+
+        var cam = Camera.main;
+        if (cam != null && Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, hitRange, targetLayer))
+        {
+            Debug.Log($"Hit target: {hit.collider.name} at {hit.point}");
+            if (hit.collider.GetComponent<IDamageable>() is IDamageable dmg)
+                dmg.TakeDamage(shotDamage);
+        }
+        else
+        {
+            Debug.Log("Swing missed");
+        }
     }
 
-    /// <summary> WeaponBase.Shoot() 호출 시 Swing 실행 </summary>
     protected override void Shoot() => Swing();
 
-    /// <summary> WeaponBase.Reload() 호출 시 ReloadRoutine 실행 </summary>
     protected override void Reload()
     {
         if (isReloading || nowAmmo >= maxAmmo) return;
@@ -95,38 +114,55 @@ public class Sword : WeaponBase
     {
         isReloading = true;
 
-        // 1) 검 들어올리기 애니
-        swordAnimator?.SetTrigger("RaiseSword");
-        yield return new WaitForSeconds(reloadRaiseDuration);
-
-        // 2) 파티클 Emit 방식으로 한 번만 방출
-        foreach (var inst in sparkleInstances)
+        // Rhythm check before draw step
+        int drawTiming = GameManager.Instance?.RhythmCheck() ?? 0;
+        switch (drawTiming)
         {
-            inst.Clear();
-            inst.Emit(sparkleCount);
+            case 1: Debug.Log("정박 타이밍! Draw Sword 성공"); break;
+            case 2: Debug.Log("반박 타이밍! Draw Sword 보조 성공"); break;
+            default: Debug.Log("박자 실패: Draw Sword 단계"); break;
         }
 
-        // 3) sparkleDuration 만큼 대기
-        yield return new WaitForSeconds(sparkleDuration);
+        // Play draw animation and sparkle simultaneously
+        swordAnimator?.SetTrigger("RaiseSword");
+        foreach (var inst in sparkleInstances)
+        {
+            inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            inst.Play();
+        }
 
-        // 4) 파티클 정리
+        // Keep drawn state for 3 seconds
+        yield return new WaitForSeconds(3f);
+
+        // Stop sparkle
         foreach (var inst in sparkleInstances)
         {
             inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             inst.Clear();
         }
 
-        // 5) 검 내리기 애니
+        // Rhythm check before lower step
+        int lowerTiming = GameManager.Instance?.RhythmCheck() ?? 0;
+        switch (lowerTiming)
+        {
+            case 1: Debug.Log("정박 타이밍! Lower Sword 성공"); break;
+            case 2: Debug.Log("반박 타이밍! Lower Sword 보조 성공"); break;
+            default: Debug.Log("박자 실패: Lower Sword 단계"); break;
+        }
+
+        // Play lower animation
         swordAnimator?.SetTrigger("LowerSword");
         yield return new WaitForSeconds(reloadLowerDuration);
 
-        // 6) 내구도 복구 & 루틴 종료
+        // Restore ammo and finish reload
         nowAmmo = Mathf.Clamp(reloadShot, 0, maxAmmo);
         isReloading = false;
         Debug.Log($"Reload Complete! Durability: {nowAmmo}");
     }
 
-    /// <summary> 한 번만 Sparkle 효과 재생 (Draw 시 호출) </summary>
+    /// <summary>
+    /// Play sparkle systems once according to burst settings.
+    /// </summary>
     public void PlaySparkleOnce()
     {
         foreach (var inst in sparkleInstances)
@@ -137,7 +173,6 @@ public class Sword : WeaponBase
         Invoke(nameof(StopSparkle), sparkleDuration);
     }
 
-    /// <summary> 즉시 Sparkle 효과 정리 </summary>
     public void StopSparkle()
     {
         foreach (var inst in sparkleInstances)
