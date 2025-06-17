@@ -1,5 +1,10 @@
 using UnityEngine;
 
+// TODO
+// 1. 스왑 모션 및 사운드
+// 2. 발사 모션 및 사운드 + 적 피격 여부 확인 + 타이밍 체크
+// 3. 장전 모션 + 타이밍 체크
+
 public class Sniper : WeaponBase
 {
     private Animator anim;
