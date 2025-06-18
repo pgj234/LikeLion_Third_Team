@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4899257790408045838
 Transform:
   m_ObjectHideFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4897231988485709454}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.8285987, y: -0.23715037, z: 0.4151185, w: -0.29130846}
+  m_LocalRotation: {x: -0.8286012, y: 0.2371472, z: -0.4151147, w: 0.29130942}
   m_LocalPosition: {x: 0.037, y: -0.053, z: 0.028}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e1e206df773fe64ea7651ebce4b8108, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponNum: 1
+  weaponNum: 0
   nowAmmo: 30
   maxAmmo: 30
   shotAmount: 10
