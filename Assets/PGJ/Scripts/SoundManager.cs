@@ -11,6 +11,8 @@ public enum BGM
 public enum SFX
 {
     RhythmFail,
+    SwordDraw,
+    SniperShoot,
 }
 
 public class SoundManager : SingletonBehaviour<SoundManager>
