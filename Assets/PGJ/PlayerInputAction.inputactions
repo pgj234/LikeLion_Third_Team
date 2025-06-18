@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Reload",
+                    "name": "Mouse1",
                     "type": "Button",
                     "id": "b594ba4c-5e16-4e55-a736-b7655ad68e3f",
                     "expectedControlType": "",
@@ -51,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Shoot",
+                    "name": "Mouse0",
                     "type": "Button",
                     "id": "2ac1e0ca-ebe9-46fe-ae00-a900160b79fb",
                     "expectedControlType": "",
@@ -280,7 +280,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Reload",
+                    "action": "Mouse1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -291,7 +291,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Reload",
+                    "action": "Mouse1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -302,7 +302,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "Mouse0",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

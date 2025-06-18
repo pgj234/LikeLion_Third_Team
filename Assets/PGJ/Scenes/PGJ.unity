@@ -1042,50 +1042,71 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 80, y: 10}
   m_EdgeRadius: 0
---- !u!1 &1298672469
-GameObject:
+--- !u!1001 &1294661003
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1298672471}
-  - component: {fileID: 1298672470}
-  m_Layer: 0
-  m_Name: Test
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1298672470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1298672469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa354b09f9cde1040a249a8bc7e43b1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1298672471
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1298672469}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2135345397807938141}
+    m_Modifications:
+    - target: {fileID: 1955309328173595413, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: swordAnimator
+      value: 
+      objectReference: {fileID: 79026931211630907}
+    - target: {fileID: 4897231988485709454, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_Name
+      value: Prefab_Sword_Cyber_Greenway
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897231988485709454, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.037
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.053
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.028
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.29130846
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.8285987
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.23715037
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.4151185
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 196.611
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -59.549988
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 401.491
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
 --- !u!1 &1346193413
 GameObject:
   m_ObjectHideFlags: 0
@@ -2345,6 +2366,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1955309327017414302 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1955309328173595413, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+  m_PrefabInstance: {fileID: 1294661003}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e1e206df773fe64ea7651ebce4b8108, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2015024714220994661
 GameObject:
   m_ObjectHideFlags: 0
@@ -2446,6 +2478,7 @@ Transform:
   - {fileID: 3421891765513270333}
   - {fileID: 369083199519182180}
   - {fileID: 2843402766398802809}
+  - {fileID: 4899257789420716165}
   m_Father: {fileID: 1433681719880093844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2259342144067360968
@@ -3303,6 +3336,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8128568258972305281}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4899257789420716165 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4899257790408045838, guid: 78b2f9ad288deff4fa3f88d4edb02231, type: 3}
+  m_PrefabInstance: {fileID: 1294661003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4899747695969835935
 Transform:
   m_ObjectHideFlags: 0
@@ -3755,6 +3793,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b7e3f0a134df1084aacfd59a69b8ff10, type: 3}
   sfxClipArray:
   - {fileID: 8300000, guid: 849bb857817654547aac72070b927a12, type: 3}
+  - {fileID: 8300000, guid: 9e8b381cbf62dbd48be9ae7388cf5e1c, type: 3}
 --- !u!1 &6603114312285101329
 GameObject:
   m_ObjectHideFlags: 0
@@ -4502,7 +4541,9 @@ MonoBehaviour:
   dashDurationTime: 0.1
   dashMaxStackNum: 2
   dashStackCoolTime: 2
-  weaponArray: []
+  weaponArray:
+  - {fileID: 1955309327017414302}
+  - {fileID: 1955309327017414302}
   startWeaponNum: 1
   JumpHeight: 1.2
   Gravity: -15
@@ -4529,4 +4570,3 @@ SceneRoots:
   - {fileID: 528207178}
   - {fileID: 1855018638}
   - {fileID: 1640984624}
-  - {fileID: 1298672471}

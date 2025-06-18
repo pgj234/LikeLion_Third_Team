@@ -178,7 +178,7 @@ public class Player : MonoBehaviour
         if (input.mouse0_Input)
         {
             input.mouse0_Input = false;
-
+            
             // 음악 시작전이면 리턴
             if (false == GameManager.Instance.musicStart)
             {
