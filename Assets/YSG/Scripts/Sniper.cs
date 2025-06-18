@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Sniper : WeaponBase
@@ -11,8 +12,15 @@ public class Sniper : WeaponBase
     [Header("조준")]
     [SerializeField] private GameObject scopeUI; // UI 조준경
     [SerializeField] private float zoomFOV = 30; // 줌 시 시야각
+    private Vector3 originalCamPos;
+    private Quaternion originalCamRot;
     private float normalFOV;
     private bool isZoomed = false;
+
+    [Header("이펙트")]
+    [SerializeField] private GameObject shootFire;
+    [SerializeField] private GameObject bulletTrail;
+
 
     private void Awake()
     {
@@ -21,6 +29,8 @@ public class Sniper : WeaponBase
         nowAmmo = maxAmmo;
 
         normalFOV = Camera.main.fieldOfView;
+        originalCamPos = Camera.main.transform.position;
+        originalCamRot = Camera.main.transform.rotation;
 
         if (scopeUI != null)
             scopeUI.SetActive(false);
@@ -73,11 +83,38 @@ public class Sniper : WeaponBase
 
         nowAmmo -= shotAmount;
 
-        // 실제 발사 충돌 체크
+        // 총구 화염 생성
+        if (shootFire != null)
+        {
+            GameObject fire = Instantiate(shootFire, shootPoint.position, shootPoint.rotation, shootPoint);
+            Destroy(fire, 0.1f);
+        }
+
+        // 총알 궤적 생성
+        if (bulletTrail != null)
+        {
+            GameObject trail = Instantiate(bulletTrail, shootPoint.position, shootPoint.rotation);
+            if (trail.TryGetComponent(out TrailRenderer trailRenderer))
+            {
+                trailRenderer.Clear();
+            }
+
+            // 궤적을 충돌 지점까지 이동시킴
+            Vector3 endPos = shootPoint.position + shootPoint.forward * 100;
+
+            if (Physics.Raycast(shootPoint.position, shootPoint.forward, out RaycastHit hit2, 100))
+            {
+                endPos = hit2.point;
+            }
+
+            StartCoroutine(MoveTrail(trail.transform, endPos));
+        }
+
+        // 충돌 판정
         Ray ray = new Ray(shootPoint.position, shootPoint.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, 100))
         {
-            Debug.Log("충돌 대상: " + hit.collider.name);
+            Debug.Log("충돌 대상 : " + hit.collider.name);
 
             if (hit.collider.CompareTag("Enemy"))
             {
@@ -88,6 +125,25 @@ public class Sniper : WeaponBase
         {
             Debug.Log("빗나감");
         }
+
+        Unzoom();
+    }
+
+    private IEnumerator MoveTrail(Transform _trail, Vector3 _targetPos)
+    {
+        float time = 0f;
+        Vector3 start = _trail.position;
+        float duration = 0.1f;
+
+        while (time < duration)
+        {
+            _trail.position = Vector3.Lerp(start, _targetPos, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        _trail.position = _targetPos;
+        Destroy(_trail.gameObject, 0.5f);
     }
 
     protected override void Reload()
@@ -116,6 +172,9 @@ public class Sniper : WeaponBase
         if (!isZoomed)
         {
             Camera.main.fieldOfView = zoomFOV;
+            Camera.main.transform.position = shootPoint.position;
+            Camera.main.transform.rotation = shootPoint.rotation;
+
             if (scopeUI != null) scopeUI.SetActive(true);
             isZoomed = true;
         }
@@ -124,6 +183,9 @@ public class Sniper : WeaponBase
     private void Unzoom()
     {
         Camera.main.fieldOfView = normalFOV;
+        Camera.main.transform.position = originalCamPos;
+        Camera.main.transform.rotation = originalCamRot;
+
         if (scopeUI != null) scopeUI.SetActive(false);
         isZoomed = false;
     }
