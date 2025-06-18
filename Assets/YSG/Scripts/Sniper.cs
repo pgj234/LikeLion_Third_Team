@@ -4,6 +4,7 @@ using UnityEngine;
 public class Sniper : WeaponBase
 {
     private Animator anim;
+    private InputManager input;
 
     private bool isActing = true;
     [SerializeField] private int reload = 0;
@@ -21,15 +22,12 @@ public class Sniper : WeaponBase
     [SerializeField] private GameObject shootFire;
     [SerializeField] private GameObject ShootTrail;
 
-    private void Awake()
+    private void Start()
     {
         anim = GetComponentInChildren<Animator>();
+        input = InputManager.Instance;
 
         nowAmmo = maxAmmo;
-
-        normalFOV = Camera.main.fieldOfView;
-        originalCamPos = Camera.main.transform.position;
-        originalCamRot = Camera.main.transform.rotation;
 
         scopeUI?.SetActive(false);
     }
