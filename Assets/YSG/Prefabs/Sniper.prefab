@@ -334,7 +334,7 @@ MonoBehaviour:
   shootPoint: {fileID: 6279242928531207454}
   scopeUI: {fileID: 3415656681482929547}
   zoomFOV: 15
-  shootFlash: {fileID: 0}
+  shootFire: {fileID: 0}
   bulletTrail: {fileID: 0}
 --- !u!4 &3781226601800647115 stripped
 Transform:

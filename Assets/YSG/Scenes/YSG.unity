@@ -1097,14 +1097,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4509403281365123941, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
-      propertyPath: shootFire
-      value: 
-      objectReference: {fileID: 1828176872806910, guid: aaa72d4832ee72949af09aa97f0658ff, type: 3}
-    - target: {fileID: 4509403281365123941, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
-      propertyPath: shootFlash
-      value: 
-      objectReference: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
