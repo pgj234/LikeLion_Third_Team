@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0f92687afd8ce9e419f94fcd3e745c26
+guid: ae451676802b71c4aad4d689ea0e268f
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0
@@ -11,5 +11,5 @@ AssetOrigin:
   productId: 197436
   packageName: Sniper Set
   packageVersion: 1.0.0
-  assetPath: Assets/YSG/Imports/Sniper Kit/Animations/BarrettMRAD/BarrettMRAD.controller
+  assetPath: Assets/YSG/Imports/Sniper Kit/Animations/AWM/AWM.controller
   uploadId: 438750
