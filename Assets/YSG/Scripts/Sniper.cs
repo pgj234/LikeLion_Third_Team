@@ -21,7 +21,6 @@ public class Sniper : WeaponBase
     [SerializeField] private GameObject shootFire;
     [SerializeField] private GameObject bulletTrail;
 
-
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -154,13 +153,13 @@ public class Sniper : WeaponBase
 
         if (GameManager.Instance.RhythmCheck() > 0)
         {
-            Debug.Log("장전 성공");
+            Debug.Log("박자 성공");
 
             anim.SetInteger("Reload", reload++);
         }
         else
         {
-            Debug.Log("장전 실패");
+            Debug.Log("박자 실패");
 
             reload = 0;
             anim.SetInteger("Reload", reload);
