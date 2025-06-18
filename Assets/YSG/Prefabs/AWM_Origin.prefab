@@ -784,9 +784,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6102601771936745073}
   - component: {fileID: 4971626230056156822}
-  - component: {fileID: -6759931765982094230}
   m_Layer: 0
-  m_Name: AWM
+  m_Name: AWM_Origin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -834,7 +833,7 @@ Animator:
   m_GameObject: {fileID: 5219996770024985349}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ae451676802b71c4aad4d689ea0e268f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 78c93510bfa644244a4066d6be246a14, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -846,33 +845,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-6759931765982094230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5219996770024985349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a43793d3cf13a74884314ce61cc4251, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponNum: 0
-  nowAmmo: 0
-  maxAmmo: 15
-  shotAmount: 1
-  nextShotTime: 0
-  shotDamage: 100
-  shotSpreadMin: {x: 0, y: 0}
-  shotSpreadMax: {x: 0, y: 0}
-  reloadStepNum: 0
-  reload: 0
-  shootPoint: {fileID: 0}
-  scopeUI: {fileID: 0}
-  zoomFOV: 15
-  shootFire: {fileID: 0}
-  bulletTrail: {fileID: 0}
 --- !u!1 &5261050563392001465
 GameObject:
   m_ObjectHideFlags: 0

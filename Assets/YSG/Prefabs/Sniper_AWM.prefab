@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4048834767988491185}
+  - component: {fileID: 3761081563988886627}
   m_Layer: 0
-  m_Name: Sniper
+  m_Name: Sniper_AWM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,6 +35,33 @@ Transform:
   - {fileID: 132107182536066921}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &3761081563988886627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 492904530773136461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a43793d3cf13a74884314ce61cc4251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponNum: 3
+  nowAmmo: 0
+  maxAmmo: 15
+  shotAmount: 1
+  nextShotTime: 0
+  shotDamage: 100
+  shotSpreadMin: {x: 0, y: 0}
+  shotSpreadMax: {x: 0, y: 0}
+  reloadStepNum: 0
+  reload: 0
+  shootPoint: {fileID: 6279242928531207454}
+  scopeUI: {fileID: 8921875170102450004}
+  zoomFOV: 15
+  shootFire: {fileID: 0}
+  ShootTrail: {fileID: 0}
 --- !u!1 &1123717773242682576
 GameObject:
   m_ObjectHideFlags: 0
@@ -77,12 +105,12 @@ GameObject:
   - component: {fileID: 21939397061192412}
   - component: {fileID: 9022438995290290450}
   m_Layer: 5
-  m_Name: ScopeUI
+  m_Name: Scope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3933745735647865018
 RectTransform:
   m_ObjectHideFlags: 0
@@ -153,12 +181,12 @@ GameObject:
   - component: {fileID: 6446010356119104588}
   - component: {fileID: 5159696870063206670}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: ScopeUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &132107182536066921
 RectTransform:
   m_ObjectHideFlags: 0
@@ -250,33 +278,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4048834767988491185}
     m_Modifications:
-    - target: {fileID: -6759931765982094230, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
-      propertyPath: scopeUI
-      value: 
-      objectReference: {fileID: 3415656681482929547}
-    - target: {fileID: -6759931765982094230, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
-      propertyPath: shootFire
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: -6759931765982094230, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
-      propertyPath: weaponNum
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: -6759931765982094230, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
-      propertyPath: shootPoint
-      value: 
-      objectReference: {fileID: 6279242928531207454}
-    - target: {fileID: -6759931765982094230, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
-      propertyPath: bulletTrail
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4971626230056156822, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 78c93510bfa644244a4066d6be246a14, type: 2}
     - target: {fileID: 5219996770024985349, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
       propertyPath: m_Name
-      value: AWM
+      value: AWM_Origin
       objectReference: {fileID: 0}
     - target: {fileID: 6102601771936745073, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
       propertyPath: m_LocalPosition.x

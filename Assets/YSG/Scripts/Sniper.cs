@@ -23,7 +23,7 @@ public class Sniper : WeaponBase
 
     private void Awake()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
 
         nowAmmo = maxAmmo;
 
@@ -31,8 +31,7 @@ public class Sniper : WeaponBase
         originalCamPos = Camera.main.transform.position;
         originalCamRot = Camera.main.transform.rotation;
 
-        if (scopeUI != null)
-            scopeUI.SetActive(false);
+        scopeUI?.SetActive(false);
     }
 
     protected override void Update()
@@ -155,15 +154,16 @@ public class Sniper : WeaponBase
         {
             Debug.Log("박자 성공");
 
-            anim.SetInteger("Reload", reload++);
+            reload++;
         }
         else
         {
             Debug.Log("박자 실패");
 
             reload = 0;
-            anim.SetInteger("Reload", reload);
         }
+
+        anim.SetInteger("Reload", reload);
     }
 
     private void Zoom()
@@ -174,7 +174,7 @@ public class Sniper : WeaponBase
             Camera.main.transform.position = shootPoint.position;
             Camera.main.transform.rotation = shootPoint.rotation;
 
-            if (scopeUI != null) scopeUI.SetActive(true);
+            scopeUI?.SetActive(true);
             isZoomed = true;
         }
     }
@@ -185,19 +185,21 @@ public class Sniper : WeaponBase
         Camera.main.transform.position = originalCamPos;
         Camera.main.transform.rotation = originalCamRot;
 
-        if (scopeUI != null) scopeUI.SetActive(false);
+        scopeUI?.SetActive(false);
         isZoomed = false;
     }
 
-    private void ActOver() => isActing = false;
+    #region 애니메이션 이벤트
+    public void ShootEvent() => Shoot();
 
-    private void ReloadOver()
+    public void ActOverEvent() => isActing = false;
+
+    public void ReloadOverEvent()
     {
         Debug.Log("장전 성공");
-
-        SoundManager.Instance.PlaySFX(SFX.RhythmFail);
 
         reload = 0;
         anim.SetInteger("Reload", reload);
     }
+    #endregion
 }
