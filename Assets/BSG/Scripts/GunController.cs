@@ -7,6 +7,7 @@ public class GunController : MonoBehaviour
     [Header("입력 키")]
     [SerializeField] private KeyCode fireKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode reloadKey = KeyCode.R;
+    [SerializeField] private KeyCode unequipKey = KeyCode.X; // 무기 해제 키
 
     [Header("장전 설정")]
     [SerializeField] private float reloadStepDuration = 0.6f; // 각 장전 단계 사이의 간격
@@ -24,6 +25,11 @@ public class GunController : MonoBehaviour
         if (Input.GetKeyDown(fireKey) && !isReloading)
         {
             animator.SetTrigger("Fire");
+        }
+
+        if (Input.GetKeyDown(unequipKey) && !isReloading)
+        {
+            animator.SetTrigger("Unequip");
         }
 
         if (Input.GetKeyDown(reloadKey) && !isReloading)

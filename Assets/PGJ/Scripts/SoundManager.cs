@@ -11,6 +11,7 @@ public enum BGM
 public enum SFX
 {
     RhythmFail,
+    SwordDraw,
     SniperShoot,
 }
 

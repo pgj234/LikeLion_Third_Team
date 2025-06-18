@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class WeaponBase : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class WeaponBase : MonoBehaviour
 
     protected int rhythmTimingNum;          // 0 : 박자 타이밍 X, 1 : 정박 타이밍, 2 : 반박 타이밍
 
+    internal bool reloading = false;
+
     protected virtual void Update()
     {
         rhythmTimingNum = GameManager.Instance.RhythmCheck();
@@ -29,6 +32,6 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void Reload()        // 재장전 메서드
     {
-
+        reloading = true;
     }
 }
