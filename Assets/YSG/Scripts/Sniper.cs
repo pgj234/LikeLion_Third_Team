@@ -19,7 +19,7 @@ public class Sniper : WeaponBase
 
     [Header("ÀÌÆåÆ®")]
     [SerializeField] private GameObject shootFire;
-    [SerializeField] private GameObject bulletTrail;
+    [SerializeField] private GameObject ShootTrail;
 
     private void Awake()
     {
@@ -90,9 +90,9 @@ public class Sniper : WeaponBase
         }
 
         // ÃÑ¾Ë ±ËÀû »ý¼º
-        if (bulletTrail != null)
+        if (ShootTrail != null)
         {
-            GameObject trail = Instantiate(bulletTrail, shootPoint.position, shootPoint.rotation);
+            GameObject trail = Instantiate(ShootTrail, shootPoint.position, shootPoint.rotation);
             if (trail.TryGetComponent(out TrailRenderer trailRenderer))
             {
                 trailRenderer.Clear();

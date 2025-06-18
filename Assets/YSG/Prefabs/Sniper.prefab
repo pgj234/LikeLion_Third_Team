@@ -257,11 +257,19 @@ PrefabInstance:
     - target: {fileID: -6759931765982094230, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
       propertyPath: shootFire
       value: 
-      objectReference: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 3}
+      objectReference: {fileID: 0}
+    - target: {fileID: -6759931765982094230, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
+      propertyPath: weaponNum
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -6759931765982094230, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
       propertyPath: shootPoint
       value: 
       objectReference: {fileID: 6279242928531207454}
+    - target: {fileID: -6759931765982094230, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
+      propertyPath: bulletTrail
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4971626230056156822, guid: 542a6c178ee243843a927e82dfdf8a13, type: 3}
       propertyPath: m_Controller
       value: 
