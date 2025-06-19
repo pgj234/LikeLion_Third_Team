@@ -2,25 +2,30 @@
 
 public class Entity : MonoBehaviour
 {
-    protected int hp;
-    protected int maxHP;
-    protected float walkSpeed;
-    protected float jumpPower;
-    protected bool isFly;
+    [SerializeField] protected int hp;
+    [SerializeField] protected int maxHP;
+    [SerializeField] protected float walkSpeed;
+    [SerializeField] protected float jumpPower;
+    [SerializeField] protected bool isFly;
 
-    protected Animator anim;
-    protected Rigidbody rb;
-    protected Collider col;
+    [SerializeField] protected Animator anim;
+    [SerializeField] protected Rigidbody rb;
+    [SerializeField] protected Collider col;
 
-    protected Transform groundCheck;        // 바닥 체크 위치
-    protected float groundCheckDistance;    // 바닥 체크 거리
-    protected LayerMask whatIsGround;       // 바닥 레이어
+    [SerializeField] protected Transform groundCheck;        // 바닥 체크 위치
+    [SerializeField] protected float groundCheckDistance;    // 바닥 체크 거리
+    [SerializeField] protected LayerMask whatIsGround;       // 바닥 레이어
 
-    protected Transform wallCheck;          // 벽 체크 위치
-    protected float wallCheckDistance;      // 벽 체크 거리
-    protected LayerMask whatIsWall;         // 벽 레이어
+    [SerializeField] protected Transform wallCheck;          // 벽 체크 위치
+    [SerializeField] protected float wallCheckDistance;      // 벽 체크 거리
+    [SerializeField] protected LayerMask whatIsWall;         // 벽 레이어
 
     protected float sturnTime;              // 스턴 남은시간
+
+    protected virtual void Awake()
+    {
+        
+    }
 
     // 바닥 체크
     //protected bool IsGroundDetected()
