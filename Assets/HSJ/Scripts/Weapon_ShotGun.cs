@@ -147,4 +147,9 @@ public class Weapon_ShotGun : WeaponBase
         yield return new WaitForSeconds(delayTime); // 딜레이 시간 대기
         action?.Invoke(); // 액션 호출
     }
+
+    public void ObjectHit()
+    {
+
+    }
 }
