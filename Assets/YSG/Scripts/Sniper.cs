@@ -13,10 +13,8 @@ public class Sniper : WeaponBase
     [Header("조준")]
     [SerializeField] private GameObject scopeUI; // UI 조준경
     [SerializeField] private float zoomFOV = 30; // 줌 시 시야각
-    private Vector3 originalCamPos;
-    private Quaternion originalCamRot;
     private float normalFOV;
-    private bool isZoomed = false;
+    private bool isZooming = false;
 
     [Header("이펙트")]
     [SerializeField] private GameObject shootFire;
@@ -41,17 +39,20 @@ public class Sniper : WeaponBase
         // 레이캐스트
         Debug.DrawRay(shootPoint.position, shootPoint.forward * 100, Color.red);
 
-        //if (Input.GetKey(KeyCode.Mouse1))
-        //if(input.mouse1_Input)
-        //{
-        //    Zoom();
-        //}
-        //else
-        //{
-        //    Unzoom();
-        //}
+        if (input.mouse1_Input)
+        {
+            input.mouse0_Input = false;
 
-        //if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (!isZooming)
+            {
+                Zoom();
+            }
+            else
+            {
+                Unzoom();
+            }
+        }
+
         if (input.mouse0_Input)
         {
             input.mouse0_Input = false;
@@ -60,7 +61,6 @@ public class Sniper : WeaponBase
 
         Debug.Log(input.r_Input);
 
-        //if (Input.GetKeyDown(KeyCode.R))
         if (input.r_Input)
         {
             input.r_Input = false;
@@ -155,7 +155,8 @@ public class Sniper : WeaponBase
 
         nowAmmo = maxAmmo;
 
-        if (GameManager.Instance.RhythmCheck() > 0)
+        if (GameManager.Instance.RhythmCheck() > 0 
+            || true) // TODO 삭제
         {
             Debug.Log("박자 성공");
 
@@ -173,25 +174,24 @@ public class Sniper : WeaponBase
 
     private void Zoom()
     {
-        if (!isZoomed)
+        if (!isZooming)
         {
+            normalFOV = Camera.main.fieldOfView;
             Camera.main.fieldOfView = zoomFOV;
-            Camera.main.transform.position = shootPoint.position;
-            Camera.main.transform.rotation = shootPoint.rotation;
 
             scopeUI?.SetActive(true);
-            isZoomed = true;
+            isZooming = true;
         }
     }
 
     private void Unzoom()
     {
+        if (!isZooming) return;
+
         Camera.main.fieldOfView = normalFOV;
-        Camera.main.transform.position = originalCamPos;
-        Camera.main.transform.rotation = originalCamRot;
 
         scopeUI?.SetActive(false);
-        isZoomed = false;
+        isZooming = false;
     }
 
     #region 애니메이션 이벤트
