@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.049999986, y: 0.049999997, z: 0.049999997}
+  m_LocalScale: {x: 0.05, y: 0.049999997, z: 0.05}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2725053277594527792}
@@ -59,7 +59,7 @@ MonoBehaviour:
   reload: 0
   shootPoint: {fileID: 6279242928531207454}
   scopeUI: {fileID: 8921875170102450004}
-  zoomFOV: 15
+  zoomScale: 4
   shootFire: {fileID: 0}
   ShootTrail: {fileID: 0}
 --- !u!1 &1123717773242682576

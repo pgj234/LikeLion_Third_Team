@@ -9,11 +9,13 @@ public class Sniper : WeaponBase
     private bool isActing = true;
     [SerializeField] private int reload = 0;
     [SerializeField] private Transform shootPoint;
+    private Vector3 originalShootPointLocalPos;
+    private Quaternion originalShootPointLocalRot;
+
 
     [Header("조준")]
-    [SerializeField] private GameObject scopeUI; // UI 조준경
-    [SerializeField] private float zoomFOV = 30; // 줌 시 시야각
-    private float normalFOV;
+    [SerializeField] private GameObject scopeUI;
+    [SerializeField] private float zoomScale = 4;
     private bool isZooming = false;
 
     [Header("이펙트")]
@@ -28,6 +30,9 @@ public class Sniper : WeaponBase
         nowAmmo = maxAmmo;
 
         scopeUI?.SetActive(false);
+
+        originalShootPointLocalPos = shootPoint.localPosition;
+        originalShootPointLocalRot = shootPoint.localRotation;
     }
 
     protected override void Update()
@@ -36,7 +41,6 @@ public class Sniper : WeaponBase
 
         if (isActing) return;
 
-        // 레이캐스트
         Debug.DrawRay(shootPoint.position, shootPoint.forward * 100, Color.red);
 
         if (input.mouse1_Input)
@@ -59,12 +63,15 @@ public class Sniper : WeaponBase
             anim.SetTrigger("Shoot");
         }
 
-        Debug.Log(input.r_Input);
-
         if (input.r_Input)
         {
             input.r_Input = false;
             Reload();
+        }
+
+        if (isZooming)
+        {
+            shootPoint.rotation = Camera.main.transform.rotation;
         }
     }
 
@@ -74,15 +81,15 @@ public class Sniper : WeaponBase
 
         if (isActing) return;
 
-        isActing = true;
-
-        SoundManager.Instance.PlaySFX(SFX.SniperShoot);
-
         if (nowAmmo <= 0)
         {
             Reload();
             return;
         }
+
+        isActing = true;
+
+        SoundManager.Instance.PlaySFX(SFX.SniperShoot);
 
         nowAmmo -= shotAmount;
 
@@ -122,6 +129,8 @@ public class Sniper : WeaponBase
             if (hit.collider.CompareTag("Enemy"))
             {
                 Debug.Log("명중");
+
+                hit.collider.GetComponent<Monster>()?.Hit(shotDamage);
             }
         }
         else
@@ -155,8 +164,8 @@ public class Sniper : WeaponBase
 
         nowAmmo = maxAmmo;
 
-        if (GameManager.Instance.RhythmCheck() > 0 
-            || true) // TODO 삭제
+        if (GameManager.Instance.RhythmCheck() > 0
+            || true) // 임시
         {
             Debug.Log("박자 성공");
 
@@ -174,21 +183,25 @@ public class Sniper : WeaponBase
 
     private void Zoom()
     {
-        if (!isZooming)
-        {
-            normalFOV = Camera.main.fieldOfView;
-            Camera.main.fieldOfView = zoomFOV;
+        if (isZooming) return;
 
-            scopeUI?.SetActive(true);
-            isZooming = true;
-        }
+        Camera.main.fieldOfView /= zoomScale;
+
+        shootPoint.position = Camera.main.transform.position + Camera.main.transform.forward * 0.5f;
+        shootPoint.rotation = Camera.main.transform.rotation;
+
+        scopeUI?.SetActive(true);
+        isZooming = true;
     }
 
     private void Unzoom()
     {
         if (!isZooming) return;
 
-        Camera.main.fieldOfView = normalFOV;
+        Camera.main.fieldOfView *= zoomScale;
+
+        shootPoint.localPosition = originalShootPointLocalPos;
+        shootPoint.localRotation = originalShootPointLocalRot;
 
         scopeUI?.SetActive(false);
         isZooming = false;
