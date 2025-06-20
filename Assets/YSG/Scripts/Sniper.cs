@@ -41,22 +41,29 @@ public class Sniper : WeaponBase
         // 레이캐스트
         Debug.DrawRay(shootPoint.position, shootPoint.forward * 100, Color.red);
 
-        if (Input.GetKey(KeyCode.Mouse1))
-        {
-            Zoom();
-        }
-        else
-        {
-            Unzoom();
-        }
+        //if (Input.GetKey(KeyCode.Mouse1))
+        //if(input.mouse1_Input)
+        //{
+        //    Zoom();
+        //}
+        //else
+        //{
+        //    Unzoom();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        //if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (input.mouse0_Input)
         {
+            input.mouse0_Input = false;
             anim.SetTrigger("Shoot");
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        Debug.Log(input.r_Input);
+
+        //if (Input.GetKeyDown(KeyCode.R))
+        if (input.r_Input)
         {
+            input.r_Input = false;
             Reload();
         }
     }
