@@ -2,178 +2,104 @@
 using System.Collections;
 using System.Collections.Generic;
 
-/// <summary>
-/// Sword weapon script that handles swinging, reloading, sparkle effects, hit detection,
-/// and rhythm-based draw phases. Press R to reload and replay sparkle.
-/// </summary>
 public class Sword : WeaponBase
 {
-    [Header("Sword Settings")]
-    [SerializeField] protected int initialDurability = 100;
-    [SerializeField] protected int durabilityPerSwing = 1;
-    [SerializeField] protected float swingCooldown = 0.5f;
-    [SerializeField] protected float reloadRaiseDuration = 0.5f;
-    [SerializeField] protected float sparkleDuration = 0.3f;
-    [SerializeField] protected float reloadLowerDuration = 0.5f;
-    [SerializeField] protected int reloadShot = 100;
+    [Header("Draw Settings")]
+    [SerializeField] float reloadRaiseDuration = 0.5f;
+    [SerializeField] float sparkleDuration = 0.3f;
+    [SerializeField] float reloadLowerDuration = 0.5f;
 
     [Header("Particle Settings")]
-    [Tooltip("Particle System Prefabs for sparkle effect")]
-    [SerializeField] protected List<ParticleSystem> sparklePrefabs;
-    private List<ParticleSystem> sparkleInstances = new List<ParticleSystem>();
-    [SerializeField] protected int sparkleCount = 30;
+    [SerializeField] List<ParticleSystem> sparklePrefabs;
+    List<ParticleSystem> sparkleInstances = new List<ParticleSystem>();
 
-    [Header("Hit Detection")]
-    [SerializeField] protected float hitRange = 5f;
-    [SerializeField] protected LayerMask targetLayer;
+    [Header("Animator Settings")]
+    [SerializeField] Animator swordAnimator;
 
-    [Header("References")]
-    [SerializeField] protected Animator swordAnimator;
+    bool isDrawing = false;
+    bool isReloading = false;
 
-    private bool isReloading = false;
-
-    // Public durations for external use
-    public float ReloadRaiseDuration => reloadRaiseDuration;
-    public float SparkleDuration => sparkleDuration;
-    public float ReloadLowerDuration => reloadLowerDuration;
-
-    private void Awake()
+    void Awake()
     {
-        // Initialize WeaponBase fields
-        maxAmmo = initialDurability;
-        nowAmmo = initialDurability;
-        shotAmount = durabilityPerSwing;
-        nextShotTime = 0f;
-
-        // Instantiate sparkle systems as children and stop them
-        sparkleInstances.Clear();
-        if (sparklePrefabs != null)
-        {
-            foreach (var prefab in sparklePrefabs)
+        // 파티클 인스턴스 생성
+        foreach (var prefab in sparklePrefabs)
+            if (prefab != null)
             {
-                if (prefab != null)
-                {
-                    var inst = Instantiate(prefab, transform);
-                    inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-                    sparkleInstances.Add(inst);
-                }
+                var inst = Instantiate(prefab, transform);
+                inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                sparkleInstances.Add(inst);
             }
-        }
     }
 
     protected override void Update()
     {
-        // Rhythm timing update
-        if (GameManager.Instance != null)
-            base.Update();
+        base.Update();
 
-        // Reload on R key press
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            // Trigger reload routine
-            Reload();
-        }
+        // R키로 Draw 시퀀스
+        if (Input.GetKeyDown(KeyCode.R) && !isDrawing && !isReloading)
+            StartCoroutine(DrawSwordSequence());
     }
 
-    /// <summary>
-    /// Swing action: deduct ammo, play animation, sparkle, and detect hits.
-    /// </summary>
-    public void Swing()
+    IEnumerator DrawSwordSequence()
     {
-        if (isReloading || Time.time < nextShotTime || nowAmmo < shotAmount)
-            return;
-
-        nowAmmo -= shotAmount;
-        nextShotTime = Time.time + swingCooldown;
-
-        swordAnimator?.SetTrigger("Swing");
-        PlaySparkleOnce();
-
-        var cam = Camera.main;
-        if (cam != null && Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, hitRange, targetLayer))
-        {
-            Debug.Log($"Hit target: {hit.collider.name} at {hit.point}");
-            if (hit.collider.GetComponent<IDamageable>() is IDamageable dmg)
-                dmg.TakeDamage(shotDamage);
-        }
-        else
-        {
-            Debug.Log("Swing missed");
-        }
-    }
-
-    protected override void Shoot() => Swing();
-
-    protected override void Reload()
-    {
-        if (isReloading || nowAmmo >= maxAmmo) return;
-        StartCoroutine(ReloadRoutine());
-    }
-
-    private IEnumerator ReloadRoutine()
-    {
+        isDrawing = true;
         isReloading = true;
 
-        // Rhythm check before draw step
-        int drawTiming = GameManager.Instance?.RhythmCheck() ?? 0;
-        switch (drawTiming)
+        // 1) Draw 애니 + 파티클
+        swordAnimator.Play("Draw Sword 2", 0, 0f);
+        PlaySparkleOnce();
+
+        // 애니 길이만큼 대기
+        yield return new WaitForSeconds(reloadRaiseDuration);
+
+        // 2) 리듬 체크
+        int timing = GameManager.Instance != null
+                     ? GameManager.Instance.RhythmCheck()
+                     : 1;
+
+        if (timing == 0)
         {
-            case 1: Debug.Log("정박 타이밍! Draw Sword 성공"); break;
-            case 2: Debug.Log("반박 타이밍! Draw Sword 보조 성공"); break;
-            default: Debug.Log("박자 실패: Draw Sword 단계"); break;
+            Debug.Log("리듬 실패: Draw 단계 → Idle로 되돌아갑니다.");
+            // 실패 시 파티클 정리
+            StopSparkle();
+            // Idle로 전환
+            swordAnimator.Play("Idle Walk Run Blend", 0, 0f);
+            // 상태 리셋
+            isDrawing = false;
+            isReloading = false;
+            yield break;
         }
 
-        // Play draw animation and sparkle simultaneously
-        swordAnimator?.SetTrigger("RaiseSword");
-        foreach (var inst in sparkleInstances)
-        {
-            inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            inst.Play();
-        }
+        Debug.Log($"리듬 성공({timing}): Draw 단계");
 
-        // Keep drawn state for 3 seconds
-        yield return new WaitForSeconds(3f);
+        // 3) 성공 시 sparkle 유지
+        yield return new WaitForSeconds(sparkleDuration);
 
-        // Stop sparkle
-        foreach (var inst in sparkleInstances)
-        {
-            inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            inst.Clear();
-        }
+        // 4) Hold 애니 (Draw → Hold 연결)
+        swordAnimator.Play("hand Idle", 0, 0f);
 
-        // Rhythm check before lower step
-        int lowerTiming = GameManager.Instance?.RhythmCheck() ?? 0;
-        switch (lowerTiming)
-        {
-            case 1: Debug.Log("정박 타이밍! Lower Sword 성공"); break;
-            case 2: Debug.Log("반박 타이밍! Lower Sword 보조 성공"); break;
-            default: Debug.Log("박자 실패: Lower Sword 단계"); break;
-        }
-
-        // Play lower animation
-        swordAnimator?.SetTrigger("LowerSword");
+        // Hold 애니 길이만큼 대기
         yield return new WaitForSeconds(reloadLowerDuration);
 
-        // Restore ammo and finish reload
-        nowAmmo = Mathf.Clamp(reloadShot, 0, maxAmmo);
+        // 5) 최종 Idle-Walk-Run Blend 복귀
+        swordAnimator.Play("Idle Walk Run Blend", 0, 0f);
+
+        // 상태 리셋
+        isDrawing = false;
         isReloading = false;
-        Debug.Log($"Reload Complete! Durability: {nowAmmo}");
     }
 
-    /// <summary>
-    /// Play sparkle systems once according to burst settings.
-    /// </summary>
-    public void PlaySparkleOnce()
+    void PlaySparkleOnce()
     {
         foreach (var inst in sparkleInstances)
         {
-            inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            inst.Clear();
             inst.Play();
         }
         Invoke(nameof(StopSparkle), sparkleDuration);
     }
 
-    public void StopSparkle()
+    void StopSparkle()
     {
         foreach (var inst in sparkleInstances)
         {
@@ -181,4 +107,7 @@ public class Sword : WeaponBase
             inst.Clear();
         }
     }
+
+    protected override void Shoot() { }
+    protected override void Reload() { }
 }
