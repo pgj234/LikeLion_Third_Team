@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -71,7 +72,7 @@ public class Player : MonoBehaviour
     InputManager input;
 
     WeaponBase currentWeapon;
-    Coroutine coReload;
+    Coroutine coWeaponChange = null;
 
     bool playerDie = false;
     int remainRevival = 1;
@@ -103,6 +104,7 @@ public class Player : MonoBehaviour
         GroundedCheck();
         Move();
 
+        WeaponChangeInputCheck();
         ReloadCheck();
         ShootCheck();
     }
@@ -112,10 +114,39 @@ public class Player : MonoBehaviour
         CameraRotation();
     }
 
+    void WeaponChangeInputCheck()
+    {
+        if (input.weapon0_Choice_Input)
+        {
+            input.weapon0_Choice_Input = false;
+
+            coWeaponChange = StartCoroutine(ChangeWeapon(0));
+        }
+        else if (input.weapon1_Choice_Input)
+        {
+            input.weapon1_Choice_Input = false;
+
+            coWeaponChange = StartCoroutine(ChangeWeapon(1));
+        }
+        else if (input.weapon2_Choice_Input)
+        {
+            input.weapon2_Choice_Input = false;
+
+            coWeaponChange = StartCoroutine(ChangeWeapon(2));
+        }
+        else if (input.weapon3_Choice_Input)
+        {
+            input.weapon3_Choice_Input = false;
+
+            coWeaponChange = StartCoroutine(ChangeWeapon(3));
+        }
+    }
+
     void Init()
     {
         playerDie = false;
         isDash = false;
+        weaponArray[startWeaponNum].useAble = true;
         remainRevival = 1;
         currentDashStack = dashMaxStackNum;
         dashStackCoolTimer = 0;
@@ -126,14 +157,29 @@ public class Player : MonoBehaviour
         fallTimeoutDelta = FallTimeout;
     }
 
-    void ChangeWeapon(int weaponNum)
+    internal void GetWeapon(int weaponNum)
     {
-        if (weaponSwapTimer < 0)
-        {
-            weaponSwapTimer = weaponSwapTime;
+        weaponArray[weaponNum].useAble = true;
+    }
 
-            currentWeapon.reloading = false;
-            currentWeapon = weaponArray[weaponNum];
+    IEnumerator ChangeWeapon(int weaponNum)
+    {
+        if (true == weaponArray[weaponNum].useAble)
+        {
+            if (weaponSwapTimer < 0)
+            {
+                weaponSwapTimer = weaponSwapTime;
+
+                currentWeapon.reloading = false;
+                currentWeapon.SetBoolAnimation("WeaponPut", true);
+
+                yield return null;
+                yield return new WaitForSeconds(currentWeapon.GetAnimationTime());
+                yield return null;
+
+                currentWeapon.gameObject.SetActive(false);
+                currentWeapon = weaponArray[weaponNum];
+            }
         }
     }
 
