@@ -81,7 +81,24 @@ public class HitEffectObj : MonoBehaviour
         if(audioSet != null)
         {
             AudioSource audio = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
-            audioSet?.Set(audio);
+            //audioSet?.Set(audio);
+            audio.volume = audioSet.volume;
+            audio.loop = audioSet.isLoop;
+            if (audio.loop)
+                audio.Play();
+            else
+                audio.PlayOneShot(audioSet.clip);
+            
+
+            foreach (Transform child in transform)
+            {
+                AudioSource childAudio = child.GetComponent<AudioSource>();
+                if (childAudio != null)
+                {
+                    //audioSet.Set(childAudio);
+                    childAudio.Play();
+                }
+            }
         }
 
         StartCoroutine(DisableEvent(playObjs));

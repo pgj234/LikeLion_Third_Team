@@ -13,11 +13,12 @@ public class Bullet : MonoBehaviour
     [Header("Effect")]
     [SerializeField] private GameObject hitEffect;           //맞았을 때 이펙트
     [SerializeField] private AudioSource hitSound;           //맞았을 때 사운드
+    [SerializeField] private AudioClip hitAudioClip;      //맞았을 때 사운드 클립 (AudioSource가 없을 때 사용)
     [SerializeField] private HitEffectObj hitObj;            //맞았을 때 커스텀 이펙트 오브젝트
 
     /// <summary> 생성시 호출 </summary>
-    public Bullet(Vector3 _position, Quaternion _lotation, Vector3 _direction, float _speed,
-        float _lifeTime = default, int damage = 1, WeaponBase _weapon = null)
+    public Bullet Set(Vector3 _position, Quaternion _lotation, Vector3 _direction, float _speed,
+        float _lifeTime = default, int damage = 1, WeaponBase _weapon = null, GameObject _hitEffect = null, AudioSource _hitAudio = null, HitEffectObj _hitObj = null, AudioClip _hitAudioClip = null)
     {
         transform.position = _position;
         transform.rotation = _lotation;
@@ -30,6 +31,12 @@ public class Bullet : MonoBehaviour
         weapon = _weapon;
         timer = 0f;
 
+        hitEffect = _hitEffect;
+        hitSound = _hitAudio;
+        hitObj = _hitObj;
+        hitAudioClip = _hitAudioClip;
+
+        return this;
     }
 
     /// <summary> 지속적인 움직임 </summary>
@@ -51,7 +58,13 @@ public class Bullet : MonoBehaviour
     /// <summary>  벽에 부딪치면 삭제 </summary>
     protected virtual void OnTriggerEnter(Collider col)
     {
-        weapon.hitAction?.Invoke(col); // 무기에서 설정된 맞았을 때 액션 호출
+        if(col.GetComponent<Entity>() != null)
+        {
+            Entity entity = col.GetComponent<Entity>();
+            //entity.Damage(damage); // 데미지 적용
+        }
+
+        //weapon.hitAction?.Invoke(col); // 무기에서 설정된 맞았을 때 액션 호출
         HitEffectPlay();
     }
 
@@ -80,7 +93,7 @@ public class Bullet : MonoBehaviour
         // 커스텀 이펙트 오브젝트가 있다면 설정 후 재생
         if (hitObj != null)
         {
-            hitObj.ObjSet(_callback:() => weapon?.effectEndAction?.Invoke());
+            //hitObj.ObjSet(_callback:() => weapon?.effectEndAction?.Invoke());
             hitObj.Play();
         }
     }

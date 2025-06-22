@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class Weapon_ShotGun : WeaponBase
 {
+    InputManager inputManager; // 입력 매니저 인스턴스
     GameManager gameManager; // 게임 매니저 인스턴스
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] Vector3 bulletScale = Vector3.one;
@@ -13,11 +14,15 @@ public class Weapon_ShotGun : WeaponBase
     Animator animator; // 애니메이터 컴포넌트
     [SerializeField] float shotSpread;
     [SerializeField] List<AudioClip> gunSound = new();
+    [SerializeField] List<GameObject> hitEffect = new();
+
+    Dictionary<string, AnimationClip> animDic = new();
 
     private void Start()
     {
         gameManager = GameManager.Instance; // 게임 매니저 인스턴스 초기화
-        animator = GetComponent<Animator>(); // 애니메이터 컴포넌트 초기화
+        inputManager = InputManager.Instance; // 입력 매니저 인스턴스 초기화
+        animator = GetComponentInChildren<Animator>(); // 애니메이터 컴포넌트 초기화
     }
 
     protected override void Update()
@@ -25,11 +30,17 @@ public class Weapon_ShotGun : WeaponBase
         //base.Update();
         rhythmTimingNum = gameManager.RhythmCheck();
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (inputManager.r_Input)
+        {
             Reload();
+            inputManager.r_Input = false; // 재장전 입력 초기화
+        }
 
-        else if(Input.GetMouseButtonDown(0))
+        else if(inputManager.mouse0_Input)
+        {
             Shoot();
+            inputManager.mouse0_Input = false; // 발사 입력 초기화
+        }
     }
 
     protected override void Reload()
@@ -39,75 +50,90 @@ public class Weapon_ShotGun : WeaponBase
             Debug.LogError("재장전이 필요 없습니다!"); // 재장전이 필요 없으면 에러 로그 출력
             return; 
         }
-        if (gameManager.RhythmCheck() == 0)
-        {
-            Debug.LogError("박자 타이밍이 아닙니다!"); // 박자 타이밍이 아니면 에러 로그 출력
-            return; 
-        }
         if(animator.GetBool("Reload") == true)
         {
             Debug.LogError("이미 재장전 중입니다!"); // 이미 재장전 중이면 에러 로그 출력
             return;
         }
 
+        int beat = gameManager.RhythmCheck(); // 현재 박자 체크
+
         //if (currentReloadStepNum >= reloadStepNum)
         //{
         //    return; // 현재 장전 단계가 최대 단계에 도달했으면 리턴
         //}
+
         gameManager.NotePush(); // 노트 푸시 호출
         nowAmmo += 1; // 발사 준비된 탄환 증가
+
+        if(animDic.ContainsKey("Reload") == false)
+        {
+            AnimationClip clip = GetAnimClip("Reload", false);
+            if (clip != null)
+                animDic.Add("Reload", clip);
+            
+        }
+
         animator.SetBool("Reload", true); // 애니메이터 트리거 설정
-        StartCoroutine(ActionDelay(() => animator.SetBool("Reload", false), 0.5f)); // 재장전 애니메이션 딜레이
+        
+
+        var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        animator.speed = beat == 0 ? 2 : 1;
+
+        float delay = (animDic["Reload"].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // 애니메이션 딜레이 계산
+        StartCoroutine(ActionDelay(() =>
+        {
+            animator.SetBool("Reload", false);
+            animator.speed = 1; // 애니메이션 속도 초기화
+        }, delay)); // 재장전 애니메이션 딜레이
         //base.Reload();
     }
 
     protected override void Shoot()
     {
-        //TODO 1. RhythmCheck() 0 으로 계속 옴
-        //TODO 2. base.Shoot() 에서 return시 아래 코드가 실행됨
         if(animator.GetBool("Reload") == true)
         {
             Debug.LogError("재장전 중에는 발사할 수 없습니다!"); // 재장전 중이면 에러 로그 출력
             return;
-        }   
-
-        Debug.Log($"RhythmCheck : {gameManager.RhythmCheck()}");
-        //Debug.Log(string.Format("rhythmTimingNum : {0}", rhythmTimingNum));
-        //if (Time.time < nextShotTime) return; // 딜레이 시간 체크
+        }
+        if (animator.GetBool("Fire") == true)
+        {
+            Debug.LogError("이미 발사 중입니다!"); // 이미 발사 중이면 에러 로그 출력
+            return;
+        }
         if (nowAmmo <= 0)
         {
             Debug.LogError("발사 준비된 탄환이 없습니다!"); // 발사 준비된 탄환이 없으면 에러 로그 출력
             return;            
         }
 
-        if(animator.GetBool("Fire") == true)
-        {
-            Debug.LogError("이미 발사 중입니다!"); // 이미 발사 중이면 에러 로그 출력
-            return;
-        }
+        int beat = gameManager.RhythmCheck(); // 현재 박자 체크
 
         gameManager.NotePush();
-
-        if (rhythmTimingNum == 0)
-        {
-            Debug.LogError("박자 타이밍이 아닙니다!"); // 박자 타이밍이 아니면 에러 로그 출력
-            return;   // 박자 타이밍이 아니면 리턴
-        }
 
         nowAmmo--;                          // 발사 준비된 탄환 감소
         //base.Shoot();
 
-        StartCoroutine(Fire());
+        StartCoroutine(Fire(beat));
     }
 
 
 
-    IEnumerator Fire()
+    IEnumerator Fire(int beat)
     {
 
         animator.SetBool("Fire", true); // 애니메이터 트리거 설정
         Transform trf = Camera.main.transform;
-        
+
+        //beat == 0 ? gunSound[0] : gunSound[1]
+
+        if (animDic.ContainsKey("Fire") == false)
+        {
+            AnimationClip clip = GetAnimClip("Fire", false);
+            if (clip != null)
+                animDic.Add("Fire", clip);
+        }
 
         WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
         for (int i = 0; i < shotAmount; i++)
@@ -118,11 +144,21 @@ public class Weapon_ShotGun : WeaponBase
             GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.LookRotation(v));
             bullet.transform.localScale = bulletScale; // 크기 설정
             bullet.GetComponent<Rigidbody>().linearVelocity = v * bulletSpeed;
+            Bullet b = bullet.GetComponent<Bullet>();
+            if(b != null)
+            {
+                b.Set(shootPoint.position, Quaternion.LookRotation(v), dir, bulletSpeed,
+                    bulletSpeed, beat == 0 ? 4 : beat == 1 ? 2 : 1, this,
+                    _hitObj: beat == 0 ? hitEffect[0].GetComponent<HitEffectObj>() : hitEffect[1].GetComponent<HitEffectObj>());
+            }
             //yield return waitForFixedUpdate; // 프레임 딜레이
-            yield return null;
+            yield return waitForFixedUpdate;
         }
 
-        animator.SetBool("Fire", false); // 발사 애니메이션 종료
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        
+        float delay = (animDic["Fire"].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // 애니메이션 딜레이 계산
+        StartCoroutine(ActionDelay(() => animator.SetBool("Fire", false), delay)); // 재장전 애니메이션 딜레이
     }
 
     Quaternion GetSpreadDirection()
@@ -148,8 +184,16 @@ public class Weapon_ShotGun : WeaponBase
         action?.Invoke(); // 액션 호출
     }
 
-    public void ObjectHit()
+    private AnimationClip GetAnimClip(string name, bool isMach = true)
     {
-
+        var clips = animator.runtimeAnimatorController.animationClips;
+        foreach (var clip in clips)
+        {
+            if (isMach && clip.name == name)
+                return clip;
+            if(!isMach && clip.name.Contains(name))
+                return clip;
+        }
+        return null;
     }
 }
