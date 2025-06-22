@@ -6698,7 +6698,7 @@ MonoBehaviour:
   reload: 0
   shootPoint: {fileID: 6279242928644788219}
   scopeUI: {fileID: 3415656681630547822}
-  zoomFOV: 15
+  zoomScale: 4
   shootFire: {fileID: 0}
   ShootTrail: {fileID: 0}
 --- !u!23 &6102499457582491676
