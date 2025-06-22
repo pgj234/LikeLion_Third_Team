@@ -16,7 +16,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     const int maxCombo = 16;
     int combo;
 
-    int bpm;
+    internal int bpm { get; private set; }
     double currentTime = 0d;
 
     [SerializeField] Transform leftLineTr = null;
