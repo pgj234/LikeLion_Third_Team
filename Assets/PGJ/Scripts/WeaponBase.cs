@@ -14,11 +14,27 @@ public class WeaponBase : MonoBehaviour
     [SerializeField] protected Vector2 shotSpreadMax;        // 탄퍼짐 최댓값
 
     [SerializeField] protected int reloadStepNum;            // 장전 단계
+
+    protected Animator anim;
+
     protected int currentReloadStepNum;     // 현재 장전 단계
 
     protected int rhythmTimingNum;          // 0 : 박자 타이밍 X, 1 : 정박 타이밍, 2 : 반박 타이밍
 
     internal bool reloading = false;
+
+    internal bool shotAble = false;
+    internal bool useAble = false;
+
+    protected virtual void Awake()
+    {
+        anim = GetComponentInChildren<Animator>();
+    }
+
+    //internal virtual void OnEnable()
+    //{
+        
+    //}
 
     protected virtual void Update()
     {
@@ -33,5 +49,21 @@ public class WeaponBase : MonoBehaviour
     protected virtual void Reload()        // 재장전 메서드
     {
         reloading = true;
+    }
+
+    // 무기 집어넣기
+    internal virtual void SwapIn()
+    {
+        gameObject.SetActive(false);
+    }
+
+    internal void SetBoolAnimation(string _animParamName, bool _isTrue)
+    {
+        anim.SetBool(_animParamName, _isTrue);
+    }
+
+    internal float GetAnimationTime()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).length;
     }
 }
