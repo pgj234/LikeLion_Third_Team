@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Icon
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 913f1aa2a490be648bcb741d281b631b, type: 3}
+    - {fileID: 102900000, guid: f0ee7a991d466f246beda3fe07372379, type: 3}
+    - {fileID: 102900000, guid: 40d2e910c89c1d24abf489fe267f1bd4, type: 3}
+    - {fileID: 2800000, guid: 931488342350ef740a977e9d7b1e66e8, type: 3}
+    - {fileID: 102900000, guid: 3187468c6119e59479ff3e66fd3e16c1, type: 3}
+    - {fileID: 102900000, guid: 015e69b5b378fb94d9fe7b5b97a4e62b, type: 3}
+    - {fileID: 102900000, guid: 38bcc190319367d45abe5dcc695ebcac, type: 3}
+    - {fileID: 102900000, guid: 9a577621592cd0e4291da1b5e3e1beb5, type: 3}
+    - {fileID: 102900000, guid: 6da77164d81826148b20919d69622656, type: 3}
+    - {fileID: 102900000, guid: ec24b985fd4fe5f44bce15b07112c15c, type: 3}
+    - {fileID: 102900000, guid: 54744e0ffbab086479c14855f087e603, type: 3}
+    - {fileID: 102900000, guid: bf3207a23aa6afe428f26937e455e131, type: 3}
+    - {fileID: 102900000, guid: 1940fdd878ec16e448b316a17557b964, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys: []
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites: []
+  m_PackedSpriteNamesToIndex: []
+  m_RenderDataMap: {}
+  m_Tag: Icon
+  m_IsVariant: 0

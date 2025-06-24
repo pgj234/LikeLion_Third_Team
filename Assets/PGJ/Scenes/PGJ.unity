@@ -7122,6 +7122,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 849bb857817654547aac72070b927a12, type: 3}
   - {fileID: 8300000, guid: 9e8b381cbf62dbd48be9ae7388cf5e1c, type: 3}
   - {fileID: 8300000, guid: fe3b96895404ff04cb1211f03bdffa45, type: 3}
+  - {fileID: 8300000, guid: aa028035fc64f0845ae13b228a0ce222, type: 3}
 --- !u!1 &6603114312285101329
 GameObject:
   m_ObjectHideFlags: 0
@@ -8798,6 +8799,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7563435938131235621}
   - component: {fileID: 79026931211630907}
+  - component: {fileID: 9219484156514632489}
   - component: {fileID: 5018669507309229991}
   - component: {fileID: 9219484156514632488}
   m_Layer: 8
@@ -8848,6 +8850,29 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 8
+--- !u!136 &9219484156514632489
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9219484156514632486}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

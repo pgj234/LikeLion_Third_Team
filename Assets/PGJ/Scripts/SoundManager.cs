@@ -13,6 +13,7 @@ public enum SFX
     RhythmFail,
     SwordDraw,
     SniperShoot,
+    WeaponGet
 }
 
 public class SoundManager : SingletonBehaviour<SoundManager>

@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
         GroundedCheck();
         Move();
 
-        WeaponChangeInputCheck();
+        //WeaponChangeInputCheck();
         ReloadCheck();
         ShootCheck();
     }
@@ -160,6 +160,8 @@ public class Player : MonoBehaviour
     internal void GetWeapon(int weaponNum)
     {
         weaponArray[weaponNum].useAble = true;
+
+        EventManager.Instance.PlayerWeaponUIRefresh();
     }
 
     IEnumerator ChangeWeapon(int weaponNum)
