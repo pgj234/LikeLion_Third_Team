@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -83,16 +82,6 @@ namespace StarterAssets
         private bool _hasAnimator;
         private const float _threshold = 0.01f;
 
-        [Header("Weapon / Sword")]
-        [Tooltip("참조할 Sword 스크립트가 붙은 GameObject")]
-        public Sword sword;
-
-        [Header("Draw/Hold Timings")]
-        [Tooltip("Draw Sword 애니메이션 재생 시간")]
-        public float drawSwordDuration = 0.5f;
-        [Tooltip("Hold Sword 상태 유지 시간 (0 이하: 무한)")]
-        public float holdSwordDuration = 2.0f;
-
         private void Awake()
         {
             if (_mainCamera == null)
@@ -101,7 +90,6 @@ namespace StarterAssets
 
         private void Start()
         {
-            // initial references
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
@@ -110,8 +98,6 @@ namespace StarterAssets
             _playerInput = GetComponent<PlayerInput>();
 #endif
             AssignAnimationIDs();
-
-            // reset timeouts
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
         }
@@ -119,11 +105,10 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
-
             JumpAndGravity();
             GroundedCheck();
             Move();
-            HandleWeaponInput();
+            // 무기 관련 로직은 Sword.cs로 이동
         }
 
         private void LateUpdate()
@@ -140,41 +125,8 @@ namespace StarterAssets
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
 
-        private void HandleWeaponInput()
-        {
-            // 키보드 1번 키를 누르면 Draw/Hold 시퀀스 실행
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                StopAllCoroutines();
-                StartCoroutine(DrawSwordSequence());
-            }
-        }
-
-        private IEnumerator DrawSwordSequence()
-        {
-            // Draw Sword
-            _animator.Play("Draw Sword 2", 0, 0f);
-
-            // 파티클 팡!
-            sword?.PlaySparkleOnce();
-
-            // Draw 애니 + 파티클 지속 시간만큼 대기
-            yield return new WaitForSeconds(drawSwordDuration + (sword?.SparkleDuration ?? 0f));
-
-            // Hold Sword (hand Idle)
-            _animator.Play("hand Idle", 0, 0f);
-
-            // Hold 유지 시간만큼 대기 (0 이하일 경우 무시)
-            if (holdSwordDuration > 0f)
-                yield return new WaitForSeconds(holdSwordDuration);
-
-            // 다시 기본 Idle-Walk-Run Blend로 복귀
-            _animator.Play("Idle Walk Run Blend", 0, 0f);
-
-            yield break;
-        }
-
         public bool isAimMove = false;
+
         private void GroundedCheck()
         {
             Vector3 spherePosition = new Vector3(
@@ -241,7 +193,6 @@ namespace StarterAssets
                 Time.deltaTime * SpeedChangeRate);
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
-            // rotate to face input direction
             if (_input.move != Vector2.zero)
             {
                 Vector3 inputDirection = new Vector3(
@@ -318,44 +269,6 @@ namespace StarterAssets
             if (lfAngle < -360f) lfAngle += 360f;
             if (lfAngle > 360f) lfAngle -= 360f;
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            Color transparentGreen = new Color(0f, 1f, 0f, 0.35f);
-            Color transparentRed = new Color(1f, 0f, 0f, 0.35f);
-
-            Gizmos.color = Grounded ? transparentGreen : transparentRed;
-            Gizmos.DrawSphere(
-                new Vector3(
-                    transform.position.x,
-                    transform.position.y - GroundedOffset,
-                    transform.position.z),
-                GroundedRadius);
-        }
-
-        private void OnFootstep(AnimationEvent animationEvent)
-        {
-            if (animationEvent.animatorClipInfo.weight > 0.5f &&
-                FootstepAudioClips.Length > 0)
-            {
-                var index = Random.Range(0, FootstepAudioClips.Length);
-                AudioSource.PlayClipAtPoint(
-                    FootstepAudioClips[index],
-                    transform.TransformPoint(_controller.center),
-                    FootstepAudioVolume);
-            }
-        }
-
-        private void OnLand(AnimationEvent animationEvent)
-        {
-            if (animationEvent.animatorClipInfo.weight > 0.5f)
-            {
-                AudioSource.PlayClipAtPoint(
-                    LandingAudioClip,
-                    transform.TransformPoint(_controller.center),
-                    FootstepAudioVolume);
-            }
         }
     }
 }
