@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "6e4e4861-eaf6-4de3-a8d1-ffefc02a7451",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -275,17 +284,6 @@
                 },
                 {
                     "name": "",
-                    "id": "1069f701-1b83-48ee-beee-26e2ef433e8b",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Mouse1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "51129d73-7e62-4715-a3ef-eb9bc78dba76",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
@@ -347,6 +345,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "WeaponChoice3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d441f93c-74d6-4319-948b-ef4dc791638b",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
