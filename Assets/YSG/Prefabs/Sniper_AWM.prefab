@@ -168,7 +168,7 @@ MonoBehaviour:
   shootPoint: {fileID: 6279242928531207454}
   spreadAngle: 10
   scopeUI: {fileID: 8921875170102450004}
-  zoomScale: 4
+  zoomScale: 2
   shootFire: {fileID: 1337198075554910, guid: 49ad2c215f7bf7c429c2675c4c6ccb5c, type: 3}
   shootTrail: {fileID: 0}
   trailDuration: 0.5

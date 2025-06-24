@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: Reload
+    m_ConditionEvent: WeaponReload
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7721168616106317244}
@@ -32,7 +32,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Reload 1
+  m_Name: WeaponReload_1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -62,7 +62,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: Reload
+    m_ConditionEvent: WeaponReload
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 855132912402021703}
@@ -87,7 +87,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: Reload
+    m_ConditionEvent: WeaponReload
     m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1648583310316539368}
@@ -110,7 +110,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ShootAndBolt
+  m_Name: WeaponAttack
   m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
@@ -139,7 +139,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Shoot
+    m_ConditionEvent: WeaponAttack
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5870708023404998673}
@@ -164,7 +164,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: Reload
+    m_ConditionEvent: WeaponReload
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 855132912402021703}
@@ -189,7 +189,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: Reload
+    m_ConditionEvent: WeaponReload
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 855132912402021703}
@@ -252,7 +252,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Reload 2
+  m_Name: WeaponReload_2
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -280,7 +280,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Swap
+  m_Name: WeaponPull
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -306,16 +306,16 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AWM
+  m_Name: Sniper_AWM
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: Shoot
+  - m_Name: WeaponAttack
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: Reload
+  - m_Name: WeaponReload
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -341,7 +341,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle
+  m_Name: WeaponIDLE
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -371,7 +371,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: Reload
+    m_ConditionEvent: WeaponReload
     m_EventTreshold: 4
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8301159950669628212}
@@ -440,7 +440,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: Reload
+    m_ConditionEvent: WeaponReload
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8139656602700920652}
@@ -485,7 +485,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Reload 3
+  m_Name: WeaponReload_3
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -513,7 +513,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Reload 4
+  m_Name: WeaponReload_4
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:

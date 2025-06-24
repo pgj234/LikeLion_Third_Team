@@ -65,7 +65,7 @@ public class Sniper : WeaponBase
         if (input.mouse0_Input)
         {
             input.mouse0_Input = false;
-            anim.SetTrigger("Shoot");
+            anim.SetTrigger("WeaponAttack");
         }
 
         if (input.r_Input)
@@ -105,12 +105,6 @@ public class Sniper : WeaponBase
         }
 
         Vector3 shootDir = shootPoint.forward;
-        if (!isZooming)
-        {
-            float spreadX = Random.Range(-spreadAngle, spreadAngle);
-            float spreadY = Random.Range(-spreadAngle, spreadAngle);
-            shootDir = Quaternion.Euler(spreadX, spreadY, 0f) * shootDir;
-        }
 
         Ray ray = new Ray(shootPoint.position, shootDir);
         if (Physics.Raycast(ray, out RaycastHit hit, 100))
@@ -140,6 +134,8 @@ public class Sniper : WeaponBase
     {
         base.Reload();
 
+        if (isActing) return;
+
         nowAmmo = maxAmmo;
 
         if (GameManager.Instance.RhythmCheck() > 0
@@ -156,7 +152,7 @@ public class Sniper : WeaponBase
             reload = 0;
         }
 
-        anim.SetInteger("Reload", reload);
+        anim.SetInteger("WeaponReload", reload);
     }
 
     private void Zoom()
