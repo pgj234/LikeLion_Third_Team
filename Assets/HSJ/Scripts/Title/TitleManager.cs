@@ -12,6 +12,7 @@ public class TitleManager : MonoBehaviour
     [SerializeField] List<TextMeshProUGUI> settingTexts;    // 0 : BGM, 1 : SFX, 2 : Mouse Sensitivity
     [SerializeField] List<TextMeshProUGUI> fpsBtnTexts;     // 60, 120, 165, 240
     [SerializeField] List<Sprite> fpsBtnBgs;                // 0 : disabled, 1 : enabled
+    [SerializeField] AudioSource[] soundSource;             // 0 : BGM, 1 : SFX
     [Header("Credit Panel")]
     [SerializeField] GameObject creditPanel;
 
@@ -129,6 +130,7 @@ public class TitleManager : MonoBehaviour
         //UserSettingManager.Instance.RegisterSFXChanged(ChangeSFX, true);
         //UserSettingManager.Instance.RegisterBGMChanged(ChangeBGM, true);
         //UserSettingManager.Instance.RegisterMouseSensitivityChanged(ChangeMouseSensitivity, true);
+        soundSource[0].volume = UserSettingManager.Instance.BGM; // BGM 오디오 소스 볼륨 설정
     }
 
     public void SceneMove(int sceneIndex)
@@ -188,6 +190,7 @@ public class TitleManager : MonoBehaviour
         // BGM 볼륨 변경 로직
         UserSettingManager.Instance.BGM = slider.value;
         settingTexts[0].text = $"{Mathf.FloorToInt(slider.value * 100)} %";
+        soundSource[0].volume = slider.value; // BGM 오디오 소스 볼륨 설정
     }
 
     public void ChangeSFX(Slider slider)
@@ -195,6 +198,10 @@ public class TitleManager : MonoBehaviour
         // SFX 볼륨 변경 로직
         UserSettingManager.Instance.SFX = slider.value;
         settingTexts[1].text = $"{Mathf.FloorToInt(slider.value * 100)} %";
+        if (soundSource[1].isPlaying)
+            soundSource[1].Stop();
+        soundSource[1].volume = slider.value; // SFX 오디오 소스 볼륨 설정
+        soundSource[1].Play(); // SFX 오디오 소스 재생
     }
 
     public void ChangeMouseSensitivity(Slider slider)
