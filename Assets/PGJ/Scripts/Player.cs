@@ -67,6 +67,9 @@ public class Player : MonoBehaviour
     public float GroundedRadius = 0.28f;
     public LayerMask GroundLayers;
 
+    [Header("Player Body")]
+    public GameObject chestObj;
+
     private GameObject mainCamera;
     CharacterController controller;
     InputManager input;
@@ -160,6 +163,8 @@ public class Player : MonoBehaviour
     internal void GetWeapon(int weaponNum)
     {
         weaponArray[weaponNum].useAble = true;
+
+        EventManager.Instance.PlayerWeaponUIRefresh();
     }
 
     IEnumerator ChangeWeapon(int weaponNum)
@@ -275,9 +280,10 @@ public class Player : MonoBehaviour
         cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
         cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, BottomClamp, TopClamp);
 
-        cinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride, cinemachineTargetYaw, 0.0f);
+        //cinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride, cinemachineTargetYaw, 0.0f);
 
-        transform.forward = new Vector3(cinemachineCameraTarget.transform.forward.x, 0, cinemachineCameraTarget.transform.forward.z);
+        chestObj.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride, cinemachineTargetYaw, 0.0f);
+        //transform.forward = new Vector3(cinemachineCameraTarget.transform.forward.x, 0, cinemachineCameraTarget.transform.forward.z);
     }
 
     float ClampAngle(float lfAngle, float lfMin, float lfMax)

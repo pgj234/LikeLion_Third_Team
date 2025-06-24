@@ -1,5 +1,4 @@
-﻿using DG.Tweening.Core.Easing;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 enum MonsterState
@@ -76,6 +75,8 @@ public class Entity : MonoBehaviour
         attackCnt = 0;
 
         currentTime = 0d;
+
+        hp = maxHP;
     }
 
     protected virtual void Update()
@@ -92,7 +93,7 @@ public class Entity : MonoBehaviour
     }
 
     // 행동 양식
-    protected virtual void StateProc()
+    protected void StateProc()
     {
         switch (monsterState)
         {
@@ -107,6 +108,16 @@ public class Entity : MonoBehaviour
 
             case MonsterState.Die:
                 break;
+        }
+    }
+
+    internal void GetDamage(int dmg)
+    {
+        hp -= dmg;
+
+        if (hp <= 0)
+        {
+            Die();
         }
     }
 
@@ -132,6 +143,12 @@ public class Entity : MonoBehaviour
     protected virtual void Idle()
     {
 
+    }
+
+    // 사망
+    protected virtual void Die()
+    {
+        
     }
 
     // 움직임 처리

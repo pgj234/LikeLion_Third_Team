@@ -15,6 +15,7 @@ public class WeaponBase : MonoBehaviour
 
     [SerializeField] protected int reloadStepNum;            // 장전 단계
 
+    protected InputManager input;
     protected Animator anim;
 
     protected int currentReloadStepNum;     // 현재 장전 단계
@@ -29,12 +30,20 @@ public class WeaponBase : MonoBehaviour
     protected virtual void Awake()
     {
         anim = GetComponentInChildren<Animator>();
+
+        if (anim == null)
+            Debug.LogError("Animator 컴포넌트를 찾을 수 없습니다.");
     }
 
     //internal virtual void OnEnable()
     //{
-        
+
     //}
+
+    protected virtual void Start()
+    {
+        input = InputManager.Instance;
+    }
 
     protected virtual void Update()
     {
