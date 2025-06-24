@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
         GroundedCheck();
         Move();
 
-        WeaponChangeInputCheck();
+        //WeaponChangeInputCheck();
         ReloadCheck();
         ShootCheck();
     }
