@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Sniper : WeaponBase
 {
-    private Animator anim;
     private InputManager input;
 
     private bool isActing = true;
@@ -12,6 +11,8 @@ public class Sniper : WeaponBase
     private Vector3 originalShootPointLocalPos;
     private Quaternion originalShootPointLocalRot;
 
+    [Header("발사")]
+    [SerializeField] private float spreadAngle = 3;
 
     [Header("조준")]
     [SerializeField] private GameObject scopeUI;
@@ -20,11 +21,16 @@ public class Sniper : WeaponBase
 
     [Header("이펙트")]
     [SerializeField] private GameObject shootFire;
-    [SerializeField] private GameObject ShootTrail;
+    [SerializeField] private LineRenderer shootTrail;
+    [SerializeField] private float trailDuration = 0.5f;
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
     private void Start()
     {
-        anim = GetComponentInChildren<Animator>();
         input = InputManager.Instance;
 
         nowAmmo = maxAmmo;
@@ -33,6 +39,9 @@ public class Sniper : WeaponBase
 
         originalShootPointLocalPos = shootPoint.localPosition;
         originalShootPointLocalRot = shootPoint.localRotation;
+
+        shootTrail = GetComponent<LineRenderer>();
+        if (shootTrail != null) shootTrail.enabled = false;
     }
 
     protected override void Update()
@@ -48,13 +57,9 @@ public class Sniper : WeaponBase
             input.mouse0_Input = false;
 
             if (!isZooming)
-            {
                 Zoom();
-            }
             else
-            {
                 Unzoom();
-            }
         }
 
         if (input.mouse0_Input)
@@ -93,35 +98,21 @@ public class Sniper : WeaponBase
 
         nowAmmo -= shotAmount;
 
-        // 총구 화염 생성
         if (shootFire != null)
         {
             GameObject fire = Instantiate(shootFire, shootPoint.position, shootPoint.rotation, shootPoint);
             Destroy(fire, 0.1f);
         }
 
-        // 총알 궤적 생성
-        if (ShootTrail != null)
+        Vector3 shootDir = shootPoint.forward;
+        if (!isZooming)
         {
-            GameObject trail = Instantiate(ShootTrail, shootPoint.position, shootPoint.rotation);
-            if (trail.TryGetComponent(out TrailRenderer trailRenderer))
-            {
-                trailRenderer.Clear();
-            }
-
-            // 궤적을 충돌 지점까지 이동시킴
-            Vector3 endPos = shootPoint.position + shootPoint.forward * 100;
-
-            if (Physics.Raycast(shootPoint.position, shootPoint.forward, out RaycastHit hit2, 100))
-            {
-                endPos = hit2.point;
-            }
-
-            StartCoroutine(MoveTrail(trail.transform, endPos));
+            float spreadX = Random.Range(-spreadAngle, spreadAngle);
+            float spreadY = Random.Range(-spreadAngle, spreadAngle);
+            shootDir = Quaternion.Euler(spreadX, spreadY, 0f) * shootDir;
         }
 
-        // 충돌 판정
-        Ray ray = new Ray(shootPoint.position, shootPoint.forward);
+        Ray ray = new Ray(shootPoint.position, shootDir);
         if (Physics.Raycast(ray, out RaycastHit hit, 100))
         {
             Debug.Log("충돌 대상 : " + hit.collider.name);
@@ -129,33 +120,20 @@ public class Sniper : WeaponBase
             if (hit.collider.CompareTag("Enemy"))
             {
                 Debug.Log("명중");
-
                 hit.collider.GetComponent<Monster>()?.Hit(shotDamage);
             }
+
+            DrawTrail(shootPoint.position, hit.point); 
         }
         else
         {
             Debug.Log("빗나감");
+
+            Vector3 missPoint = shootPoint.position + shootDir * 100;
+            DrawTrail(shootPoint.position, missPoint); 
         }
 
         Unzoom();
-    }
-
-    private IEnumerator MoveTrail(Transform _trail, Vector3 _targetPos)
-    {
-        float time = 0f;
-        Vector3 start = _trail.position;
-        float duration = 0.1f;
-
-        while (time < duration)
-        {
-            _trail.position = Vector3.Lerp(start, _targetPos, time / duration);
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        _trail.position = _targetPos;
-        Destroy(_trail.gameObject, 0.5f);
     }
 
     protected override void Reload()
@@ -207,7 +185,25 @@ public class Sniper : WeaponBase
         isZooming = false;
     }
 
-    #region 애니메이션 이벤트
+    private void DrawTrail(Vector3 _start, Vector3 _end)
+    {
+        if (shootTrail == null) return;
+
+        shootTrail.positionCount = 2;
+        shootTrail.SetPosition(0, _start);
+        shootTrail.SetPosition(1, _end);
+        shootTrail.enabled = true;
+
+        StartCoroutine(DisableTrail());
+    }
+
+    private IEnumerator DisableTrail()
+    {
+        yield return new WaitForSeconds(trailDuration);
+        shootTrail.enabled = false;
+    }
+
+    #region 애니메이션
     public void ShootEvent() => Shoot();
 
     public void ActOverEvent() => isActing = false;
@@ -218,6 +214,18 @@ public class Sniper : WeaponBase
 
         reload = 0;
         anim.SetInteger("Reload", reload);
+    }
+
+    public void SetAnimSpeed(float speed)
+    {
+        if (anim == null) return;
+        anim.speed = speed;
+    }
+
+    public void ResetAnimSpeed()
+    {
+        if (anim == null) return;
+        anim.speed = 1;
     }
     #endregion
 }

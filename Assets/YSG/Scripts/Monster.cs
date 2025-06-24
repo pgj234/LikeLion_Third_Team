@@ -1,88 +1,124 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Monster : MonoBehaviour
 {
     private Animator anim;
     private CharacterController character;
+    private NavMeshAgent agent;
     private Transform player;
+
+    private float timer;
+
+    private bool isWaiting = false;
+    private bool isRunning = false;
+    private bool isAttacking = false;
+    private bool isHit = false;
+    private bool isDead = false;
 
     [Header("이동")]
     public float walkSpeed = 1.5f;
-    public float runSpeed = 4f;
-    public float moveTime = 2f;
-    public float waitTime = 1f;
-    private float timer;
-    private bool isWaiting = false;
-    private bool isRunning = false;
+    public float runSpeed = 4;
+    public float moveTime = 2;
+    public float waitTime = 1;
     private Vector3 moveDirection;
 
     [Header("감지")]
-    public float detectRange = 5f;
-    public LayerMask playerLayer;
-    public LayerMask obstacleLayer;
+    [SerializeField] private float detectRange = 5;
+    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask groundLayer;
+
+    [Header("공격")]
+    [SerializeField] private Transform attackCenter;
+    [SerializeField] private float attackRadius = 1;
+    [SerializeField] private float attackCooldown = 1.5f;
+    private float attackTimer = 0;
 
     [Header("체력")]
-    [SerializeField] private float maxHp = 100f;
+    [SerializeField] private float maxHp = 100;
     [SerializeField] private float currentHp;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
         character = GetComponent<CharacterController>();
+        agent = GetComponent<NavMeshAgent>();
+
+        agent.updatePosition = true;
+        agent.updateRotation = true;
+        agent.enabled = false;
 
         timer = moveTime;
         moveDirection = transform.forward;
-
         currentHp = maxHp;
     }
 
     private void Update()
     {
+        if (isDead) return;
+
+        if (isHit)
+        {
+            anim.SetFloat("Speed", 0);
+            return;
+        }
+
         DetectPlayer();
-        Move();
+
+        if (attackTimer > 0)
+            attackTimer -= Time.deltaTime;
+
+        if (player != null && IsInAttackRange() && !isAttacking)
+            Attack();
+
+        if (isAttacking)
+        {
+            if (agent.enabled) agent.enabled = false;
+
+            anim.SetFloat("Speed", 0);
+            return;
+        }
+
+        if (player != null) isRunning = true;
+
+        if (isRunning)
+            Run();
+        else
+            Walk();
     }
 
     #region 이동
-    private void Move()
+    private void Walk()
     {
-        float currentSpeed = 0f;
+        if (agent.enabled) agent.enabled = false;
 
-        if (isRunning)
+        float currentSpeed = 0;
+
+        if (isWaiting)
         {
-            character.Move(moveDirection * runSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.LookRotation(moveDirection);
-            currentSpeed = runSpeed;
+            timer -= Time.deltaTime;
+            currentSpeed = 0;
+            if (timer < 0)
+            {
+                isWaiting = false;
+                timer = moveTime;
+            }
         }
         else
         {
-            if (isWaiting)
-            {
-                timer -= Time.deltaTime;
-                currentSpeed = 0f;
-                if (timer <= 0f)
-                {
-                    isWaiting = false;
-                    timer = moveTime;
-                }
-            }
-            else
-            {
-                character.Move(moveDirection * walkSpeed * Time.deltaTime);
-                currentSpeed = walkSpeed;
+            character.Move(moveDirection * walkSpeed * Time.deltaTime);
+            currentSpeed = walkSpeed;
 
-                timer -= Time.deltaTime;
-                if (timer <= 0f)
-                {
-                    isWaiting = true;
-                    timer = waitTime;
-                    currentSpeed = 0f;
-                }
-
-                if (IsObstacle() || !IsGround())
-                {
-                    Turn();
-                }
+            timer -= Time.deltaTime;
+            if (timer < 0)
+            {
+                isWaiting = true;
+                timer = waitTime;
+                currentSpeed = 0;
             }
+
+            if (IsObstacle() || !IsGround())
+                Turn();
         }
 
         anim.SetFloat("Speed", currentSpeed);
@@ -92,60 +128,143 @@ public class Monster : MonoBehaviour
     {
         int[] angles = { -90, 90, 180 };
         int angle = angles[Random.Range(0, angles.Length)];
-
         transform.Rotate(0, angle, 0);
         moveDirection = transform.forward;
+    }
+
+    private void Run()
+    {
+        if (!agent.enabled) agent.enabled = true;
+
+        agent.speed = runSpeed;
+        agent.SetDestination(player.position);
+
+        if (agent.hasPath && agent.remainingDistance > agent.stoppingDistance)
+        {
+            Vector3 dir = agent.desiredVelocity.normalized;
+            if (dir != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(dir);
+            }
+
+            anim.SetFloat("Speed", runSpeed);
+        }
+        else
+        {
+            anim.SetFloat("Speed", 0);
+        }
     }
     #endregion
 
     #region 감지
     private void DetectPlayer()
     {
+        if (player != null) return;
+
         Collider[] hits = Physics.OverlapSphere(transform.position, detectRange, playerLayer);
-        if (hits.Length > 0)
+
+        foreach (var hit in hits)
         {
-            player = hits[0].transform;
-            isRunning = true;
-            moveDirection = (player.position - transform.position).normalized;
+            if (hit.CompareTag("Player"))
+            {
+                player = hit.transform;
+                break;
+            }
         }
-        else
+    }
+
+    private bool IsInAttackRange()
+    {
+        Collider[] hits = Physics.OverlapSphere(attackCenter.position, attackRadius, playerLayer);
+        foreach (var hit in hits)
         {
-            isRunning = false;
+            if (hit.CompareTag("Player")) return true;
         }
+        return false;
     }
 
     private bool IsObstacle()
     {
         Ray ray = new Ray(transform.position + Vector3.up * 0.5f, moveDirection);
-        return Physics.Raycast(ray, 0.6f, obstacleLayer);
+        return Physics.Raycast(ray, 0.6f, groundLayer);
     }
 
     private bool IsGround()
     {
         Vector3 origin = transform.position + moveDirection * 0.5f + Vector3.up * 0.1f;
-        return Physics.Raycast(origin, Vector3.down, 1f);
+        return Physics.Raycast(origin, Vector3.down, 1, groundLayer);
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectRange);
+
+        if (attackCenter != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(attackCenter.position, attackRadius);
+        }
     }
     #endregion
+
+    #region 전투
+    private void Attack()
+    {
+        if (attackTimer > 0) return;
+
+        isAttacking = true;
+
+        anim?.SetTrigger("Attack");
+
+        Debug.Log("플레이어 데미지!");
+
+        attackTimer = attackCooldown;
+    }
 
     public void Hit(float damage)
     {
         currentHp -= damage;
 
+        anim?.SetTrigger("Hit");
 
-        if (anim != null)
+        isHit = true;
+        isRunning = true;
+
+        if (player == null)
         {
-            anim.SetTrigger("Hit");
+            GameObject target = GameObject.FindGameObjectWithTag("Player");
+            if (target != null)
+            {
+                player = target.transform;
+            }
         }
 
         if (currentHp <= 0)
         {
             Debug.Log("사망");
+
+            Die();
         }
     }
+
+    public void EndAttack() => isAttacking = false;
+    public void EndHit() => isHit = false;
+
+    private void Die()
+    {
+        anim?.SetTrigger("Death");
+
+        isAttacking = false;
+        isHit = false;
+        isRunning = false;
+        isDead = true;
+
+        if (agent != null) agent.enabled = false;
+        if (character != null) character.enabled = false;
+
+        Destroy(gameObject, 10);
+    }
+
+    #endregion
 }
