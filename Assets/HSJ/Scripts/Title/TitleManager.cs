@@ -160,7 +160,7 @@ public class TitleManager : MonoBehaviour
             foreach(TextMeshProUGUI text in fpsBtnTexts)
             {
                 Image img = text.transform.parent.GetComponent<Image>();
-                img.sprite = text.text == UserSettingManager.Instance.FPS.ToString() ? fpsBtnBgs[1] : fpsBtnBgs[0];
+                img.sprite = int.Parse(text.text) == (int)UserSettingManager.Instance.FPS ? fpsBtnBgs[1] : fpsBtnBgs[0];
                 text.color = Color.white; // 텍스트 색상을 초기화
             }
         }
