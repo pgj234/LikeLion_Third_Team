@@ -63,6 +63,10 @@ MonoBehaviour:
   whatIsWall:
     serializedVersion: 2
     m_Bits: 0
+  weaponDropObjArray:
+  - {fileID: 1942028101895977579, guid: 5a264cb530ad1014484745203a8ecd3f, type: 3}
+  - {fileID: 4018343803183913587, guid: baff4d7b7952a78429d7a3ff2253e6b2, type: 3}
+  - {fileID: 2633544591488275643, guid: e96ff4020fc26ef4f86327ca1a1ef417, type: 3}
 --- !u!195 &7474605138025687094
 NavMeshAgent:
   m_ObjectHideFlags: 0

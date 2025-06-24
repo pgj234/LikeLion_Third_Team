@@ -7,6 +7,8 @@ public class EventManager : SingletonBehaviour<EventManager>
     // 데미지 이벤트
     public Action<int> OnPlayerDamageAction;
 
+    public Action OnPlayerWeaponUIRefreshAction;
+
     // 플레이어 사망 이벤트
     public Action OnPlayerDieAction;
     // 부활 이벤트
@@ -26,6 +28,12 @@ public class EventManager : SingletonBehaviour<EventManager>
     public void PlayerDamageEvent(int damage)
     {
         OnPlayerDamageAction?.Invoke(damage);
+    }
+
+    // 플레이어 사용가능 무기 UI 새로고침
+    public void PlayerWeaponUIRefresh()
+    {
+        OnPlayerWeaponUIRefreshAction?.Invoke();
     }
 
     // 플레이어 사망 이벤트 실행 메서드
