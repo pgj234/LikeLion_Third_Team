@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Sniper : WeaponBase
 {
-    private Animator anim;
     private InputManager input;
 
     private bool isActing = true;
@@ -25,10 +24,13 @@ public class Sniper : WeaponBase
     [SerializeField] private LineRenderer shootTrail;
     [SerializeField] private float trailDuration = 0.5f;
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     private void Start()
     {
-        anim = GetComponentInChildren<Animator>();
-
         input = InputManager.Instance;
 
         nowAmmo = maxAmmo;

@@ -14,6 +14,7 @@ public class Monster : MonoBehaviour
     private bool isRunning = false;
     private bool isAttacking = false;
     private bool isHit = false;
+    private bool isDead = false;
 
     [Header("¿Ãµø")]
     public float walkSpeed = 1.5f;
@@ -54,6 +55,8 @@ public class Monster : MonoBehaviour
 
     private void Update()
     {
+        if (isDead) return;
+
         if (isHit)
         {
             anim.SetFloat("Speed", 0);
@@ -250,7 +253,18 @@ public class Monster : MonoBehaviour
 
     private void Die()
     {
+        anim?.SetTrigger("Death");
 
+        isAttacking = false;
+        isHit = false;
+        isRunning = false;
+        isDead = true;
+
+        if (agent != null) agent.enabled = false;
+        if (character != null) character.enabled = false;
+
+        Destroy(gameObject, 10);
     }
+
     #endregion
 }

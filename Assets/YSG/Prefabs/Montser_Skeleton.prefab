@@ -611,5 +611,5 @@ MonoBehaviour:
   attackCenter: {fileID: 1582615829231290225}
   attackRadius: 0.7
   attackCooldown: 1.5
-  maxHp: 100
+  maxHp: 200
   currentHp: 0
