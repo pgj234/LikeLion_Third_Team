@@ -7,8 +7,8 @@ public class Pistol : WeaponBase
     //[SerializeField] private KeyCode reloadKey = KeyCode.R;
     //[SerializeField] private KeyCode unequipKey = KeyCode.X; // 무기 해제 키
 
-    [Header("장전 설정")]
-    [SerializeField] private float reloadStepDuration = 0.6f; // 각 장전 단계 사이의 간격
+    //[Header("장전 설정")]
+    //[SerializeField] private float reloadStepDuration = 0.6f; // 각 장전 단계 사이의 간격
     // private int reloadStep = 0;                (부모에 currentReloadStepNum 변수 이용)      // 0: 준비 안함, 1~3: 각 장전 단계
 
     protected override void Awake()

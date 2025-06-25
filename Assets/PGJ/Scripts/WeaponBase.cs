@@ -108,6 +108,11 @@ public class WeaponBase : MonoBehaviour
         return anim.GetCurrentAnimatorStateInfo(0).length;
     }
 
+    internal float SetAnimationSpeed(float speed)
+    {
+        return anim.speed = speed;
+    }
+
     internal int GetMaxAmmo()
     {
         return maxAmmo;

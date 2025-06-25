@@ -166,6 +166,7 @@ public class Player : MonoBehaviour
         dashStackCoolTimer = 0;
 
         currentWeapon = weaponArray[startWeaponNum];
+        currentWeapon.SetAnimationSpeed(1.8f);
 
         jumpTimeoutDelta = JumpTimeout;
         fallTimeoutDelta = FallTimeout;
@@ -238,67 +239,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    //void ReloadCheck()
-    //{
-    //    if (false == playerDie)
-    //    {
-    //        if (input.r_Input)
-    //        {
-    //            input.r_Input = false;
-
-    //            if (false == currentWeapon.reloading)
-    //            {
-    //                // 장전 진행
-    //            }
-    //        }
-    //    }
-    //}
-
-    //void ShootCheck()
-    //{
-    //    if (input.mouse0_Input)
-    //    {
-    //        input.mouse0_Input = false;
-            
-    //        // 음악 시작전이면 리턴
-    //        //if (false == gameManager.musicStart)
-    //        //{
-    //        //    return;
-    //        //}
-            
-    //        // 무기 장전중이면 리턴
-    //        //if (true == currentWeapon.reloading)
-    //        //{
-    //        //    return;
-    //        //}
-            
-    //        // 노트가 멀면 리턴
-    //        //if (false == gameManager.GetNoteDisable())
-    //        //{
-    //        //    return;
-    //        //}
-            
-    //        //if (1 == gameManager.RhythmCheck())
-    //        //{
-    //        //    Debug.Log("정박 성공!");
-    //        //    gameManager.AddCombo();
-    //        //}
-    //        //else if (2 == gameManager.RhythmCheck())
-    //        //{
-    //        //    Debug.Log("반박 성공!");
-    //        //    gameManager.AddCombo();
-    //        //}
-    //        //else
-    //        //{
-    //        //    Debug.Log("박자 타이밍 실패...");
-    //        //    SoundManager.Instance.PlaySFX(SFX.RhythmFail);
-    //        //    gameManager.SetHalfCombo();
-    //        //}
-
-    //        //gameManager.NotePush();
-    //    }
-    //}
-
     void CameraRotation()
     {
         if (input.look.sqrMagnitude >= threshold && !LockCameraPosition)
@@ -310,10 +250,7 @@ public class Player : MonoBehaviour
         cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
         cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, BottomClamp, TopClamp);
 
-        //cinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride, cinemachineTargetYaw, 0.0f);
-
         chestObj.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride, cinemachineTargetYaw, 0.0f);
-        //transform.forward = new Vector3(cinemachineCameraTarget.transform.forward.x, 0, cinemachineCameraTarget.transform.forward.z);
     }
 
     float ClampAngle(float lfAngle, float lfMin, float lfMax)
