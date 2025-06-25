@@ -164,6 +164,7 @@ MonoBehaviour:
   shotSpreadMin: {x: 0, y: 0}
   shotSpreadMax: {x: 0, y: 0}
   reloadStepNum: 0
+  player: {fileID: 0}
   reload: 0
   shootPoint: {fileID: 6279242928531207454}
   scopeUI: {fileID: 8921875170102450004}
