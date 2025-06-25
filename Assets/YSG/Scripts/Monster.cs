@@ -262,8 +262,6 @@ public class Monster : MonoBehaviour
 
         if (agent != null) agent.enabled = false;
         if (character != null) character.enabled = false;
-
-        Destroy(gameObject, 10);
     }
 
     #endregion

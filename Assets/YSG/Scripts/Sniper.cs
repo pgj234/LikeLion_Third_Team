@@ -6,13 +6,16 @@ public class Sniper : WeaponBase
     private bool isActing = true;
     [SerializeField] private int reload = 0;
     [SerializeField] private Transform shootPoint;
-    private Vector3 originalShootPointLocalPos;
-    private Quaternion originalShootPointLocalRot;
 
     [Header("조준")]
     [SerializeField] private GameObject scopeUI;
     [SerializeField] private float zoomScale = 4;
     private bool isZooming = false;
+
+    private Camera cam;
+    private Vector3 originCamPos;
+    private Quaternion originCamRot;
+    private Transform originCamParent;
 
     [Header("이펙트")]
     [SerializeField] private GameObject shootFire;
@@ -32,8 +35,7 @@ public class Sniper : WeaponBase
 
         scopeUI?.SetActive(false);
 
-        originalShootPointLocalPos = shootPoint.localPosition;
-        originalShootPointLocalRot = shootPoint.localRotation;
+        cam = Camera.main;
 
         shootTrail = GetComponent<LineRenderer>();
         if (shootTrail != null) shootTrail.enabled = false;
@@ -68,10 +70,14 @@ public class Sniper : WeaponBase
             input.r_Input = false;
             Reload();
         }
+    }
 
+    private void LateUpdate()
+    {
         if (isZooming)
         {
-            shootPoint.rotation = Camera.main.transform.rotation;
+            cam.transform.position = shootPoint.position;
+            cam.transform.rotation = shootPoint.rotation;
         }
     }
 
@@ -89,7 +95,6 @@ public class Sniper : WeaponBase
         else
         {
             Debug.Log("발사 박자 실패");
-
             return;
         }
 
@@ -124,14 +129,14 @@ public class Sniper : WeaponBase
                 hit.collider.GetComponent<Monster>()?.Hit(shotDamage);
             }
 
-            DrawTrail(shootPoint.position, hit.point); 
+            DrawTrail(shootPoint.position, hit.point);
         }
         else
         {
             Debug.Log("빗나감");
 
             Vector3 missPoint = shootPoint.position + shootDir * 100;
-            DrawTrail(shootPoint.position, missPoint); 
+            DrawTrail(shootPoint.position, missPoint);
         }
 
         Unzoom();
@@ -149,13 +154,11 @@ public class Sniper : WeaponBase
             || true) // 임시
         {
             Debug.Log("장전 박자 성공");
-
             reload++;
         }
         else
         {
             Debug.Log("장전 박자 실패");
-
             reload = 0;
         }
 
@@ -166,10 +169,17 @@ public class Sniper : WeaponBase
     {
         if (isZooming) return;
 
-        Camera.main.fieldOfView /= zoomScale;
+        cam = Camera.main;
 
-        shootPoint.position = Camera.main.transform.position + Camera.main.transform.forward * 0.5f;
-        shootPoint.rotation = Camera.main.transform.rotation;
+        originCamParent = cam.transform.parent;
+        originCamPos = cam.transform.localPosition;
+        originCamRot = cam.transform.localRotation;
+
+        cam.transform.SetParent(shootPoint);
+        cam.transform.localPosition = Vector3.zero;
+        cam.transform.localRotation = Quaternion.identity;
+
+        cam.fieldOfView /= zoomScale;
 
         scopeUI?.SetActive(true);
         isZooming = true;
@@ -179,10 +189,10 @@ public class Sniper : WeaponBase
     {
         if (!isZooming) return;
 
-        Camera.main.fieldOfView *= zoomScale;
-
-        shootPoint.localPosition = originalShootPointLocalPos;
-        shootPoint.localRotation = originalShootPointLocalRot;
+        cam.transform.SetParent(originCamParent);
+        cam.transform.localPosition = originCamPos;
+        cam.transform.localRotation = originCamRot;
+        cam.fieldOfView *= zoomScale;
 
         scopeUI?.SetActive(false);
         isZooming = false;
