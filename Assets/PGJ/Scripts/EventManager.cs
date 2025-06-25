@@ -7,7 +7,12 @@ public class EventManager : SingletonBehaviour<EventManager>
     // 데미지 이벤트
     public Action<int> OnPlayerDamageAction;
 
-    public Action OnPlayerWeaponUIRefreshAction;
+    // 플레이어 체력 UI 새로고침 이벤트
+    public Action<int> OnPlayerHpUIRefreshAction;
+    // 플레이어 사용가능 무기 UI 새로고침 이벤트
+    public Action<bool[]> OnPlayerWeaponUIRefreshAction;
+    // 플레이어 대쉬 스택 UI 새로고침 이벤트
+    public Action<int> OnPlayerDashUIRefreshAction;
 
     // 플레이어 사망 이벤트
     public Action OnPlayerDieAction;
@@ -31,9 +36,15 @@ public class EventManager : SingletonBehaviour<EventManager>
     }
 
     // 플레이어 사용가능 무기 UI 새로고침
-    public void PlayerWeaponUIRefresh()
+    public void PlayerWeaponUIRefresh(bool[] weaponUseAbleArray)
     {
-        OnPlayerWeaponUIRefreshAction?.Invoke();
+        OnPlayerWeaponUIRefreshAction?.Invoke(weaponUseAbleArray);
+    }
+
+    // 플레이어 대쉬 스택 UI 새로고침
+    public void PlayerDashUIRefresh(int currentStackNum)
+    {
+        OnPlayerDashUIRefreshAction?.Invoke(currentStackNum);
     }
 
     // 플레이어 사망 이벤트 실행 메서드

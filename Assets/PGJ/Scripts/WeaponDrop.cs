@@ -13,11 +13,11 @@ public class WeaponDrop : MonoBehaviour
     [SerializeField] float yRotateSpd;
     [SerializeField] WeaponDropKind weaponDropKind;
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
-        if (col.transform.CompareTag("Player"))
+        if (col.CompareTag("Player"))
         {
-            if (col.transform.TryGetComponent(out Player player))
+            if (col.TryGetComponent(out Player player))
             {
                 SoundManager.Instance.PlaySFX(SFX.WeaponGet);
 

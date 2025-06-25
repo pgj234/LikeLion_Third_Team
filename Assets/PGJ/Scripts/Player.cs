@@ -5,6 +5,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [Header("Player")]
+    public int maxHp;
+    int currentHp;
+
+    [Space(5)]
     public float moveSpeed;
     public float dashSpeed;
     public float RotationSmoothTime;
@@ -108,7 +112,7 @@ public class Player : MonoBehaviour
         Move();
 
         WeaponChangeInputCheck();
-        ReloadCheck();
+        //ReloadCheck();
         ShootCheck();
     }
 
@@ -147,6 +151,7 @@ public class Player : MonoBehaviour
 
     void Init()
     {
+        currentHp = maxHp;
         playerDie = false;
         isDash = false;
         weaponArray[startWeaponNum].useAble = true;
@@ -160,11 +165,27 @@ public class Player : MonoBehaviour
         fallTimeoutDelta = FallTimeout;
     }
 
+    internal void GetDamage(int _dmg)
+    {
+        currentHp -= _dmg;
+
+        if (currentHp <= 0)
+        {
+            SetPlayerDie(true);
+        }
+        EventManager.Instance.OnPlayerHpUIRefreshAction(currentHp);
+    }
+
     internal void GetWeapon(int weaponNum)
     {
         weaponArray[weaponNum].useAble = true;
 
-        EventManager.Instance.PlayerWeaponUIRefresh();
+        bool[] weaponUseAbleArray = new bool[weaponArray.Length];
+        for (int i=0; i<weaponArray.Length; i++)
+        {
+            weaponUseAbleArray[i] = weaponArray[i].useAble;
+        }
+        EventManager.Instance.PlayerWeaponUIRefresh(weaponUseAbleArray);
     }
 
     IEnumerator ChangeWeapon(int weaponNum)
@@ -184,6 +205,7 @@ public class Player : MonoBehaviour
 
                 currentWeapon.gameObject.SetActive(false);
                 currentWeapon = weaponArray[weaponNum];
+                currentWeapon.gameObject.SetActive(true);
             }
         }
     }
@@ -207,22 +229,21 @@ public class Player : MonoBehaviour
         }
     }
 
-    void ReloadCheck()
-    {
-        if (false == playerDie)
-        {
-            if (input.r_Input || input.mouse1_Input)
-            {
-                input.r_Input = false;
-                input.mouse1_Input = false;
+    //void ReloadCheck()
+    //{
+    //    if (false == playerDie)
+    //    {
+    //        if (input.r_Input)
+    //        {
+    //            input.r_Input = false;
 
-                if (false == currentWeapon.reloading)
-                {
-                    // 장전 진행
-                }
-            }
-        }
-    }
+    //            if (false == currentWeapon.reloading)
+    //            {
+    //                // 장전 진행
+    //            }
+    //        }
+    //    }
+    //}
 
     void ShootCheck()
     {
