@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using DG.Tweening.Core.Easing;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -75,6 +77,8 @@ public class Player : MonoBehaviour
     public GameObject chestObj;
 
     private GameObject mainCamera;
+    GameManager gameManager;
+    EventManager eventManager;
     CharacterController controller;
     InputManager input;
 
@@ -97,6 +101,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         input = InputManager.Instance;
+        gameManager = GameManager.Instance;
+        eventManager = EventManager.Instance;
 
         Init();
     }
@@ -173,7 +179,7 @@ public class Player : MonoBehaviour
         {
             SetPlayerDie(true);
         }
-        EventManager.Instance.OnPlayerDamageAction(currentHp);
+        eventManager.OnPlayerDamageAction(currentHp);
     }
 
     internal void GetWeapon(int weaponNum)
@@ -185,7 +191,7 @@ public class Player : MonoBehaviour
         {
             weaponUseAbleArray[i] = weaponArray[i].useAble;
         }
-        EventManager.Instance.PlayerWeaponUIRefresh(weaponUseAbleArray);
+        eventManager.PlayerWeaponUIRefresh(weaponUseAbleArray);
     }
 
     IEnumerator ChangeWeapon(int weaponNum)
@@ -206,6 +212,9 @@ public class Player : MonoBehaviour
                 currentWeapon.gameObject.SetActive(false);
                 currentWeapon = weaponArray[weaponNum];
                 currentWeapon.gameObject.SetActive(true);
+
+                eventManager.PlayerCurrentBulletUIRefresh(currentWeapon.GetCurrentAmmo());
+                eventManager.PlayerMaxBulletUIRefresh(currentWeapon.GetMaxAmmo());
             }
         }
     }
@@ -252,7 +261,7 @@ public class Player : MonoBehaviour
             input.mouse0_Input = false;
             
             // 음악 시작전이면 리턴
-            if (false == GameManager.Instance.musicStart)
+            if (false == gameManager.musicStart)
             {
                 return;
             }
@@ -264,29 +273,29 @@ public class Player : MonoBehaviour
             }
 
             // 노트가 멀면 리턴
-            if (false == GameManager.Instance.GetNoteDisable())
+            if (false == gameManager.GetNoteDisable())
             {
                 return;
             }
 
-            if (1 == GameManager.Instance.RhythmCheck())
+            if (1 == gameManager.RhythmCheck())
             {
                 Debug.Log("정박 성공!");
-                EventManager.Instance.PlayerAddComboEvent();
+                gameManager.AddCombo();
             }
-            else if (2 == GameManager.Instance.RhythmCheck())
+            else if (2 == gameManager.RhythmCheck())
             {
                 Debug.Log("반박 성공!");
-                EventManager.Instance.PlayerAddComboEvent();
+                gameManager.AddCombo();
             }
             else
             {
                 Debug.Log("박자 타이밍 실패...");
                 SoundManager.Instance.PlaySFX(SFX.RhythmFail);
-                EventManager.Instance.PlayerReduceComboEvent();
+                gameManager.SetHalfCombo();
             }
 
-            GameManager.Instance.NotePush();
+            gameManager.NotePush();
         }
     }
 
@@ -447,13 +456,13 @@ public class Player : MonoBehaviour
         {
             playerDie = _playerDie;
 
-            EventManager.Instance.PlayerDieEvent();
+            eventManager.PlayerDieEvent();
         }
         else if (false == _playerDie && true == playerDie)          // 죽었다가 부활한 경우
         {
             playerDie = _playerDie;
 
-            EventManager.Instance.PlayerRevivalEvent();
+            eventManager.PlayerRevivalEvent();
         }
     }
 }

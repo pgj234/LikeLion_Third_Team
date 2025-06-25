@@ -75,4 +75,14 @@ public class WeaponBase : MonoBehaviour
     {
         return anim.GetCurrentAnimatorStateInfo(0).length;
     }
+
+    internal int GetMaxAmmo()
+    {
+        return maxAmmo;
+    }
+
+    internal int GetCurrentAmmo()
+    {
+        return nowAmmo;
+    }
 }
