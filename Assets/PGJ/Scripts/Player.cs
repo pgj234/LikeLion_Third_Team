@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
 
         WeaponChangeInputCheck();
         //ReloadCheck();
-        ShootCheck();
+        //ShootCheck();
     }
 
     void LateUpdate()
@@ -203,7 +203,7 @@ public class Player : MonoBehaviour
                 weaponSwapTimer = weaponSwapTime;
 
                 currentWeapon.reloading = false;
-                currentWeapon.SetBoolAnimation("WeaponPut", true);
+                currentWeapon.SetTrggierAnimation("WeaponPut");
 
                 yield return null;
                 yield return new WaitForSeconds(currentWeapon.GetAnimationTime());
@@ -254,50 +254,50 @@ public class Player : MonoBehaviour
     //    }
     //}
 
-    void ShootCheck()
-    {
-        if (input.mouse0_Input)
-        {
-            input.mouse0_Input = false;
+    //void ShootCheck()
+    //{
+    //    if (input.mouse0_Input)
+    //    {
+    //        input.mouse0_Input = false;
             
-            // 음악 시작전이면 리턴
-            if (false == gameManager.musicStart)
-            {
-                return;
-            }
+    //        // 음악 시작전이면 리턴
+    //        //if (false == gameManager.musicStart)
+    //        //{
+    //        //    return;
+    //        //}
+            
+    //        // 무기 장전중이면 리턴
+    //        //if (true == currentWeapon.reloading)
+    //        //{
+    //        //    return;
+    //        //}
+            
+    //        // 노트가 멀면 리턴
+    //        //if (false == gameManager.GetNoteDisable())
+    //        //{
+    //        //    return;
+    //        //}
+            
+    //        //if (1 == gameManager.RhythmCheck())
+    //        //{
+    //        //    Debug.Log("정박 성공!");
+    //        //    gameManager.AddCombo();
+    //        //}
+    //        //else if (2 == gameManager.RhythmCheck())
+    //        //{
+    //        //    Debug.Log("반박 성공!");
+    //        //    gameManager.AddCombo();
+    //        //}
+    //        //else
+    //        //{
+    //        //    Debug.Log("박자 타이밍 실패...");
+    //        //    SoundManager.Instance.PlaySFX(SFX.RhythmFail);
+    //        //    gameManager.SetHalfCombo();
+    //        //}
 
-            // 무기 장전중이면 리턴
-            if (true == currentWeapon.reloading)
-            {
-                return;
-            }
-
-            // 노트가 멀면 리턴
-            if (false == gameManager.GetNoteDisable())
-            {
-                return;
-            }
-
-            if (1 == gameManager.RhythmCheck())
-            {
-                Debug.Log("정박 성공!");
-                gameManager.AddCombo();
-            }
-            else if (2 == gameManager.RhythmCheck())
-            {
-                Debug.Log("반박 성공!");
-                gameManager.AddCombo();
-            }
-            else
-            {
-                Debug.Log("박자 타이밍 실패...");
-                SoundManager.Instance.PlaySFX(SFX.RhythmFail);
-                gameManager.SetHalfCombo();
-            }
-
-            gameManager.NotePush();
-        }
-    }
+    //        //gameManager.NotePush();
+    //    }
+    //}
 
     void CameraRotation()
     {

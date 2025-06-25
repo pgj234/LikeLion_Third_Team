@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DG.Tweening.Core.Easing;
 using UnityEngine;
 
 enum PlayType
@@ -13,7 +14,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 {
     int score;
 
-    const int maxCombo = 16;
+    const int maxCombo = 64;
     int combo;
 
     internal int bpm { get; private set; }
@@ -52,7 +53,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
         eventManager = EventManager.Instance;
 
-        bpm = 128;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
+        bpm = 90;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
         for (int i=0; i<20; i++)
         {
             if (1 == i % 2)     // 반박 생성
