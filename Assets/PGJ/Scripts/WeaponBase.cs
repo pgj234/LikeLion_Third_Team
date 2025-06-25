@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WeaponBase : MonoBehaviour
 {
@@ -29,10 +28,17 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        anim = GetComponentInChildren<Animator>();
+        anim = GetComponent<Animator>();
 
-        if (anim == null)
-            Debug.LogError("Animator 컴포넌트를 찾을 수 없습니다.");
+        if (null == anim)
+        {
+            anim = GetComponentInChildren<Animator>();
+
+            if (null == anim)
+            {
+                Debug.LogError("Animator 컴포넌트를 찾을 수 없습니다.");
+            }
+        }
     }
 
     //internal virtual void OnEnable()
@@ -74,5 +80,15 @@ public class WeaponBase : MonoBehaviour
     internal float GetAnimationTime()
     {
         return anim.GetCurrentAnimatorStateInfo(0).length;
+    }
+
+    internal int GetMaxAmmo()
+    {
+        return maxAmmo;
+    }
+
+    internal int GetCurrentAmmo()
+    {
+        return nowAmmo;
     }
 }
