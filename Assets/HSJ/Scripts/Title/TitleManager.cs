@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,6 +14,9 @@ public class TitleManager : MonoBehaviour
     [SerializeField] List<TextMeshProUGUI> fpsBtnTexts;     // 60, 120, 165, 240
     [SerializeField] List<Sprite> fpsBtnBgs;                // 0 : disabled, 1 : enabled
     [SerializeField] AudioSource[] soundSource;             // 0 : BGM, 1 : SFX
+    [SerializeField] AudioClip btnOverClip;
+    [SerializeField] AudioClip panelCloseClip;
+    [SerializeField] Image fadeImg;
     [Header("Credit Panel")]
     [SerializeField] GameObject creditPanel;
 
@@ -38,6 +42,8 @@ public class TitleManager : MonoBehaviour
                 MainBtnExitEvent(obj);
             }
         }
+
+        MainBtnOverSFXPlay();
     }
 
     public void MainBtnDownEvent(GameObject gameObject)
@@ -113,6 +119,11 @@ public class TitleManager : MonoBehaviour
         // 0~255 범위의 값을 0~1 범위로 변환
         return colorValue / 255f;
     }
+
+    void MainBtnOverSFXPlay()
+    {
+        soundSource[1].PlayOneShot(btnOverClip, UserSettingManager.Instance.SFX); // 버튼 오버 사운드 재생
+    }
     #endregion
 
     private void Start()
@@ -120,6 +131,7 @@ public class TitleManager : MonoBehaviour
         // 초기화 작업
         settingPanel.SetActive(false);
         creditPanel.SetActive(false);
+        fadeImg.enabled = false; // 페이드 이미지 비활성화
 
         foreach (GameObject btn in mainBtns)
         {
@@ -136,7 +148,12 @@ public class TitleManager : MonoBehaviour
     public void SceneMove(int sceneIndex)
     {
         // 씬 전환을 위해 SceneManager를 사용
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
+        fadeImg.enabled = true; // 페이드 이미지 활성화
+        fadeImg.color = new Color(0f, 0f, 0f, 0f); // 초기 색상 설정
+        fadeImg.DOColor(Color.black, 1f).OnComplete(() =>
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
+        });
     }
 
     public void ToggleSetting()
@@ -170,6 +187,7 @@ public class TitleManager : MonoBehaviour
             {
                 MainBtnExitEvent(go);
             }
+            soundSource[1].PlayOneShot(panelCloseClip, UserSettingManager.Instance.SFX); // 패널 닫기 사운드 재생
         }
     }
 
@@ -182,6 +200,7 @@ public class TitleManager : MonoBehaviour
             {
                 MainBtnExitEvent(go);
             }
+            soundSource[1].PlayOneShot(panelCloseClip, UserSettingManager.Instance.SFX); // 패널 닫기 사운드 재생
         }
     }
 
