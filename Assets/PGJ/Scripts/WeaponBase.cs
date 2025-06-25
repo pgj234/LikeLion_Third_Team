@@ -79,11 +79,20 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void Shoot()         // 발사 메서드
     {
-
+        if (reloading)
+        {
+            return;
+        }
     }
 
     protected virtual void Reload()        // 재장전 메서드
     {
+        // 탄 꽉참
+        if (nowAmmo == maxAmmo)
+        {
+            return;
+        }
+
         reloading = true;
     }
 

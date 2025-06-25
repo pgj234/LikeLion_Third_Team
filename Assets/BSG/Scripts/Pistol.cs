@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Pistol : WeaponBase
 {
@@ -23,14 +24,65 @@ public class Pistol : WeaponBase
         base.Start();
     }
 
+    void OnEnable()
+    {
+        anim.SetTrigger("WeaponPull");
+    }
+
     protected override void Reload()
     {
-        base.Reload();
+        // 탄 꽉참
+        if (nowAmmo == maxAmmo)
+        {
+            return;
+        }
+
+        HandleReloadInput();
+
+        if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
+        {
+            gameManager.AddCombo();
+        }
+        else
+        {
+            Debug.Log("박자 타이밍 실패...");
+            gameManager.SetHalfCombo();
+        }
+
+        gameManager.NotePush();
     }
 
     protected override void Shoot()
     {
-        base.Shoot();
+        if (reloading)
+        {
+            return;
+        }
+
+        // 탄 없음
+        if (nowAmmo < 1)
+        {
+            SoundManager.Instance.PlaySFX(SFX.PistolEmpty);
+            return;
+        }
+
+        anim.SetTrigger("WeaponAttack");
+        nowAmmo--;
+        EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
+
+        if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
+        {
+            SoundManager.Instance.PlaySFX(SFX.PistolShot);
+            gameManager.AddCombo();
+        }
+        else
+        {
+            Debug.Log("박자 타이밍 실패...");
+            SoundManager.Instance.PlaySFX(SFX.RhythmFailShot);
+            gameManager.SetHalfCombo();
+        }
+
+        gameManager.NotePush();
     }
 
     protected override void Update()
@@ -41,39 +93,13 @@ public class Pistol : WeaponBase
         {
             input.mouse0_Input = false;
 
-            if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
-            {
-                SoundManager.Instance.PlaySFX(SFX.TestRhythm);
-                gameManager.AddCombo();
-            }
-            else
-            {
-                Debug.Log("박자 타이밍 실패...");
-                //SoundManager.Instance.PlaySFX(SFX.RhythmFail);
-                gameManager.SetHalfCombo();
-            }
-
-            gameManager.NotePush();
+            Shoot();
         }
         else if (input.r_Input)         // 재장전
         {
             input.r_Input = false;
 
-            HandleReloadInput();
-
-            if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
-            {
-                SoundManager.Instance.PlaySFX(SFX.TestRhythm);
-                gameManager.AddCombo();
-            }
-            else
-            {
-                Debug.Log("박자 타이밍 실패...");
-                //SoundManager.Instance.PlaySFX(SFX.RhythmFail);
-                gameManager.SetHalfCombo();
-            }
-
-            gameManager.NotePush();
+            Reload();
         }
     }
 
@@ -89,10 +115,18 @@ public class Pistol : WeaponBase
             currentReloadStepNum++;
         }
 
+        if (3 > currentReloadStepNum)
+        {
+            SoundManager.Instance.PlaySFX(SFX.PistolCocked);
+        }
+
         anim.SetInteger("WeaponReload_", currentReloadStepNum);
 
         if (3 == currentReloadStepNum)
         {
+            SoundManager.Instance.PlaySFX(SFX.PistolSlide);
+            nowAmmo = maxAmmo;
+            EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
             currentReloadStepNum = 0;
             reloading = false;
         }

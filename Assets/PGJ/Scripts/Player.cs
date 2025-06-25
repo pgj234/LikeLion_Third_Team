@@ -133,11 +133,21 @@ public class Player : MonoBehaviour
         {
             input.weapon0_Choice_Input = false;
 
+            if (weaponArray[0] == currentWeapon)
+            {
+                return;
+            }
+
             coWeaponChange = StartCoroutine(ChangeWeapon(0));
         }
         else if (input.weapon1_Choice_Input)
         {
             input.weapon1_Choice_Input = false;
+
+            if (weaponArray[1] == currentWeapon)
+            {
+                return;
+            }
 
             coWeaponChange = StartCoroutine(ChangeWeapon(1));
         }
@@ -145,11 +155,21 @@ public class Player : MonoBehaviour
         {
             input.weapon2_Choice_Input = false;
 
+            if (weaponArray[2] == currentWeapon)
+            {
+                return;
+            }
+
             coWeaponChange = StartCoroutine(ChangeWeapon(2));
         }
         else if (input.weapon3_Choice_Input)
         {
             input.weapon3_Choice_Input = false;
+
+            if (weaponArray[3] == currentWeapon)
+            {
+                return;
+            }
 
             coWeaponChange = StartCoroutine(ChangeWeapon(3));
         }
@@ -204,7 +224,7 @@ public class Player : MonoBehaviour
                 weaponSwapTimer = weaponSwapTime;
 
                 currentWeapon.reloading = false;
-                currentWeapon.SetTrggierAnimation("WeaponPut");
+                currentWeapon.SetBoolAnimation("WeaponPut", true);
 
                 yield return null;
                 yield return new WaitForSeconds(currentWeapon.GetAnimationTime());
