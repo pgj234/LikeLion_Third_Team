@@ -34254,7 +34254,7 @@ AnimationClip:
   - time: 0
     functionName: PlayDrawSound
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: d8829195aab4ca84a98feb85b715809f, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
