@@ -173,7 +173,7 @@ public class Player : MonoBehaviour
         {
             SetPlayerDie(true);
         }
-        EventManager.Instance.OnPlayerHpUIRefreshAction(currentHp);
+        EventManager.Instance.OnPlayerDamageAction(currentHp);
     }
 
     internal void GetWeapon(int weaponNum)

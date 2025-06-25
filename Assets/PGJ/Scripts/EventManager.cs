@@ -4,11 +4,9 @@ using UnityEngine;
 public class EventManager : SingletonBehaviour<EventManager>
 {
     // 플레이어
+
     // 데미지 이벤트
     public Action<int> OnPlayerDamageAction;
-
-    // 플레이어 체력 UI 새로고침 이벤트
-    public Action<int> OnPlayerHpUIRefreshAction;
     // 플레이어 사용가능 무기 UI 새로고침 이벤트
     public Action<bool[]> OnPlayerWeaponUIRefreshAction;
     // 플레이어 대쉬 스택 UI 새로고침 이벤트
