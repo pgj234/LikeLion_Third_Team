@@ -11164,6 +11164,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3662337628319508799, guid: f064f9b1eb58d814eb14baab5f9ffa97, type: 3}
+      propertyPath: weaponNum
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662337628319508799, guid: f064f9b1eb58d814eb14baab5f9ffa97, type: 3}
       propertyPath: swordAnimator
       value: 
       objectReference: {fileID: 1491203125}
@@ -12676,6 +12680,7 @@ MonoBehaviour:
   sparklePrefabs:
   - {fileID: 5281703823909813044, guid: ab4c63ea0690b254da615d1054521b20, type: 3}
   - {fileID: 5501976216335251706, guid: 987df892e7993d84e9eb67b14560dc32, type: 3}
+  reloadShot: 100
   swordAnimator: {fileID: 1049925407}
 --- !u!1 &2115827866
 GameObject:
