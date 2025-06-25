@@ -61,6 +61,8 @@ public class UserInterface : MonoBehaviour
             else
                 DisableWeaponSlot(weaponSlot[i]);
         }
+
+        eventManager.OnPlayerComboRefreshAction += PlayComboAnimation; // 콤보 새로고침 이벤트 등록
     }
 
     /// <summary> 테스트용 함수 </summary>
@@ -68,7 +70,7 @@ public class UserInterface : MonoBehaviour
     {
         // 콤보 애니메이션
         if (Input.GetKeyDown(KeyCode.F12))
-            PlayComboAnimation();
+            PlayComboAnimation(999);
 
         // 검 얻기
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -112,11 +114,10 @@ public class UserInterface : MonoBehaviour
     }
 
 
-    void PlayComboAnimation()
+    void PlayComboAnimation(int combo)
     {
         Color whiteEnd = new Color(1f, 1f, 1f, 0f);             // 콤보 카운트 레이블 애니메이션 종료 색상
         Color redEnd = new Color(1f, 0f, 0f, 0f);               // 콤보 바 애니메이션 종료 색상
-        int combo = gameManager != null ? gameManager.GetCombo() : 999;                   // 현재 콤보 값 가져오기
 
         comboBar.DOKill();                                      // 현재 진행 중인 애니메이션 중지
         comboBar.color = Color.white;                           // 콤보 바 색상을 흰색으로 설정
