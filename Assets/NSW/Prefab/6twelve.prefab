@@ -3235,7 +3235,7 @@ GameObject:
   - component: {fileID: 2390145821179186849}
   - component: {fileID: 7086338262798190575}
   - component: {fileID: 5610670585756760564}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Tiles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3431,7 +3431,7 @@ GameObject:
   - component: {fileID: 70654632284367628}
   - component: {fileID: 2037032600290661901}
   - component: {fileID: 1528409288631599925}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Asphalt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3770,7 +3770,7 @@ GameObject:
   - component: {fileID: 266159253107659575}
   - component: {fileID: 6095129071117459404}
   - component: {fileID: 8506470544181400310}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Asphalt_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5487,7 +5487,7 @@ GameObject:
   - component: {fileID: 7822982858352359989}
   - component: {fileID: 6942423535310415633}
   - component: {fileID: 837077264272074575}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Parking_lot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6142,7 +6142,7 @@ GameObject:
   - component: {fileID: 6590512627690193895}
   - component: {fileID: 3284707856813685500}
   - component: {fileID: 7993329255138543834}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Garbage_bag_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9017,7 +9017,7 @@ GameObject:
   - component: {fileID: 2282214669718773182}
   - component: {fileID: 6956072020201160264}
   - component: {fileID: 4304673591715845943}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Garbage_bag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10191,7 +10191,7 @@ GameObject:
   - component: {fileID: 3437071259881814877}
   - component: {fileID: 3415718520894795777}
   - component: {fileID: 1392096798688315210}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: trash_can_lid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12968,7 +12968,7 @@ GameObject:
   - component: {fileID: 8086053434185739141}
   - component: {fileID: 4670044928971245406}
   - component: {fileID: 9185151328834273758}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Garbage_bag_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14378,7 +14378,7 @@ GameObject:
   - component: {fileID: 3528936341062336460}
   - component: {fileID: 742281526927829710}
   - component: {fileID: 8405099609783531214}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Grass_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14794,7 +14794,7 @@ GameObject:
   - component: {fileID: 1720734242513228329}
   - component: {fileID: 9085600068367785900}
   - component: {fileID: 4389756414768129752}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: trash_can_lid_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
