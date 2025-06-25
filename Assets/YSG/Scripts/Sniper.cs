@@ -3,16 +3,11 @@ using UnityEngine;
 
 public class Sniper : WeaponBase
 {
-    private InputManager input;
-
     private bool isActing = true;
     [SerializeField] private int reload = 0;
     [SerializeField] private Transform shootPoint;
     private Vector3 originalShootPointLocalPos;
     private Quaternion originalShootPointLocalRot;
-
-    [Header("발사")]
-    [SerializeField] private float spreadAngle = 3;
 
     [Header("조준")]
     [SerializeField] private GameObject scopeUI;
@@ -29,9 +24,9 @@ public class Sniper : WeaponBase
         base.Awake();
     }
 
-    private void Start()
+    protected override void Start()
     {
-        input = InputManager.Instance;
+        base.Start();
 
         nowAmmo = maxAmmo;
 
@@ -85,6 +80,18 @@ public class Sniper : WeaponBase
         base.Shoot();
 
         if (isActing) return;
+
+        if (GameManager.Instance.RhythmCheck() > 0
+            || true) // 임시
+        {
+            Debug.Log("발사 박자 성공");
+        }
+        else
+        {
+            Debug.Log("발사 박자 실패");
+
+            return;
+        }
 
         if (nowAmmo <= 0)
         {
@@ -141,13 +148,13 @@ public class Sniper : WeaponBase
         if (GameManager.Instance.RhythmCheck() > 0
             || true) // 임시
         {
-            Debug.Log("박자 성공");
+            Debug.Log("장전 박자 성공");
 
             reload++;
         }
         else
         {
-            Debug.Log("박자 실패");
+            Debug.Log("장전 박자 실패");
 
             reload = 0;
         }
