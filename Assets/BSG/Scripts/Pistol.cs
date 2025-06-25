@@ -37,43 +37,28 @@ public class Pistol : WeaponBase
     {
         base.Update();
 
-        if (input.mouse0_Input)        // 공격
+        if (input.mouse0_Input && !reloading)
         {
             input.mouse0_Input = false;
 
-            if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
-            {
-                SoundManager.Instance.PlaySFX(SFX.TestRhythm);
-                gameManager.AddCombo();
-            }
-            else
-            {
-                Debug.Log("박자 타이밍 실패...");
-                //SoundManager.Instance.PlaySFX(SFX.RhythmFail);
-                gameManager.SetHalfCombo();
-            }
-
-            gameManager.NotePush();
+            anim.SetTrigger("WeaponAttack");
         }
-        else if (input.r_Input)         // 재장전
+
+        if (input.weapon2_Choice_Input && !reloading)
+        {
+            anim.SetTrigger("WeaponPull");
+        }
+
+        if (input.weapon3_Choice_Input && !reloading)
+        {
+            anim.SetTrigger("WeaponPut");
+        }
+
+        if (input.r_Input)
         {
             input.r_Input = false;
 
             HandleReloadInput();
-
-            if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
-            {
-                SoundManager.Instance.PlaySFX(SFX.TestRhythm);
-                gameManager.AddCombo();
-            }
-            else
-            {
-                Debug.Log("박자 타이밍 실패...");
-                //SoundManager.Instance.PlaySFX(SFX.RhythmFail);
-                gameManager.SetHalfCombo();
-            }
-
-            gameManager.NotePush();
         }
     }
 

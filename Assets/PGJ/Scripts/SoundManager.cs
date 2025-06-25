@@ -10,7 +10,7 @@ public enum BGM
 // SFX 목록 enum
 public enum SFX
 {
-    TestRhythm,
+    RhythmFail,
     SwordDraw,
     SniperShoot,
     WeaponGet
@@ -34,10 +34,6 @@ public class SoundManager : SingletonBehaviour<SoundManager>
         sfxAudioSource = transform.Find("SFX").GetComponent<AudioSource>();
     }
 
-    internal void SetPlayScheduled(double dspStartTime)
-    {
-        bgmAudioSource.PlayScheduled(dspStartTime);
-    }
 
 
     public void PlayBGM(BGM _bgm)

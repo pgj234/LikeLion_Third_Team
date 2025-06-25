@@ -5,120 +5,87 @@ using System.Collections.Generic;
 public class Sword : WeaponBase
 {
     [Header("Draw Settings")]
-    [SerializeField] float reloadRaiseDuration = 0.5f;   // Draw Sword 2 애니 길이
-    [SerializeField] float sparkleDuration = 0.3f;   // 파티클 유지 시간
-    [SerializeField] float reloadLowerDuration = 0.5f;   // Put 애니 길이
+    [SerializeField] float reloadRaiseDuration = 0.5f;
+    [SerializeField] float sparkleDuration = 0.3f;
+    [SerializeField] float reloadLowerDuration = 0.5f;
 
     [Header("Particle Settings")]
     [SerializeField] List<ParticleSystem> sparklePrefabs;
-    private List<ParticleSystem> sparkleInstances = new List<ParticleSystem>();
-
-    [Header("Reload Settings")]
-    [Tooltip("재장전 후 회복될 내구도(탄환)량")]
-    [SerializeField] int reloadShot = 100;
+    List<ParticleSystem> sparkleInstances = new List<ParticleSystem>();
 
     [Header("Animator Settings")]
-    [SerializeField] Animator swordAnimator;             // Inspector에서 반드시 할당!
+    [SerializeField] Animator swordAnimator;
 
     bool isDrawing = false;
     bool isReloading = false;
 
     void Awake()
     {
-        // Sparkle 프리팹 인스턴스 생성 및 초기화
+        // 파티클 인스턴스 생성
         foreach (var prefab in sparklePrefabs)
-        {
-            if (prefab == null) continue;
-            var inst = Instantiate(prefab, transform);
-            inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            sparkleInstances.Add(inst);
-        }
+            if (prefab != null)
+            {
+                var inst = Instantiate(prefab, transform);
+                inst.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                sparkleInstances.Add(inst);
+            }
     }
 
     protected override void Update()
     {
         base.Update();
 
-        // WeaponNum (0-9) 입력으로 Draw Sequence
-        KeyCode drawKey = KeyCode.Alpha0 + weaponNum;
-        if (!isDrawing && Input.GetKeyDown(drawKey))
-        {
+        // R키로 Draw 시퀀스
+        if (Input.GetKeyDown(KeyCode.R) && !isDrawing && !isReloading)
             StartCoroutine(DrawSwordSequence());
-        }
-
-        // R 키 입력으로 Reload Sequence
-        if (!isReloading && Input.GetKeyDown(KeyCode.R))
-        {
-            StartCoroutine(ReloadSequence());
-        }
     }
 
-    /// <summary>
-    /// “0” 키로만 실행.
-    /// Draw 애니 + 파티클 → 바로 Idle 복귀.
-    /// (리듬 체크 없음)
-    /// </summary>
     IEnumerator DrawSwordSequence()
     {
         isDrawing = true;
+        isReloading = true;
 
-        // Draw 모션과 파티클
-        swordAnimator.SetBool("WeaponPull", true);
+        // 1) Draw 애니 + 파티클
         swordAnimator.Play("Draw Sword 2", 0, 0f);
         PlaySparkleOnce();
 
-        // Draw 애니 길이 대기
+        // 애니 길이만큼 대기
         yield return new WaitForSeconds(reloadRaiseDuration);
 
-        // 파티클 정지
-        StopSparkle();
+        // 2) 리듬 체크
+        int timing = GameManager.Instance != null
+                     ? GameManager.Instance.RhythmCheck()
+                     : 1;
 
-        // Draw 모션 종료
-        swordAnimator.SetBool("WeaponPull", false);
-        swordAnimator.Play("Idle Walk Run Blend", 0, 0f);
-
-        isDrawing = false;
-    }
-
-    /// <summary>
-    /// R 키로만 실행.
-    /// 1) RaiseSword → 파티클 → LowerSword
-    /// 2) 리듬 체크 실패/성공 판정
-    /// 3) 성공 시 내구도 복구, 실패 시 아무 일도 없음
-    /// </summary>
-    IEnumerator ReloadSequence()
-    {
-        isReloading = true;
-
-        // 1) 리듬 체크
-        int timing = GameManager.Instance?.RhythmCheck() ?? 1;
         if (timing == 0)
         {
-            Debug.Log("리듬 실패: Reload 단계");
+            Debug.Log("리듬 실패: Draw 단계 → Idle로 되돌아갑니다.");
+            // 실패 시 파티클 정리
+            StopSparkle();
+            // Idle로 전환
+            swordAnimator.Play("Idle Walk Run Blend", 0, 0f);
+            // 상태 리셋
+            isDrawing = false;
             isReloading = false;
             yield break;
         }
-        Debug.Log($"리듬 성공({timing}): Reload 단계");
 
-        // 2) RaiseSword 애니 + 파티클
-        swordAnimator.SetBool("WeaponReload_0", true);
-        swordAnimator.SetTrigger("RaiseSword");
-        yield return new WaitForSeconds(reloadRaiseDuration);
+        Debug.Log($"리듬 성공({timing}): Draw 단계");
 
-        PlaySparkleOnce();
+        // 3) 성공 시 sparkle 유지
         yield return new WaitForSeconds(sparkleDuration);
 
-        // 3) LowerSword 애니
-        swordAnimator.SetBool("WeaponReload_0", false);
-        swordAnimator.SetTrigger("LowerSword");
+        // 4) Hold 애니 (Draw → Hold 연결)
+        swordAnimator.Play("hand Idle", 0, 0f);
+
+        // Hold 애니 길이만큼 대기
         yield return new WaitForSeconds(reloadLowerDuration);
 
-        StopSparkle();
+        // 5) 최종 Idle-Walk-Run Blend 복귀
+        swordAnimator.Play("Idle Walk Run Blend", 0, 0f);
 
-        // 4) 내구도 복구
-        nowAmmo = Mathf.Clamp(reloadShot, 0, maxAmmo);
-        Debug.Log($"Reload Complete! Durability: {nowAmmo}");
-
+        // 상태 리셋
+        isDrawing = false;
         isReloading = false;
     }
 
@@ -141,7 +108,6 @@ public class Sword : WeaponBase
         }
     }
 
-    // 공격/재장전 로직은 여기서 처리하지 않음
-    protected override void Shoot() { /* empty */ }
-    protected override void Reload() { /* empty */ }
+    protected override void Shoot() { }
+    protected override void Reload() { }
 }

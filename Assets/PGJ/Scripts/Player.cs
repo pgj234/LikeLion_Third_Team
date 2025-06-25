@@ -1,16 +1,10 @@
 ﻿using System.Collections;
-using DG.Tweening.Core.Easing;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
     [Header("Player")]
-    public int maxHp;
-    int currentHp;
-
-    [Space(5)]
     public float moveSpeed;
     public float dashSpeed;
     public float RotationSmoothTime;
@@ -77,8 +71,6 @@ public class Player : MonoBehaviour
     public GameObject chestObj;
 
     private GameObject mainCamera;
-    GameManager gameManager;
-    EventManager eventManager;
     CharacterController controller;
     InputManager input;
 
@@ -101,8 +93,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         input = InputManager.Instance;
-        gameManager = GameManager.Instance;
-        eventManager = EventManager.Instance;
 
         Init();
     }
@@ -118,8 +108,8 @@ public class Player : MonoBehaviour
         Move();
 
         WeaponChangeInputCheck();
-        //ReloadCheck();
-        //ShootCheck();
+        ReloadCheck();
+        ShootCheck();
     }
 
     void LateUpdate()
@@ -157,7 +147,6 @@ public class Player : MonoBehaviour
 
     void Init()
     {
-        currentHp = maxHp;
         playerDie = false;
         isDash = false;
         weaponArray[startWeaponNum].useAble = true;
@@ -171,27 +160,11 @@ public class Player : MonoBehaviour
         fallTimeoutDelta = FallTimeout;
     }
 
-    internal void GetDamage(int _dmg)
-    {
-        currentHp -= _dmg;
-
-        if (currentHp <= 0)
-        {
-            SetPlayerDie(true);
-        }
-        eventManager.OnPlayerDamageAction(currentHp);
-    }
-
     internal void GetWeapon(int weaponNum)
     {
         weaponArray[weaponNum].useAble = true;
 
-        bool[] weaponUseAbleArray = new bool[weaponArray.Length];
-        for (int i=0; i<weaponArray.Length; i++)
-        {
-            weaponUseAbleArray[i] = weaponArray[i].useAble;
-        }
-        eventManager.PlayerWeaponUIRefresh(weaponUseAbleArray);
+        EventManager.Instance.PlayerWeaponUIRefresh();
     }
 
     IEnumerator ChangeWeapon(int weaponNum)
@@ -203,7 +176,7 @@ public class Player : MonoBehaviour
                 weaponSwapTimer = weaponSwapTime;
 
                 currentWeapon.reloading = false;
-                currentWeapon.SetTrggierAnimation("WeaponPut");
+                currentWeapon.SetBoolAnimation("WeaponPut", true);
 
                 yield return null;
                 yield return new WaitForSeconds(currentWeapon.GetAnimationTime());
@@ -211,10 +184,6 @@ public class Player : MonoBehaviour
 
                 currentWeapon.gameObject.SetActive(false);
                 currentWeapon = weaponArray[weaponNum];
-                currentWeapon.gameObject.SetActive(true);
-
-                eventManager.PlayerCurrentBulletUIRefresh(currentWeapon.GetCurrentAmmo());
-                eventManager.PlayerMaxBulletUIRefresh(currentWeapon.GetMaxAmmo());
             }
         }
     }
@@ -238,66 +207,67 @@ public class Player : MonoBehaviour
         }
     }
 
-    //void ReloadCheck()
-    //{
-    //    if (false == playerDie)
-    //    {
-    //        if (input.r_Input)
-    //        {
-    //            input.r_Input = false;
+    void ReloadCheck()
+    {
+        if (false == playerDie)
+        {
+            if (input.r_Input || input.mouse1_Input)
+            {
+                input.r_Input = false;
+                input.mouse1_Input = false;
 
-    //            if (false == currentWeapon.reloading)
-    //            {
-    //                // 장전 진행
-    //            }
-    //        }
-    //    }
-    //}
+                if (false == currentWeapon.reloading)
+                {
+                    // 장전 진행
+                }
+            }
+        }
+    }
 
-    //void ShootCheck()
-    //{
-    //    if (input.mouse0_Input)
-    //    {
-    //        input.mouse0_Input = false;
+    void ShootCheck()
+    {
+        if (input.mouse0_Input)
+        {
+            input.mouse0_Input = false;
             
-    //        // 음악 시작전이면 리턴
-    //        //if (false == gameManager.musicStart)
-    //        //{
-    //        //    return;
-    //        //}
-            
-    //        // 무기 장전중이면 리턴
-    //        //if (true == currentWeapon.reloading)
-    //        //{
-    //        //    return;
-    //        //}
-            
-    //        // 노트가 멀면 리턴
-    //        //if (false == gameManager.GetNoteDisable())
-    //        //{
-    //        //    return;
-    //        //}
-            
-    //        //if (1 == gameManager.RhythmCheck())
-    //        //{
-    //        //    Debug.Log("정박 성공!");
-    //        //    gameManager.AddCombo();
-    //        //}
-    //        //else if (2 == gameManager.RhythmCheck())
-    //        //{
-    //        //    Debug.Log("반박 성공!");
-    //        //    gameManager.AddCombo();
-    //        //}
-    //        //else
-    //        //{
-    //        //    Debug.Log("박자 타이밍 실패...");
-    //        //    SoundManager.Instance.PlaySFX(SFX.RhythmFail);
-    //        //    gameManager.SetHalfCombo();
-    //        //}
+            // 음악 시작전이면 리턴
+            if (false == GameManager.Instance.musicStart)
+            {
+                return;
+            }
 
-    //        //gameManager.NotePush();
-    //    }
-    //}
+            // 무기 장전중이면 리턴
+            if (true == currentWeapon.reloading)
+            {
+                return;
+            }
+
+            // 노트가 멀면 리턴
+            if (false == GameManager.Instance.GetNoteDisable())
+            {
+                return;
+            }
+
+            if (1 == GameManager.Instance.RhythmCheck())
+            {
+                Debug.Log("정박 성공!");
+                EventManager.Instance.PlayerAddComboEvent();
+            }
+            else if (2 == GameManager.Instance.RhythmCheck())
+            {
+                Debug.Log("반박 성공!");
+                EventManager.Instance.PlayerAddComboEvent();
+            }
+            else
+            {
+                Debug.Log("박자 타이밍 실패...");
+                SoundManager.Instance.PlaySFX(SFX.RhythmFail);
+                EventManager.Instance.PlayerReduceComboEvent();
+            }
+
+            GameManager.Instance.NotePush();
+        }
+    }
 
     void CameraRotation()
     {
@@ -456,13 +426,13 @@ public class Player : MonoBehaviour
         {
             playerDie = _playerDie;
 
-            eventManager.PlayerDieEvent();
+            EventManager.Instance.PlayerDieEvent();
         }
         else if (false == _playerDie && true == playerDie)          // 죽었다가 부활한 경우
         {
             playerDie = _playerDie;
 
-            eventManager.PlayerRevivalEvent();
+            EventManager.Instance.PlayerRevivalEvent();
         }
     }
 }

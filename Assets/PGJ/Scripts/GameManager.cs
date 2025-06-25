@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DG.Tweening.Core.Easing;
 using UnityEngine;
 
 enum PlayType
@@ -14,7 +13,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 {
     int score;
 
-    const int maxCombo = 64;
+    const int maxCombo = 16;
     int combo;
 
     internal int bpm { get; private set; }
@@ -45,15 +44,10 @@ public class GameManager : SingletonBehaviour<GameManager>
     Queue<GameObject> leftNoteQueue = new Queue<GameObject>();
     Queue<GameObject> rightNoteQueue = new Queue<GameObject>();
 
-    EventManager eventManager;
-
     protected override void Init()
     {
         base.Init();
-
-        eventManager = EventManager.Instance;
-
-        bpm = 90;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
+        bpm = 128;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
         for (int i=0; i<20; i++)
         {
             if (1 == i % 2)     // 반박 생성
@@ -83,6 +77,9 @@ public class GameManager : SingletonBehaviour<GameManager>
                 rightNoteObjQueue.Enqueue(noteObj);
             }
         }
+
+        EventManager.Instance.OnPlayerAddComboAction += AddCombo;
+        EventManager.Instance.OnPlayerReduceComboAction += SetHalfCombo;
     }
 
     //void Start()
@@ -115,6 +112,9 @@ public class GameManager : SingletonBehaviour<GameManager>
     protected override void OnDestroy()
     {
         base.OnDestroy();
+
+        EventManager.Instance.OnPlayerAddComboAction -= AddCombo;
+        EventManager.Instance.OnPlayerReduceComboAction -= SetHalfCombo;
     }
 
     // 막 누르면 저 멀리 있는 노트도 다 없어지는 현상 방지하는 변수 설정 (리듬 타이밍에 가까운 노트만 상호작용 가능하게)
@@ -144,27 +144,28 @@ public class GameManager : SingletonBehaviour<GameManager>
     }
 
     // 콤보 추가
-    internal void AddCombo()
+    void AddCombo()
     {
         if (combo < maxCombo)
         {
             combo++;
         }
         Debug.Log("콤보 : " + combo);
-
-        eventManager.PlayerComboRefreshEvent(combo);
     }
 
     // 콤보 반토막
-    internal void SetHalfCombo()
+    void SetHalfCombo()
     {
         if (combo > 0)
         {
             combo /= 2;
         }
         Debug.Log("콤보 : " + combo);
+    }
 
-        eventManager.PlayerComboRefreshEvent(combo);
+    internal int GetCombo()
+    {
+        return combo;
     }
 
     #region 노트 풀링
