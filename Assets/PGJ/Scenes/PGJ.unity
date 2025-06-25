@@ -1896,9 +1896,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2920948892773071609, guid: 73c9ba45a224d2047b07df275134021c, type: 3}
+      propertyPath: maxAmmo
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2920948892773071609, guid: 73c9ba45a224d2047b07df275134021c, type: 3}
+      propertyPath: nowAmmo
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2920948892773071609, guid: 73c9ba45a224d2047b07df275134021c, type: 3}
+      propertyPath: weaponNum
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2920948892773071609, guid: 73c9ba45a224d2047b07df275134021c, type: 3}
+      propertyPath: shotAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3186594024935214725, guid: 73c9ba45a224d2047b07df275134021c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605897526846121440, guid: 73c9ba45a224d2047b07df275134021c, type: 3}
+      propertyPath: maxHp
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3994968541899923378, guid: 73c9ba45a224d2047b07df275134021c, type: 3}
       propertyPath: m_Name
       value: Player_New
+      objectReference: {fileID: 0}
+    - target: {fileID: 7218967386703583794, guid: 73c9ba45a224d2047b07df275134021c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308494313675619256, guid: 73c9ba45a224d2047b07df275134021c, type: 3}
+      propertyPath: near clip plane
+      value: 0.01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1950,9 +1982,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmClipArray:
-  - {fileID: 8300000, guid: b7e3f0a134df1084aacfd59a69b8ff10, type: 3}
+  - {fileID: 8300000, guid: 6fb5b3e64f914d249a527846990d1ef1, type: 3}
   sfxClipArray:
-  - {fileID: 8300000, guid: 849bb857817654547aac72070b927a12, type: 3}
+  - {fileID: 8300000, guid: 3e7677de6ae86d341982bf2ecf19113c, type: 3}
   - {fileID: 8300000, guid: 9e8b381cbf62dbd48be9ae7388cf5e1c, type: 3}
   - {fileID: 8300000, guid: fe3b96895404ff04cb1211f03bdffa45, type: 3}
   - {fileID: 8300000, guid: aa028035fc64f0845ae13b228a0ce222, type: 3}
