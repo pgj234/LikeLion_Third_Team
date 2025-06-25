@@ -61,11 +61,19 @@ public class UserInterface : MonoBehaviour
             else
                 DisableWeaponSlot(weaponSlot[i]);
         }
-
-        eventManager.OnPlayerComboRefreshAction += PlayComboAnimation; // 콤보 새로고침 이벤트 등록
     }
 
-    /// <summary> 테스트용 함수 </summary>
+    private void OnEnable()
+    {
+        EventManager.Instance.OnPlayerComboRefreshAction += PlayComboAnimation; // 콤보 새로고침 이벤트 등록
+    }
+
+    private void OnDisable()
+    {
+        eventManager.OnPlayerComboRefreshAction -= PlayComboAnimation; // 콤보 새로고침 이벤트 등록
+    }
+
+    /// <summary> 테스트용 메서드 </summary>
     private void Update()
     {
         // 콤보 애니메이션
