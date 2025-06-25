@@ -169,17 +169,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sniper_AWM
       objectReference: {fileID: 0}
-    - target: {fileID: 492904530773136461, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1123717773242682576, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
-      propertyPath: m_Icon
+    - target: {fileID: 3761081563988886627, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
+      propertyPath: player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 130524938069141908}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.05000001
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalScale.y
@@ -187,35 +183,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.049999993
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.042
+      value: 0.1375092
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.276
+      value: -0.24397503
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.509
+      value: 0.43048775
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.8139333
+      value: -0.6068591
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.21955056
+      value: 0.78376776
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.39041683
+      value: -0.11622795
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.3699794
+      value: -0.0626199
       objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -228,10 +224,6 @@ PrefabInstance:
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -378,7 +370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &431305427
 Transform:
   m_ObjectHideFlags: 0
@@ -3859,11 +3851,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4818480659139931781}
   - {fileID: 4087525131665100263}
   - {fileID: 9190978066435238136}
-  - {fileID: 5433665820673336573}
   - {fileID: 8613443551111869421}
-  - {fileID: 4818480659139931781}
+  - {fileID: 5433665820673336573}
   m_Father: {fileID: 564357431198573504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3363137160437867321
@@ -6570,11 +6562,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9182007596471131187}
   - {fileID: 5067458670557329713}
   - {fileID: 7289528616224802577}
-  - {fileID: 2864467317145851290}
   - {fileID: 8490027433484558395}
-  - {fileID: 9182007596471131187}
+  - {fileID: 2864467317145851290}
   - {fileID: 274713602427717666}
   - {fileID: 9199602630699892527}
   - {fileID: 4977334612126045424}

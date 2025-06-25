@@ -599,7 +599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 1.5
   runSpeed: 4
-  moveTime: 2
+  moveTime: 5
   waitTime: 1
   detectRange: 5
   playerLayer:
