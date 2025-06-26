@@ -9,6 +9,7 @@ TagManager:
   - HalfNote
   - OffsetTimingNote
   - Enemy
+  - Enemy_Weak
   layers:
   - Default
   - TransparentFX
