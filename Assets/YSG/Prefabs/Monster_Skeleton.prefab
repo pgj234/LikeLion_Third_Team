@@ -41,7 +41,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -357,7 +357,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
       propertyPath: m_Name
-      value: Montser_Skeleton
+      value: Monster_Skeleton
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
       propertyPath: m_Layer
@@ -608,6 +608,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  attackDamage: 10
   attackCenter: {fileID: 1582615829231290225}
   attackRadius: 0.7
   attackCooldown: 1.5

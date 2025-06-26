@@ -3,10 +3,6 @@ using UnityEngine;
 
 public class Sniper : WeaponBase
 {
-    [Header("플레이어")]
-    [SerializeField] private GameObject player;
-    private Animator playerAnim;
-
     private bool isActing = true;
     [SerializeField] private int reload = 0;
     [SerializeField] private Transform shootPoint;
@@ -34,10 +30,6 @@ public class Sniper : WeaponBase
     protected override void Start()
     {
         base.Start();
-
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerAnim = player.GetComponent<Animator>();
-        playerAnim.Play("SniperPull");
 
         nowAmmo = maxAmmo;
 
