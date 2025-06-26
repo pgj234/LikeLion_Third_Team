@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,10 @@ public class TitleManager : MonoBehaviour
     [SerializeField] List<TextMeshProUGUI> settingTexts;    // 0 : BGM, 1 : SFX, 2 : Mouse Sensitivity
     [SerializeField] List<TextMeshProUGUI> fpsBtnTexts;     // 60, 120, 165, 240
     [SerializeField] List<Sprite> fpsBtnBgs;                // 0 : disabled, 1 : enabled
+    [SerializeField] AudioSource[] soundSource;             // 0 : BGM, 1 : SFX
+    [SerializeField] AudioClip btnOverClip;
+    [SerializeField] AudioClip panelCloseClip;
+    [SerializeField] Image fadeImg;
     [Header("Credit Panel")]
     [SerializeField] GameObject creditPanel;
 
@@ -37,6 +42,8 @@ public class TitleManager : MonoBehaviour
                 MainBtnExitEvent(obj);
             }
         }
+
+        MainBtnOverSFXPlay();
     }
 
     public void MainBtnDownEvent(GameObject gameObject)
@@ -112,6 +119,11 @@ public class TitleManager : MonoBehaviour
         // 0~255 범위의 값을 0~1 범위로 변환
         return colorValue / 255f;
     }
+
+    void MainBtnOverSFXPlay()
+    {
+        soundSource[1].PlayOneShot(btnOverClip, UserSettingManager.Instance.SFX); // 버튼 오버 사운드 재생
+    }
     #endregion
 
     private void Start()
@@ -119,6 +131,7 @@ public class TitleManager : MonoBehaviour
         // 초기화 작업
         settingPanel.SetActive(false);
         creditPanel.SetActive(false);
+        fadeImg.enabled = false; // 페이드 이미지 비활성화
 
         foreach (GameObject btn in mainBtns)
         {
@@ -129,12 +142,18 @@ public class TitleManager : MonoBehaviour
         //UserSettingManager.Instance.RegisterSFXChanged(ChangeSFX, true);
         //UserSettingManager.Instance.RegisterBGMChanged(ChangeBGM, true);
         //UserSettingManager.Instance.RegisterMouseSensitivityChanged(ChangeMouseSensitivity, true);
+        soundSource[0].volume = UserSettingManager.Instance.BGM; // BGM 오디오 소스 볼륨 설정
     }
 
     public void SceneMove(int sceneIndex)
     {
         // 씬 전환을 위해 SceneManager를 사용
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
+        fadeImg.enabled = true; // 페이드 이미지 활성화
+        fadeImg.color = new Color(0f, 0f, 0f, 0f); // 초기 색상 설정
+        fadeImg.DOColor(Color.black, 1f).OnComplete(() =>
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
+        });
     }
 
     public void ToggleSetting()
@@ -158,7 +177,7 @@ public class TitleManager : MonoBehaviour
             foreach(TextMeshProUGUI text in fpsBtnTexts)
             {
                 Image img = text.transform.parent.GetComponent<Image>();
-                img.sprite = text.text == UserSettingManager.Instance.FPS.ToString() ? fpsBtnBgs[1] : fpsBtnBgs[0];
+                img.sprite = int.Parse(text.text) == (int)UserSettingManager.Instance.FPS ? fpsBtnBgs[1] : fpsBtnBgs[0];
                 text.color = Color.white; // 텍스트 색상을 초기화
             }
         }
@@ -168,6 +187,7 @@ public class TitleManager : MonoBehaviour
             {
                 MainBtnExitEvent(go);
             }
+            soundSource[1].PlayOneShot(panelCloseClip, UserSettingManager.Instance.SFX); // 패널 닫기 사운드 재생
         }
     }
 
@@ -180,6 +200,7 @@ public class TitleManager : MonoBehaviour
             {
                 MainBtnExitEvent(go);
             }
+            soundSource[1].PlayOneShot(panelCloseClip, UserSettingManager.Instance.SFX); // 패널 닫기 사운드 재생
         }
     }
 
@@ -188,6 +209,7 @@ public class TitleManager : MonoBehaviour
         // BGM 볼륨 변경 로직
         UserSettingManager.Instance.BGM = slider.value;
         settingTexts[0].text = $"{Mathf.FloorToInt(slider.value * 100)} %";
+        soundSource[0].volume = slider.value; // BGM 오디오 소스 볼륨 설정
     }
 
     public void ChangeSFX(Slider slider)
@@ -195,6 +217,10 @@ public class TitleManager : MonoBehaviour
         // SFX 볼륨 변경 로직
         UserSettingManager.Instance.SFX = slider.value;
         settingTexts[1].text = $"{Mathf.FloorToInt(slider.value * 100)} %";
+        if (soundSource[1].isPlaying)
+            soundSource[1].Stop();
+        soundSource[1].volume = slider.value; // SFX 오디오 소스 볼륨 설정
+        soundSource[1].Play(); // SFX 오디오 소스 재생
     }
 
     public void ChangeMouseSensitivity(Slider slider)

@@ -50,7 +50,7 @@ public class Weapon_ShotGun : WeaponBase
     private void OnDisable()
     {
         audio.Stop(); // 오디오 소스 정지
-        FindAnyObjectByType<AudioSource>().PlayOneShot(gunSound[4], .5f); // 다른 오디오 소스에서 사운드 재생
+        FindAnyObjectByType<AudioSource>()?.PlayOneShot(gunSound[4], .5f); // 다른 오디오 소스에서 사운드 재생
     }
 
     protected override void Update()
