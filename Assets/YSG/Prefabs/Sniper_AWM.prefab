@@ -157,14 +157,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponNum: 3
   nowAmmo: 0
-  maxAmmo: 15
+  maxAmmo: 8
   shotAmount: 1
   nextShotTime: 0
   shotDamage: 100
   shotSpreadMin: {x: 0, y: 0}
   shotSpreadMax: {x: 0, y: 0}
   reloadStepNum: 0
-  player: {fileID: 0}
   reload: 0
   shootPoint: {fileID: 6279242928531207454}
   scopeUI: {fileID: 8921875170102450004}

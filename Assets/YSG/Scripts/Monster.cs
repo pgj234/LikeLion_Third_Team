@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.AI;
 
 public class Monster : MonoBehaviour
@@ -16,26 +16,26 @@ public class Monster : MonoBehaviour
     private bool isHit = false;
     private bool isDead = false;
 
-    [Header("ÀÌµ¿")]
+    [Header("ì´ë™")]
     public float walkSpeed = 1.5f;
     public float runSpeed = 4;
     public float moveTime = 5;
     public float waitTime = 1;
     private Vector3 moveDirection;
 
-    [Header("°¨Áö")]
+    [Header("ê°ì§€")]
     [SerializeField] private float detectRange = 5;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private LayerMask groundLayer;
 
-    [Header("°ø°Ý")]
+    [Header("ê³µê²©")]
     [SerializeField] private int attackDamage = 10;
     [SerializeField] private Transform attackCenter;
     [SerializeField] private float attackRadius = 1;
     [SerializeField] private float attackCooldown = 1.5f;
     private float attackTimer = 0;
 
-    [Header("Ã¼·Â")]
+    [Header("ì²´ë ¥")]
     [SerializeField] private float maxHp = 100;
     [SerializeField] private float currentHp;
 
@@ -88,7 +88,7 @@ public class Monster : MonoBehaviour
             Walk();
     }
 
-    #region ÀÌµ¿
+    #region ì´ë™
     private void Walk()
     {
         if (agent.enabled) agent.enabled = false;
@@ -157,7 +157,7 @@ public class Monster : MonoBehaviour
     }
     #endregion
 
-    #region °¨Áö
+    #region ê°ì§€
     private void DetectPlayer()
     {
         if (player != null) return;
@@ -209,7 +209,7 @@ public class Monster : MonoBehaviour
     }
     #endregion
 
-    #region ÀüÅõ
+    #region ì „íˆ¬
     private void Attack()
     {
         if (attackTimer > 0) return;
@@ -217,7 +217,6 @@ public class Monster : MonoBehaviour
         isAttacking = true;
 
         anim?.SetTrigger("Attack");
-
         //if (player == null)
         //{
         //    GameObject target = GameObject.FindGameObjectWithTag("Player");
@@ -229,7 +228,7 @@ public class Monster : MonoBehaviour
 
         //player.GetComponent<Player>().GetDamage(attackDamage);
 
-        Debug.Log($"ÇÃ·¹ÀÌ¾î {attackDamage} µ¥¹ÌÁö > ÇöÀç Ã¼·Â : " );
+        Debug.Log($"í”Œë ˆì´ì–´ {attackDamage} ë°ë¯¸ì§€ > í˜„ìž¬ ì²´ë ¥ : " );
 
         attackTimer = attackCooldown;
     }
@@ -254,7 +253,7 @@ public class Monster : MonoBehaviour
 
         if (currentHp <= 0)
         {
-            Debug.Log("»ç¸Á");
+            Debug.Log("ì‚¬ë§");
 
             Die();
         }
