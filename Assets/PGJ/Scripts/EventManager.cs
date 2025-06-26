@@ -6,31 +6,51 @@ public class EventManager : SingletonBehaviour<EventManager>
     // 스코어링 이벤트
     public Action<int> OnScoreRefreshAction;
 
-    // 플레이어
-    // 데미지 이벤트
-    public Action<int> OnPlayerDamageAction;
+    // Pause 윈도우 오픈 여부 이벤트
+    public Action<bool> OnPauseAction;
 
-    public Action OnPlayerWeaponUIRefreshAction;
+    // 플레이어
+
+    // 플레이어 최대 체력
+    public Action<int> OnPlayerMaxHpAction;
+    // 데미지 이벤트 (플레이어 체력 UI 표시)
+    public Action<int> OnPlayerDamageAction;
+    // 플레이어 사용가능 무기 UI 새로고침 이벤트
+    public Action<bool[]> OnPlayerWeaponUIRefreshAction;
+    // 플레이어 현재 장전 탄 수 UI 새로고침 이벤트
+    public Action<int> OnPlayerCurrentBulletUIRefreshAction;
+    // 플레이어 최대 장전 탄 수 UI 새로고침 이벤트
+    public Action<int> OnPlayerMaxBulletUIRefreshAction;
 
     // 플레이어 사망 이벤트
     public Action OnPlayerDieAction;
     // 부활 이벤트
     public Action OnPlayerRevivalAction;
 
-    // 콤보 증가
-    public Action OnPlayerAddComboAction;
-    // 콤보 감소
-    public Action OnPlayerReduceComboAction;
+    // 콤보 새로고침 이벤트
+    public Action<int> OnPlayerComboRefreshAction;
 
     protected override void Init()
     {
         base.Init();
     }
 
+    // Puase 윈도우 오픈 여부
+    public void PauseWindowOpen(bool isOpen)
+    {
+        OnPauseAction?.Invoke(isOpen);
+    }
+
     // 스코어링 이벤트 발생 메서드
     public void ScoreRefreshEvent(int score)
     {
         OnScoreRefreshAction?.Invoke(score);
+    }
+
+    // 플레이어 최대 체력
+    public void PlayerMaxHpEvent(int maxHp)
+    {
+        OnPlayerMaxHpAction?.Invoke(maxHp);
     }
 
     // 플레이어 데미지 이벤트 발생 메서드
@@ -40,9 +60,9 @@ public class EventManager : SingletonBehaviour<EventManager>
     }
 
     // 플레이어 사용가능 무기 UI 새로고침
-    public void PlayerWeaponUIRefresh()
+    public void PlayerWeaponUIRefresh(bool[] weaponUseAbleArray)
     {
-        OnPlayerWeaponUIRefreshAction?.Invoke();
+        OnPlayerWeaponUIRefreshAction?.Invoke(weaponUseAbleArray);
     }
 
     // 플레이어 사망 이벤트 실행 메서드
@@ -57,15 +77,21 @@ public class EventManager : SingletonBehaviour<EventManager>
         OnPlayerRevivalAction?.Invoke();
     }
 
-    // 플레이어 콤보 증가 이벤트 실행 메서드
-    public void PlayerAddComboEvent()
+    // 플레이어 콤보 새로고침 이벤트 실행 메서드
+    public void PlayerComboRefreshEvent(int combo)
     {
-        OnPlayerAddComboAction?.Invoke();
+        OnPlayerComboRefreshAction?.Invoke(combo);
     }
 
-    // 플레이어 콤보 증가 이벤트 실행 메서드
-    public void PlayerReduceComboEvent()
+    // 플레이어 현재 장전 탄 수 UI 새로고침 이벤트
+    public void PlayerCurrentBulletUIRefresh(int currentBullet)
     {
-        OnPlayerReduceComboAction?.Invoke();
+        OnPlayerCurrentBulletUIRefreshAction?.Invoke(currentBullet);
+    }
+
+    // 플레이어 최대 장전 탄 수 UI 새로고침 이벤트
+    public void PlayerMaxBulletUIRefresh(int maxBullet)
+    {
+        OnPlayerMaxBulletUIRefreshAction?.Invoke(maxBullet);
     }
 }
