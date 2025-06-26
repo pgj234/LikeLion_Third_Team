@@ -85,7 +85,7 @@ public class Sniper : WeaponBase
     {
         base.Shoot();
 
-        if (isActing) return;
+        //if (isActing) return;
 
         if (GameManager.Instance.RhythmCheck() > 0
             || true) // юс╫ц

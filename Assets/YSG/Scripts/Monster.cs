@@ -229,7 +229,7 @@ public class Monster : MonoBehaviour
 
         //player.GetComponent<Player>().GetDamage(attackDamage);
 
-        Debug.Log($"플레이어 {attackDamage} 데미지 > 현재 체력 : " );
+        Debug.Log($"플레이어 {attackDamage} 데미지" );
 
         attackTimer = attackCooldown;
     }

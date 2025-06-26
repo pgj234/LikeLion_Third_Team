@@ -169,14 +169,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sniper_AWM
       objectReference: {fileID: 0}
-    - target: {fileID: 492904530773136461, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3761081563988886627, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 130524938069141908}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.077
