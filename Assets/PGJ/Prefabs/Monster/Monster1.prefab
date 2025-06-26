@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 0
   maxHP: 0
-  walkSpeed: 0
+  walkSpeed: 1
   jumpPower: 0
   isFly: 0
   anim: {fileID: 0}
@@ -57,7 +57,7 @@ MonoBehaviour:
   groundCheckDistance: 0
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   wallCheck: {fileID: 0}
   wallCheckDistance: 0
   whatIsWall:
