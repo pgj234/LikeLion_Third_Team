@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.050000016, y: 0.050000004, z: 0.04999999}
+  m_LocalScale: {x: 0.05000001, y: 0.05, z: 0.049999993}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2725053277594527792}
@@ -164,11 +164,11 @@ MonoBehaviour:
   shotSpreadMin: {x: 0, y: 0}
   shotSpreadMax: {x: 0, y: 0}
   reloadStepNum: 0
+  player: {fileID: 0}
   reload: 0
   shootPoint: {fileID: 6279242928531207454}
-  spreadAngle: 10
   scopeUI: {fileID: 8921875170102450004}
-  zoomScale: 4
+  zoomScale: 2
   shootFire: {fileID: 1337198075554910, guid: 49ad2c215f7bf7c429c2675c4c6ccb5c, type: 3}
   shootTrail: {fileID: 0}
   trailDuration: 0.5
@@ -184,7 +184,7 @@ GameObject:
   m_Layer: 0
   m_Name: ShootPoint
   m_TagString: Untagged
-  m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

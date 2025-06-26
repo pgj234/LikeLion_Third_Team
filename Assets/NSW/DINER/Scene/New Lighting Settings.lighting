@@ -6,14 +6,14 @@ LightingSettings:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
- HEAD:Assets/BSG/SciFiWarriorPBRHPPolyart/Scene/DemoScene01Settings.lighting
+<<<<<<<< HEAD:Assets/BSG/SciFiWarriorPBRHPPolyart/Scene/DemoScene01Settings.lighting
   m_Name: DemoScene01Settings
   serializedVersion: 9
-
+========
   m_Name: New Lighting Settings
   serializedVersion: 3
   m_GIWorkflowMode: 1
- NSW:Assets/NSW/DINER/Scene/New Lighting Settings.lighting
+>>>>>>>> NSW:Assets/NSW/DINER/Scene/New Lighting Settings.lighting
   m_EnableBakedLightmaps: 1
   m_EnableRealtimeLightmaps: 1
   m_RealtimeEnvironmentLighting: 1

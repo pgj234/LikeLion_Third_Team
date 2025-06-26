@@ -19,7 +19,7 @@ public class Monster : MonoBehaviour
     [Header("이동")]
     public float walkSpeed = 1.5f;
     public float runSpeed = 4;
-    public float moveTime = 2;
+    public float moveTime = 5;
     public float waitTime = 1;
     private Vector3 moveDirection;
 
@@ -29,6 +29,7 @@ public class Monster : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [Header("공격")]
+    [SerializeField] private int attackDamage = 10;
     [SerializeField] private Transform attackCenter;
     [SerializeField] private float attackRadius = 1;
     [SerializeField] private float attackCooldown = 1.5f;
@@ -40,7 +41,7 @@ public class Monster : MonoBehaviour
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
         character = GetComponent<CharacterController>();
         agent = GetComponent<NavMeshAgent>();
 
@@ -217,7 +218,18 @@ public class Monster : MonoBehaviour
 
         anim?.SetTrigger("Attack");
 
-        Debug.Log("플레이어 데미지!");
+        //if (player == null)
+        //{
+        //    GameObject target = GameObject.FindGameObjectWithTag("Player");
+        //    if (target != null)
+        //    {
+        //        player = target.transform;
+        //    }
+        //}
+
+        //player.GetComponent<Player>().GetDamage(attackDamage);
+
+        Debug.Log($"플레이어 {attackDamage} 데미지 > 현재 체력 : " );
 
         attackTimer = attackCooldown;
     }
@@ -262,8 +274,6 @@ public class Monster : MonoBehaviour
 
         if (agent != null) agent.enabled = false;
         if (character != null) character.enabled = false;
-
-        Destroy(gameObject, 10);
     }
 
     #endregion
