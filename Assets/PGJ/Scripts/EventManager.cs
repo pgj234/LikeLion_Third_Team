@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class EventManager : SingletonBehaviour<EventManager>
 {
+    // 스코어링 이벤트
+    public Action<int> OnScoreRefreshAction;
+
     // 플레이어
 
     // 데미지 이벤트 (플레이어 체력 UI 표시)
@@ -27,6 +30,12 @@ public class EventManager : SingletonBehaviour<EventManager>
     protected override void Init()
     {
         base.Init();
+    }
+
+    // 스코어링 이벤트 발생 메서드
+    public void ScoreRefreshEvent(int score)
+    {
+        OnScoreRefreshAction?.Invoke(score);
     }
 
     // 플레이어 데미지 이벤트 발생 메서드

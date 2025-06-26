@@ -53,6 +53,8 @@ public class GameManager : SingletonBehaviour<GameManager>
 
         eventManager = EventManager.Instance;
 
+        score = 0;
+
         bpm = 90;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
         for (int i=0; i<20; i++)
         {
@@ -89,6 +91,13 @@ public class GameManager : SingletonBehaviour<GameManager>
     //{
     //    setting   // fps 고정
     //}
+
+    internal void AddScore(int addScore)
+    {
+        score += addScore;
+
+        eventManager.ScoreRefreshEvent(score);
+    }
 
     internal void SetBPM(int _bpm)
     {
