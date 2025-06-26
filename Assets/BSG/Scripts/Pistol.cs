@@ -7,15 +7,17 @@ public class Pistol : WeaponBase
     //[SerializeField] private KeyCode reloadKey = KeyCode.R;
     //[SerializeField] private KeyCode unequipKey = KeyCode.X; // 무기 해제 키
 
-    [Header("장전 설정")]
-    [SerializeField] private float reloadStepDuration = 0.6f; // 각 장전 단계 사이의 간격
+    //[Header("장전 설정")]
+    //[SerializeField] private float reloadStepDuration = 0.6f; // 각 장전 단계 사이의 간격
     // private int reloadStep = 0;                (부모에 currentReloadStepNum 변수 이용)      // 0: 준비 안함, 1~3: 각 장전 단계
+
+    Transform cameraTr;
 
     protected override void Awake()
     {
         base.Awake();
 
-
+        cameraTr = Camera.main.transform;
     }
 
     protected override void Start()
@@ -23,42 +25,78 @@ public class Pistol : WeaponBase
         base.Start();
     }
 
+    void OnEnable()
+    {
+        anim.SetTrigger("WeaponPull");
+    }
+
     protected override void Reload()
     {
-        base.Reload();
+        // 탄 꽉참
+        if (nowAmmo == maxAmmo)
+        {
+            return;
+        }
+
+        HandleReloadInput();
+
+        gameManager.NotePush();
     }
 
     protected override void Shoot()
     {
-        base.Shoot();
+        if (reloading)
+        {
+            return;
+        }
+
+        // 탄 없음
+        if (nowAmmo < 1)
+        {
+            SoundManager.Instance.PlaySFX(SFX.PistolEmpty);
+            return;
+        }
+
+        anim.Play("Pistol_fire", -1, 0);
+        //anim.SetTrigger("WeaponAttack");
+        nowAmmo--;
+        EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
+
+        if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
+        {
+            SoundManager.Instance.PlaySFX(SFX.PistolShot);
+            gameManager.AddCombo();
+        }
+        else
+        {
+            Debug.Log("박자 타이밍 실패...");
+            SoundManager.Instance.PlaySFX(SFX.RhythmFailShot);
+            gameManager.SetHalfCombo();
+        }
+
+        gameManager.NotePush();
+    }
+
+    void Hit()
+    {
+        
     }
 
     protected override void Update()
     {
         base.Update();
 
-        if (input.mouse0_Input && !reloading)
+        if (input.mouse0_Input)        // 공격
         {
             input.mouse0_Input = false;
 
-            anim.SetTrigger("WeaponAttack");
+            Shoot();
         }
-
-        if (input.weapon2_Choice_Input && !reloading)
-        {
-            anim.SetTrigger("WeaponPull");
-        }
-
-        if (input.weapon3_Choice_Input && !reloading)
-        {
-            anim.SetTrigger("WeaponPut");
-        }
-
-        if (input.r_Input)
+        else if (input.r_Input)         // 재장전
         {
             input.r_Input = false;
 
-            HandleReloadInput();
+            Reload();
         }
     }
 
@@ -74,10 +112,39 @@ public class Pistol : WeaponBase
             currentReloadStepNum++;
         }
 
+        if (3 > currentReloadStepNum)
+        {
+            if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
+            {
+                gameManager.AddCombo();
+                SoundManager.Instance.PlaySFX(SFX.PistolCocked);
+            }
+            else
+            {
+                Debug.Log("박자 타이밍 실패...");
+                gameManager.SetHalfCombo();
+                SoundManager.Instance.PlaySFX(SFX.RhythmFailShot);
+            }
+        }
+
         anim.SetInteger("WeaponReload_", currentReloadStepNum);
 
         if (3 == currentReloadStepNum)
         {
+            if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
+            {
+                gameManager.AddCombo();
+                SoundManager.Instance.PlaySFX(SFX.PistolSlide);
+            }
+            else
+            {
+                Debug.Log("박자 타이밍 실패...");
+                gameManager.SetHalfCombo();
+                SoundManager.Instance.PlaySFX(SFX.RhythmFailShot);
+            }
+
+            nowAmmo = maxAmmo;
+            EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
             currentReloadStepNum = 0;
             reloading = false;
         }
