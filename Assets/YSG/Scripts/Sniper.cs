@@ -51,7 +51,7 @@ public class Sniper : WeaponBase
 
         if (input.mouse1_Input)
         {
-            input.mouse0_Input = false;
+            input.mouse1_Input = false;
 
             if (!isZooming)
                 Zoom();
@@ -226,7 +226,7 @@ public class Sniper : WeaponBase
         Debug.Log("장전 성공");
 
         reload = 0;
-        anim.SetInteger("Reload", reload);
+        anim.SetInteger("WeaponReload", reload);
     }
 
     public void SetAnimSpeed(float speed)
