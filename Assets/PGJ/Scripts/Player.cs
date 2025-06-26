@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using DG.Tweening.Core.Easing;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -178,6 +176,8 @@ public class Player : MonoBehaviour
     void Init()
     {
         currentHp = maxHp;
+        eventManager.PlayerMaxHpEvent(maxHp);
+
         playerDie = false;
         isDash = false;
         weaponArray[startWeaponNum].useAble = true;
