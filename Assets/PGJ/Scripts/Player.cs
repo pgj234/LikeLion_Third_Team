@@ -234,6 +234,23 @@ public class Player : MonoBehaviour
                 currentWeapon = weaponArray[weaponNum];
                 currentWeapon.gameObject.SetActive(true);
 
+                switch (weaponNum)
+                {
+                    case 0:         // 검
+                        currentWeapon.SetAnimationSpeed(1.5f);
+                        break;
+
+                    case 1:         // 권총
+                        currentWeapon.SetAnimationSpeed(1.8f);
+                        break;
+
+                    case 2:         // 샷건
+                        break;
+
+                    case 3:         // 스나
+                        break;
+                }
+
                 eventManager.PlayerCurrentBulletUIRefresh(currentWeapon.GetCurrentAmmo());
                 eventManager.PlayerMaxBulletUIRefresh(currentWeapon.GetMaxAmmo());
             }
@@ -294,6 +311,7 @@ public class Player : MonoBehaviour
         if (false == isDash)
         {
             inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
+            Debug.Log(input.move);
         }
 
         if (true == input.lShift_Input)

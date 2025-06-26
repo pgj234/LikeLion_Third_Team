@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Windows;
 
 public class Sword : WeaponBase
 {
@@ -32,8 +33,7 @@ public class Sword : WeaponBase
     [Tooltip("1단계 장전 후 다음 R키 입력까지 대기 시간 (타임아웃)")]
     [SerializeField] float stage1InputTimeout = 2.0f;
 
-    [Header("Animator Settings")]
-    [SerializeField] Animator swordAnimator;    // 반드시 Inspector에서 할당!
+    [SerializeField] Avatar avatar;
 
     bool isDrawing = false;
     bool isAttacking = false;
@@ -44,8 +44,10 @@ public class Sword : WeaponBase
     // 리듬 입력 대기 중인지 여부 (정확한 타이밍에 R키를 눌러야 할 때 사용)
     bool awaitingRhythmInput = false;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         // Sparkle 프리팹 인스턴스 생성 및 초기화
         foreach (var prefab in sparklePrefabs)
         {
@@ -60,24 +62,33 @@ public class Sword : WeaponBase
     {
         base.Update();
 
-        // 0번 키로 Draw (무기를 들고 있지 않고, 장전 중이 아닐 때)
-        KeyCode drawKey = KeyCode.Alpha0 + weaponNum;
-        if (!isDrawing && Input.GetKeyDown(drawKey) && currentReloadStage == ReloadStage.None)
-        {
-            StartCoroutine(DrawSwordSequence());
-        }
-
         // R 키로 Reload (장전 입력 블록 중이 아닐 때만 허용)
-        if (!isReloadingInputBlocked && Input.GetKeyDown(KeyCode.R))
+        if (!isReloadingInputBlocked && input.r_Input)
         {
+            input.r_Input = false;
+
             HandleReloadInput();
         }
 
         // 좌클릭으로 Attack
-        if (!isAttacking && Time.time >= nextAttackTime && Input.GetMouseButtonDown(0))
+        if (!isAttacking && Time.time >= nextAttackTime && input.mouse0_Input)
         {
+            input.mouse0_Input = false;
+
             WeaponAttack();
         }
+    }
+
+    void OnEnable()
+    {
+        anim.avatar = avatar;
+        anim.enabled = true;
+    }
+
+    void OnDisable()
+    {
+        anim.avatar = null;
+        anim.enabled = false;
     }
 
     /// <summary>
@@ -120,39 +131,39 @@ public class Sword : WeaponBase
         }
     }
 
-    IEnumerator DrawSwordSequence()
-    {
-        isDrawing = true;
-        isReloadingInputBlocked = true; // 그리는 동안은 장전 입력도 블록
+    //IEnumerator DrawSwordSequence()
+    //{
+    //    isDrawing = true;
+    //    isReloadingInputBlocked = true; // 그리는 동안은 장전 입력도 블록
 
-        // Draw 모션 시작 (Animator 트랜지션 사용)
-        swordAnimator.SetBool("WeaponPull", true);
+    //    // Draw 모션 시작 (Animator 트랜지션 사용)
+    //    anim.SetBool("WeaponPull", true);
 
-        // --- 이 부분에 디버그 로그 추가 ---
-        swordDrawSound = GetComponent<SwordDrawSound>();
-        if (swordDrawSound == null)
-        {
-            Debug.LogWarning("Sword.cs: SwordDrawSound 컴포넌트를 찾을 수 없습니다! 동일 GameObject에 있나요?");
-        }
-        else
-        {
-            Debug.Log("Sword.cs: SwordDrawSound 컴포넌트를 성공적으로 찾았습니다.");
-        }
-        // ----------------------------------
+    //    // --- 이 부분에 디버그 로그 추가 ---
+    //    swordDrawSound = GetComponent<SwordDrawSound>();
+    //    if (swordDrawSound == null)
+    //    {
+    //        Debug.LogWarning("Sword.cs: SwordDrawSound 컴포넌트를 찾을 수 없습니다! 동일 GameObject에 있나요?");
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Sword.cs: SwordDrawSound 컴포넌트를 성공적으로 찾았습니다.");
+    //    }
+    //    // ----------------------------------
 
-        PlaySparkleOnce();
+    //    PlaySparkleOnce();
 
-        // 애니메이션 길이 대기 (Animator의 특정 State의 길이를 사용하는 것이 더 정확합니다)
-        // 여기서는 reloadRaiseDuration을 Draw Sword 2 애니메이션 길이로 사용한다고 가정
-        yield return new WaitForSeconds(reloadRaiseDuration);
+    //    // 애니메이션 길이 대기 (Animator의 특정 State의 길이를 사용하는 것이 더 정확합니다)
+    //    // 여기서는 reloadRaiseDuration을 Draw Sword 2 애니메이션 길이로 사용한다고 가정
+    //    yield return new WaitForSeconds(reloadRaiseDuration);
 
-        // 파티클 정지 & Idle 복귀 (Animator 트랜지션 사용)
-        StopSparkle();
-        swordAnimator.SetBool("WeaponPull", false); // WeaponPull이 false가 되면 Idle로 트랜지션되도록 Animator 설정
+    //    // 파티클 정지 & Idle 복귀 (Animator 트랜지션 사용)
+    //    StopSparkle();
+    //    anim.SetBool("WeaponPull", false); // WeaponPull이 false가 되면 Idle로 트랜지션되도록 Animator 설정
 
-        isDrawing = false;
-        isReloadingInputBlocked = false; // 드로잉 끝났으니 장전 입력 블록 해제
-    }
+    //    isDrawing = false;
+    //    isReloadingInputBlocked = false; // 드로잉 끝났으니 장전 입력 블록 해제
+    //}
 
     /// <summary>
     /// 1단계 장전 시퀀스: RaiseSword 애니메이션 재생 및 첫 번째 리듬 체크
@@ -164,7 +175,7 @@ public class Sword : WeaponBase
 
         // 1-1) RaiseSword 애니메이션 시작 (Animator Trigger 사용)
         // Animator: "RaiseSword" Trigger를 받아서 "Raise Sword" 스테이트로 이동하도록 설정
-        swordAnimator.SetTrigger("RaiseSword");
+        anim.SetTrigger("RaiseSword");
         Debug.Log("장전 1단계 시작: RaiseSword 애니메이션");
 
         // 1-2) RaiseSword 애니메이션 길이만큼 대기
@@ -185,20 +196,20 @@ public class Sword : WeaponBase
         awaitingRhythmInput = true; // 두 번째 R키 입력 대기 시작
 
         // 1-4) 2단계 리듬 입력 대기 타임아웃
-        float startTime = Time.time;
-        while (awaitingRhythmInput && Time.time < startTime + stage1InputTimeout)
-        {
-            yield return null; // 다음 프레임까지 대기
-        }
+        //float startTime = Time.time;
+        //while (awaitingRhythmInput && Time.time < startTime + stage1InputTimeout)
+        //{
+        //    yield return null; // 다음 프레임까지 대기
+        //}
 
         // 타임아웃으로 인해 awaitingRhythmInput이 아직 true라면 -> 시간 초과로 실패 처리
-        if (awaitingRhythmInput)
-        {
-            Debug.Log("리듬 입력 시간 초과 (2단계 입력 대기 중)");
-            awaitingRhythmInput = false; // 대기 상태 해제
-            StartCoroutine(ReloadFailSequence());
-            // isReloadingInputBlocked는 ReloadFailSequence에서 처리됨
-        }
+        //if (awaitingRhythmInput)
+        //{
+        //    Debug.Log("리듬 입력 시간 초과 (2단계 입력 대기 중)");
+        //    awaitingRhythmInput = false; // 대기 상태 해제
+        //    StartCoroutine(ReloadFailSequence());
+        //    // isReloadingInputBlocked는 ReloadFailSequence에서 처리됨
+        //}
         // 만약 R키가 눌렸다면 ReloadStage2Sequence가 호출되어 이 코루틴이 먼저 종료됨.
     }
 
@@ -211,7 +222,7 @@ public class Sword : WeaponBase
         if (currentReloadStage != ReloadStage.Stage1_Complete && currentReloadStage != ReloadStage.Stage2_Ready)
         {
             Debug.LogWarning("잘못된 장전 단계에서 ReloadStage2Sequence 호출 시도. (현재 상태: " + currentReloadStage + ")");
-            StartCoroutine(ReloadFailSequence()); // 즉시 실패 처리
+            //StartCoroutine(ReloadFailSequence()); // 즉시 실패 처리
             yield break;
         }
 
@@ -222,7 +233,7 @@ public class Sword : WeaponBase
         if (timing2 == 0) // 리듬 실패
         {
             Debug.Log("리듬 실패: 2단계 장전 박자 불일치");
-            StartCoroutine(ReloadFailSequence());
+            //StartCoroutine(ReloadFailSequence());
             yield break; // 코루틴 종료
         }
 
@@ -230,18 +241,18 @@ public class Sword : WeaponBase
 
         // 2-2) LowerSword 애니메이션 시작 (Animator Trigger 사용)
         // Animator: "LowerSword" Trigger를 받아서 "Lower Sword" 스테이트 또는 "Charge Success" 스테이트로 이동하도록 설정
-        swordAnimator.SetTrigger("LowerSword");
+        anim.SetTrigger("LowerSword");
         Debug.Log("장전 2단계 시작: LowerSword 애니메이션");
 
         PlaySparkleOnce(); // 성공 시 파티클 재생
         yield return new WaitForSeconds(sparkleDuration); // 파티클 유지 시간
 
         // 2-3) LowerSword 애니메이션 길이만큼 대기
-        yield return new WaitForSeconds(reloadLowerDuration); // 인스펙터에 설정된 길이 사용
+        //yield return new WaitForSeconds(reloadLowerDuration); // 인스펙터에 설정된 길이 사용
         StopSparkle(); // 파티클 정지
 
         // 2-4) 내구도 복구 및 성공 처리
-        nowAmmo = Mathf.Clamp(reloadShot, 0, maxAmmo);
+        nowAmmo = maxAmmo;
         Debug.Log($"Reload Complete! Durability: {nowAmmo}");
 
         StartCoroutine(ReloadSuccessSequence()); // 성공 마무리 코루틴 시작
@@ -254,7 +265,7 @@ public class Sword : WeaponBase
     {
         currentReloadStage = ReloadStage.Success;
         // Animator: "ChargeSuccess" (새로운 Trigger)를 받아서 "Charge Success" 스테이트로 이동하도록 설정
-        // swordAnimator.SetTrigger("ChargeSuccess"); 
+        // anim.SetTrigger("ChargeSuccess"); 
         Debug.Log("장전 성공 애니메이션 시퀀스 시작.");
 
         // 성공 애니메이션 재생 시간 대기 (예: 0.5초)
@@ -267,7 +278,7 @@ public class Sword : WeaponBase
         awaitingRhythmInput = false; // 혹시 모를 대기 상태 해제
 
         // Animator: 성공 후 Idle로 돌아가기 위한 Trigger (예: ResetCharge)
-        // swordAnimator.SetTrigger("ResetCharge"); 
+        // anim.SetTrigger("ResetCharge"); 
 
         Debug.Log("장전 성공 시퀀스 완료 및 초기화.");
         yield break;
@@ -286,7 +297,7 @@ public class Sword : WeaponBase
 
         currentReloadStage = ReloadStage.Fail;
         // Animator: "ReloadFail" (새로운 Trigger)을 받아서 "Charge Fail" 스테이트로 이동하도록 설정
-        swordAnimator.SetTrigger("ReloadFail");
+        anim.SetTrigger("ReloadFail");
         Debug.Log("장전 실패 애니메이션 시퀀스 시작.");
 
         // 실패 애니메이션 재생 시간 대기 (예: 1초)
@@ -298,7 +309,7 @@ public class Sword : WeaponBase
         awaitingRhythmInput = false; // 혹시 모를 대기 상태 해제
 
         // Animator: 실패 후 Idle로 돌아가기 위한 Trigger (예: ResetCharge)
-        // swordAnimator.SetTrigger("ResetCharge"); 
+        // anim.SetTrigger("ResetCharge"); 
 
         Debug.Log("장전 실패 시퀀스 완료 및 초기화.");
         yield break;
@@ -320,22 +331,24 @@ public class Sword : WeaponBase
 
         // 내구도 차감 + 쿨다운 갱신
         nowAmmo -= shotAmount;
-        nextAttackTime = Time.time + attackCooldown;
+        nextAttackTime = Time.time;
 
         // 공격 애니 시작
         isAttacking = true;
-        swordAnimator.speed = attackAnimationSpeed;
-        swordAnimator.SetBool("WeaponAttack", true); // Animator에 WeaponAttack bool 파라미터 필요
+        //anim.speed = attackAnimationSpeed;
+        anim.Play("Attack", -1, 0);
+        //anim.SetBool("WeaponAttack", true); // Animator에 WeaponAttack bool 파라미터 필요
 
         // 애니 길이 뒤에 종료 처리
-        StartCoroutine(EndAttack());
+        //StartCoroutine(EndAttack());
+        EndAttack();
     }
 
-    IEnumerator EndAttack()
+    void EndAttack()
     {
-        yield return new WaitForSeconds(attackDuration / attackAnimationSpeed);
-        swordAnimator.SetBool("WeaponAttack", false);
-        swordAnimator.speed = 1f;
+        //yield return new WaitForSeconds(attackDuration / attackAnimationSpeed);
+        anim.SetBool("WeaponAttack", false);
+        anim.speed = 1f;
         isAttacking = false;
     }
 

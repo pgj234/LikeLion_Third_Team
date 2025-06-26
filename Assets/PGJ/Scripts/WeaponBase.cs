@@ -34,15 +34,22 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        anim = GetComponent<Animator>();
-
-        if (null == anim)
+        if (0 == weaponNum)
         {
-            anim = GetComponentInChildren<Animator>();
+            anim = transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetComponent<Animator>();
+        }
+        else
+        {
+            anim = GetComponent<Animator>();
 
             if (null == anim)
             {
-                Debug.LogError("Animator 컴포넌트를 찾을 수 없습니다.");
+                anim = GetComponentInChildren<Animator>();
+
+                if (null == anim)
+                {
+                    Debug.LogError("Animator 컴포넌트를 찾을 수 없습니다.");
+                }
             }
         }
     }
