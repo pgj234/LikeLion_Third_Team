@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Pistol : WeaponBase
 {
@@ -12,11 +11,13 @@ public class Pistol : WeaponBase
     //[SerializeField] private float reloadStepDuration = 0.6f; // 각 장전 단계 사이의 간격
     // private int reloadStep = 0;                (부모에 currentReloadStepNum 변수 이용)      // 0: 준비 안함, 1~3: 각 장전 단계
 
+    Transform cameraTr;
+
     protected override void Awake()
     {
         base.Awake();
 
-
+        cameraTr = Camera.main.transform;
     }
 
     protected override void Start()
@@ -56,7 +57,8 @@ public class Pistol : WeaponBase
             return;
         }
 
-        anim.SetTrigger("WeaponAttack");
+        anim.Play("Pistol_fire", -1, 0);
+        //anim.SetTrigger("WeaponAttack");
         nowAmmo--;
         EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
 
@@ -73,6 +75,11 @@ public class Pistol : WeaponBase
         }
 
         gameManager.NotePush();
+    }
+
+    void Hit()
+    {
+        
     }
 
     protected override void Update()
