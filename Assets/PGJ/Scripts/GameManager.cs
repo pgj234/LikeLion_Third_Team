@@ -176,6 +176,16 @@ public class GameManager : SingletonBehaviour<GameManager>
         eventManager.PlayerComboRefreshEvent(combo);
     }
 
+    internal int GetCombo()
+    {
+        return combo;
+    }
+
+    internal int GetMaxCombo()
+    {
+        return maxCombo;
+    }
+
     #region 노트 풀링
     internal void NotePull()
     {

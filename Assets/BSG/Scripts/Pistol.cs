@@ -58,6 +58,8 @@ public class Pistol : WeaponBase
         }
 
         anim.Play("Pistol_fire", -1, 0);
+        shotEffect.SetActive(false);
+        shotEffect.SetActive(true);
         //anim.SetTrigger("WeaponAttack");
         nowAmmo--;
         EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
@@ -74,12 +76,35 @@ public class Pistol : WeaponBase
             gameManager.SetHalfCombo();
         }
 
+        Hit();
+
         gameManager.NotePush();
     }
 
     void Hit()
     {
-        
+        RaycastHit[] results = new RaycastHit[1]; // 미리 배열 생성
+        int hitCount = Physics.SphereCastNonAlloc(cameraTr.position, 0.1f, cameraTr.forward, results, range);
+
+        if (0 < hitCount)
+        {
+            Instantiate(hitEffectPrefab, results[0].point, Quaternion.Euler(results[0].normal));
+
+            if (results[0].transform.CompareTag("Enemy"))
+            {
+                if (results[0].transform.TryGetComponent(out Entity enemy))
+                {
+                    enemy.GetDamage(GetTotalDamage());
+                }
+            }
+            else if (results[0].transform.CompareTag("Enemy_Weak"))
+            {
+                if (results[0].transform.TryGetComponent(out EntityWeak enemyWeak))
+                {
+                    enemyWeak.GetDamage(GetTotalDamage() * 2);
+                }
+            }
+        }
     }
 
     protected override void Update()
