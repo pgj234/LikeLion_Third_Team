@@ -39,16 +39,6 @@ public class Pistol : WeaponBase
 
         HandleReloadInput();
 
-        if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
-        {
-            gameManager.AddCombo();
-        }
-        else
-        {
-            Debug.Log("박자 타이밍 실패...");
-            gameManager.SetHalfCombo();
-        }
-
         gameManager.NotePush();
     }
 
@@ -117,14 +107,35 @@ public class Pistol : WeaponBase
 
         if (3 > currentReloadStepNum)
         {
-            SoundManager.Instance.PlaySFX(SFX.PistolCocked);
+            if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
+            {
+                gameManager.AddCombo();
+                SoundManager.Instance.PlaySFX(SFX.PistolCocked);
+            }
+            else
+            {
+                Debug.Log("박자 타이밍 실패...");
+                gameManager.SetHalfCombo();
+                SoundManager.Instance.PlaySFX(SFX.RhythmFailShot);
+            }
         }
 
         anim.SetInteger("WeaponReload_", currentReloadStepNum);
 
         if (3 == currentReloadStepNum)
         {
-            SoundManager.Instance.PlaySFX(SFX.PistolSlide);
+            if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
+            {
+                gameManager.AddCombo();
+                SoundManager.Instance.PlaySFX(SFX.PistolSlide);
+            }
+            else
+            {
+                Debug.Log("박자 타이밍 실패...");
+                gameManager.SetHalfCombo();
+                SoundManager.Instance.PlaySFX(SFX.RhythmFailShot);
+            }
+
             nowAmmo = maxAmmo;
             EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
             currentReloadStepNum = 0;
