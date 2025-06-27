@@ -311,7 +311,6 @@ public class Player : MonoBehaviour
         if (false == isDash)
         {
             inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
-            Debug.Log(input.move);
         }
 
         if (true == input.lShift_Input)
