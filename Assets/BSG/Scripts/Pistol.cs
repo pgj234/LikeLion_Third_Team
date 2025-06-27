@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
 public class Pistol : WeaponBase
 {
@@ -58,8 +59,8 @@ public class Pistol : WeaponBase
         }
 
         anim.Play("Pistol_fire", -1, 0);
-        //shotEffect.SetActive(false);
-        //shotEffect.SetActive(true);
+        shotEffect.SetActive(false);
+        shotEffect.SetActive(true);
         //anim.SetTrigger("WeaponAttack");
         nowAmmo--;
         EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
@@ -84,11 +85,11 @@ public class Pistol : WeaponBase
     void Hit()
     {
         RaycastHit[] results = new RaycastHit[1]; // 미리 배열 생성
-        int hitCount = Physics.SphereCastNonAlloc(cameraTr.position, 0.1f, cameraTr.forward, results, range);
-
+        int hitCount = Physics.SphereCastNonAlloc(cameraTr.position, 0.1f, cameraTr.forward, results, range, LayerMask.GetMask("Ground", "Enemy"));
+        
         if (0 < hitCount)
         {
-            Instantiate(hitEffectPrefab, results[0].point, Quaternion.Euler(results[0].normal));
+            GameObject go = Instantiate(hitEffectPrefab, results[0].point, Quaternion.LookRotation(results[0].normal) * Quaternion.Euler(90, 0, 0));
 
             if (results[0].transform.CompareTag("Enemy"))
             {
@@ -105,6 +106,34 @@ public class Pistol : WeaponBase
                 }
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Vector3 origin = cameraTr.position;
+        Vector3 dir = cameraTr.forward;
+        
+        // 충돌 궤적 시각화
+        Gizmos.DrawLine(origin, origin + dir * range);
+        DrawWireSphere(origin, 0.1f); // 시작점
+        DrawWireSphere(origin + dir * range, 0.1f); // 끝점
+
+        // 중간을 따라 원 그려서 "터널"처럼 시각화 가능
+        int segments = 10;
+        for (int i = 1; i < segments; i++)
+        {
+            float t = i / (float)segments;
+            Vector3 pos = origin + dir * range * t;
+            DrawWireSphere(pos, 0.1f);
+        }
+    }
+
+    // 구를 그리는 헬퍼
+    private void DrawWireSphere(Vector3 position, float radius)
+    {
+        Gizmos.DrawWireSphere(position, radius);
     }
 
     protected override void Update()

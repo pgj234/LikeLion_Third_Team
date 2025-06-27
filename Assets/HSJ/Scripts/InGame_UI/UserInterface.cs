@@ -112,53 +112,53 @@ public class UserInterface : MonoBehaviour
     /// <summary> 테스트용 메서드 </summary>
     private void Update()
     {
-        // 콤보 애니메이션
-        if (Input.GetKeyDown(KeyCode.F12))
-            PlayComboAnimation(999);
+        //// 콤보 애니메이션
+        //if (Input.GetKeyDown(KeyCode.F12))
+        //    PlayComboAnimation(999);
 
-        // 검 선택
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            ChangeWeaponAnimation(new bool[] { true, false, false, false });
-        // 샷건 선택
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-            ChangeWeaponAnimation(new bool[] { false, true, false, false });
-        // 스나 선택
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-            ChangeWeaponAnimation(new bool[] { false, false, true, false });
-        // 권총 선택
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-            ChangeWeaponAnimation(new bool[] { false, false, false, true });
+        //// 검 선택
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //    ChangeWeaponAnimation(new bool[] { true, false, false, false });
+        //// 샷건 선택
+        //else if (Input.GetKeyDown(KeyCode.Alpha2))
+        //    ChangeWeaponAnimation(new bool[] { false, true, false, false });
+        //// 스나 선택
+        //else if (Input.GetKeyDown(KeyCode.Alpha3))
+        //    ChangeWeaponAnimation(new bool[] { false, false, true, false });
+        //// 권총 선택
+        //else if (Input.GetKeyDown(KeyCode.Alpha4))
+        //    ChangeWeaponAnimation(new bool[] { false, false, false, true });
 
 
-        // 검 활성화
-        if (Input.GetKeyDown(KeyCode.F1))
-            AcquireWeapon(0); // 검 슬롯 활성화
-        // 샷건 활성화
-        else if (Input.GetKeyDown(KeyCode.F2))
-            AcquireWeapon(1); // 샷건 슬롯 활성화
-        // 스나 활성화
-        else if (Input.GetKeyDown(KeyCode.F3))
-            AcquireWeapon(2); // 스나 슬롯 활성화
-        // 권총 활성화
-        else if (Input.GetKeyDown(KeyCode.F4))
-            AcquireWeapon(3); // 권총 슬롯 활성화
+        //// 검 활성화
+        //if (Input.GetKeyDown(KeyCode.F1))
+        //    AcquireWeapon(0); // 검 슬롯 활성화
+        //// 샷건 활성화
+        //else if (Input.GetKeyDown(KeyCode.F2))
+        //    AcquireWeapon(1); // 샷건 슬롯 활성화
+        //// 스나 활성화
+        //else if (Input.GetKeyDown(KeyCode.F3))
+        //    AcquireWeapon(2); // 스나 슬롯 활성화
+        //// 권총 활성화
+        //else if (Input.GetKeyDown(KeyCode.F4))
+        //    AcquireWeapon(3); // 권총 슬롯 활성화
 
-        // 검 비활성화
-        if (Input.GetKeyDown(KeyCode.F5))
-            weaponSlot[0].SetActive(false); // 검 슬롯 비활성화
-        // 샷건 비활성화
-        if (Input.GetKeyDown(KeyCode.F6))
-            weaponSlot[1].SetActive(false); // 샷건 슬롯 비활성화
-        // 스나 비활성화
-        if (Input.GetKeyDown(KeyCode.F7))
-            weaponSlot[2].SetActive(false); // 스나 슬롯 비활성화
-        // 권총 비활성화
-        if (Input.GetKeyDown(KeyCode.F8))
-            weaponSlot[3].SetActive(false); // 권총 슬롯 비활성화
+        //// 검 비활성화
+        //if (Input.GetKeyDown(KeyCode.F5))
+        //    weaponSlot[0].SetActive(false); // 검 슬롯 비활성화
+        //// 샷건 비활성화
+        //if (Input.GetKeyDown(KeyCode.F6))
+        //    weaponSlot[1].SetActive(false); // 샷건 슬롯 비활성화
+        //// 스나 비활성화
+        //if (Input.GetKeyDown(KeyCode.F7))
+        //    weaponSlot[2].SetActive(false); // 스나 슬롯 비활성화
+        //// 권총 비활성화
+        //if (Input.GetKeyDown(KeyCode.F8))
+        //    weaponSlot[3].SetActive(false); // 권총 슬롯 비활성화
 
-        // 아이템 픽업 패널 테스트용
-        if (Input.GetKeyDown(KeyCode.BackQuote))
-            ShowItemPickUpPanel(Random.Range(0, itemIcon.Count), Random.Range(1, 999)); 
+        //// 아이템 픽업 패널 테스트용
+        //if (Input.GetKeyDown(KeyCode.BackQuote))
+        //    ShowItemPickUpPanel(Random.Range(0, itemIcon.Count), Random.Range(1, 999)); 
 
         // Pause 패널 토글
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -386,7 +386,9 @@ public class UserInterface : MonoBehaviour
         pausePanel.SetActive(!pausePanel.activeSelf); // Pause 패널의 활성화 상태를 토글
         if (pausePanel.activeSelf)
         {
-            Time.timeScale = 0f; // 게임 일시 정지
+            eventManager.OnPauseAction(true);
+
+            //Time.timeScale = 0f; // 게임 일시 정지
             inputManager.cursorInputForLook = false; // 마우스 커서 잠금 해제
             inputManager.cursorLocked = false; // 커서 잠금 해제
             // 슬라이더 값 초기화
@@ -397,14 +399,16 @@ public class UserInterface : MonoBehaviour
             mouseSlider.value = settingManager.MouseSensitivity; // 마우스 감도 슬라이더 값 초기화
             mouseLabel.text = $"{Mathf.FloorToInt(mouseSlider.value * 100)} %"; // 마우스 감도 레이블 업데이트
 
-            SoundManager.Instance.StopBGM(); // BGM 정지
+            //SoundManager.Instance.StopBGM(); // BGM 정지
         }
         else
         {
-            Time.timeScale = 1f; // 게임 재개
+            eventManager.OnPauseAction(false);
+
+            //Time.timeScale = 1f; // 게임 재개
             inputManager.cursorInputForLook = true; // 마우스 커서 잠금
             inputManager.cursorLocked = true; // 커서 잠금
-            SoundManager.Instance.PlayBGM(BGM.Test_Bgm); // BGM 재생
+            //SoundManager.Instance.PlayBGM(BGM.Test_Bgm); // BGM 재생
         }
     }
 
@@ -414,14 +418,14 @@ public class UserInterface : MonoBehaviour
 
         if (resurrectionCount > 0)
         {
-            Time.timeScale = 0f; // 게임 일시 정지
+            //Time.timeScale = 0f; // 게임 일시 정지
             resurrectionPanel.SetActive(true); // 부활 패널 활성화
             gameOverPanel.SetActive(false); // 게임오버 패널 비활성화
             resurrectionCoroutine = StartCoroutine(ResurrectionCounter()); // 부활 카운트 시작
         }
         else
         {
-            Time.timeScale = 0f; // 게임 재개
+            //Time.timeScale = 0f; // 게임 재개
             gameOverPanel.SetActive(true); // 게임오버 패널 활성화
             resurrectionPanel.SetActive(false); // 부활 패널 비활성화
         }

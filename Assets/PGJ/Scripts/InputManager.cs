@@ -26,14 +26,45 @@ public class InputManager : SingletonBehaviour<InputManager>
     public bool cursorLocked = true;
     public bool cursorInputForLook = true;
 
+    bool pause = false;
+
+    protected override void Init()
+    {
+        base.Init();
+
+        EventManager.Instance.OnPauseAction += SetPause;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        EventManager.Instance.OnPauseAction -= SetPause;
+    }
+
+    void SetPause(bool _isPuase)
+    {
+        pause = _isPuase;
+    }
+
 #if ENABLE_INPUT_SYSTEM
     public void OnMove(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         MoveInput(value.Get<Vector2>());
     }
 
     public void OnLook(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         if (cursorInputForLook)
         {
             LookInput(value.Get<Vector2>());
@@ -42,51 +73,101 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     public void OnJump(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         SpaceInput(value.isPressed);
     }
 
     public void OnDash(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         LShiftInput(value.isPressed);
     }
 
     public void OnAim(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         AimInput(value.isPressed);
     }
 
     public void OnReload(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         R_Input(value.isPressed);
     }
 
     public void OnWeaponChoice0(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         Weapon0_Choice_Input(value.isPressed);
     }
 
     public void OnWeaponChoice1(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         Weapon1_Choice_Input(value.isPressed);
     }
 
     public void OnWeaponChoice2(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         Weapon2_Choice_Input(value.isPressed);
     }
 
     public void OnWeaponChoice3(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         Weapon3_Choice_Input(value.isPressed);
     }
 
     public void OnMouse0(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         Mouse0_Input(value.isPressed);
     }
 
     public void OnMouse1(InputValue value)
     {
+        if (pause)
+        {
+            return;
+        }
+
         Mouse1_Input(value.isPressed);
     }
 #endif
@@ -154,6 +235,11 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     private void OnApplicationFocus(bool hasFocus)
     {
+        if (pause)
+        {
+            return;
+        }
+
         SetCursorState(cursorLocked);
     }
 

@@ -13,13 +13,17 @@ public class Player : MonoBehaviour
     public float dashSpeed;
     public float RotationSmoothTime;
     public float SpeedChangeRate;
+    public float dashNormalCost;
+    public float dashRhythmCost;
     public float dashCoolTime;
+    public float maxDashGaugeNum;
     public float dashDurationTime;
-    public int dashMaxStackNum;
-    public float dashStackCoolTime;
 
-    int currentDashStack;
-    float dashStackCoolTimer;
+    float currentDashGaugeNum;
+
+    [Space(10)]
+    [Header("DashEffectImg")]
+    [SerializeField] GameObject dashEffect_Img_Obj;
 
     [Space(10)]
     [Header("Weapon")]
@@ -109,7 +113,7 @@ public class Player : MonoBehaviour
     {
         weaponSwapTimer -= Time.deltaTime;
 
-        DashCoolTimeProc();
+        DashGaugeProc();
 
         JumpAndGravity();
         GroundedCheck();
@@ -182,8 +186,7 @@ public class Player : MonoBehaviour
         isDash = false;
         weaponArray[startWeaponNum].useAble = true;
         remainRevival = 1;
-        currentDashStack = dashMaxStackNum;
-        dashStackCoolTimer = 0;
+        currentDashGaugeNum = maxDashGaugeNum;
 
         currentWeapon = weaponArray[startWeaponNum];
         currentWeapon.SetAnimationSpeed(1.8f);
@@ -257,22 +260,25 @@ public class Player : MonoBehaviour
         }
     }
 
-    void DashCoolTimeProc()
+    void DashGaugeProc()
     {
-        // 대쉬 스택 최대면 리턴
-        if (currentDashStack >= dashMaxStackNum)
+        if (maxDashGaugeNum < currentDashGaugeNum)
         {
             return;
         }
 
-        dashStackCoolTimer -= Time.deltaTime;
+        currentDashGaugeNum += Time.deltaTime;
+    }
 
-        if (dashStackCoolTimer < 0)
+    internal float GetDashGauge()
+    {
+        if (maxDashGaugeNum < currentDashGaugeNum)
         {
-            dashStackCoolTimer = dashStackCoolTime;
-
-            currentDashStack += 1;
-            Debug.Log("현재 대쉬 스택 : " + currentDashStack);
+            return maxDashGaugeNum;
+        }
+        else
+        {
+            return currentDashGaugeNum;
         }
     }
 
@@ -304,6 +310,7 @@ public class Player : MonoBehaviour
         dashTimer -= Time.deltaTime;
         if (dashTimer + dashDurationTime < dashCoolTime && true == isDash)
         {
+            dashEffect_Img_Obj.SetActive(false);
             isDash = false;
             targetSpeed = 0.0f;
         }
@@ -319,12 +326,40 @@ public class Player : MonoBehaviour
 
             if (0 > dashTimer)
             {
-                if (0 < currentDashStack)
+                if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
                 {
-                    currentDashStack -= 1;
+                    if (dashRhythmCost < currentDashGaugeNum)
+                    {
+                        dashEffect_Img_Obj.SetActive(false);
+                        dashEffect_Img_Obj.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                        dashEffect_Img_Obj.SetActive(true);
 
-                    dashTimer = dashCoolTime;
-                    isDash = true;
+                        currentDashGaugeNum -= dashRhythmCost;
+
+                        gameManager.AddCombo();
+                        SoundManager.Instance.PlaySFX(SFX.DashRhythmSucces);
+
+                        dashTimer = dashCoolTime;
+                        isDash = true;
+                    }
+                }
+                else
+                {
+                    if (dashNormalCost < currentDashGaugeNum)
+                    {
+                        dashEffect_Img_Obj.SetActive(false);
+                        dashEffect_Img_Obj.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 180));
+                        dashEffect_Img_Obj.SetActive(true);
+
+                        currentDashGaugeNum -= dashNormalCost;
+
+                        Debug.Log("박자 타이밍 실패...");
+                        gameManager.SetHalfCombo();
+                        SoundManager.Instance.PlaySFX(SFX.DashRhythmFailed);
+
+                        dashTimer = dashCoolTime;
+                        isDash = true;
+                    }
                 }
             }
         }
