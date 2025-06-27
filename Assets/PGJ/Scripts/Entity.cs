@@ -84,12 +84,12 @@ public class Entity : MonoBehaviour
         // 박자에 맞춰서 행동
         currentTime += Time.deltaTime;
 
-        if (currentTime >= 30d / gameManager.bpm)
-        {
-            StateProc();
+        // if (currentTime >= 30d / gameManager.bpm)
+        // {
+        //     StateProc();
 
-            currentTime -= 30d / gameManager.bpm;
-        }
+        //     currentTime -= 30d / gameManager.bpm;
+        // }
     }
 
     // 행동 양식
