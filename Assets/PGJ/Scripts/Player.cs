@@ -83,6 +83,7 @@ public class Player : MonoBehaviour
     EventManager eventManager;
     CharacterController controller;
     InputManager input;
+    UserSettingManager userSettingManager;
 
     WeaponBase currentWeapon;
     Coroutine coWeaponChange = null;
@@ -105,6 +106,7 @@ public class Player : MonoBehaviour
         input = InputManager.Instance;
         gameManager = GameManager.Instance;
         eventManager = EventManager.Instance;
+        userSettingManager = UserSettingManager.Instance;
 
         Init();
     }
@@ -286,8 +288,8 @@ public class Player : MonoBehaviour
     {
         if (input.look.sqrMagnitude >= threshold && !LockCameraPosition)
         {
-            cinemachineTargetYaw += input.look.x * 1;
-            cinemachineTargetPitch += input.look.y * 1;
+            cinemachineTargetYaw += input.look.x * userSettingManager.MouseSensitivity;
+            cinemachineTargetPitch += input.look.y * userSettingManager.MouseSensitivity;
         }
 
         cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);

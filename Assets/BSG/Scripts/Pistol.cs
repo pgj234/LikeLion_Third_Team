@@ -82,6 +82,11 @@ public class Pistol : WeaponBase
         gameManager.NotePush();
     }
 
+    public void ShotEffectOff()
+    {
+        shotEffect.SetActive(false);
+    }
+
     void Hit()
     {
         RaycastHit[] results = new RaycastHit[1]; // 미리 배열 생성
