@@ -250,9 +250,11 @@ public class Player : MonoBehaviour
                         break;
 
                     case 2:         // 샷건
+                        currentWeapon.SetAnimationSpeed(1.5f);
                         break;
 
                     case 3:         // 스나
+                        currentWeapon.SetAnimationSpeed(2.1f);
                         break;
                 }
 
