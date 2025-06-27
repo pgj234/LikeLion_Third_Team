@@ -58,8 +58,8 @@ public class Pistol : WeaponBase
         }
 
         anim.Play("Pistol_fire", -1, 0);
-        //shotEffect.SetActive(false);
-        //shotEffect.SetActive(true);
+        shotEffect.SetActive(false);
+        shotEffect.SetActive(true);
         //anim.SetTrigger("WeaponAttack");
         nowAmmo--;
         EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);

@@ -136,7 +136,7 @@ public class Player : MonoBehaviour
                 return;
             }
 
-            coWeaponChange = StartCoroutine(ChangeWeapon(0));
+            ChangeWeapon(0);
         }
         else if (input.weapon1_Choice_Input)
         {
@@ -147,7 +147,7 @@ public class Player : MonoBehaviour
                 return;
             }
 
-            coWeaponChange = StartCoroutine(ChangeWeapon(1));
+            ChangeWeapon(1);
         }
         else if (input.weapon2_Choice_Input)
         {
@@ -158,7 +158,7 @@ public class Player : MonoBehaviour
                 return;
             }
 
-            coWeaponChange = StartCoroutine(ChangeWeapon(2));
+            ChangeWeapon(2);
         }
         else if (input.weapon3_Choice_Input)
         {
@@ -169,7 +169,7 @@ public class Player : MonoBehaviour
                 return;
             }
 
-            coWeaponChange = StartCoroutine(ChangeWeapon(3));
+            ChangeWeapon(3);
         }
     }
 
@@ -215,7 +215,7 @@ public class Player : MonoBehaviour
         eventManager.PlayerWeaponUIRefresh(weaponUseAbleArray);
     }
 
-    IEnumerator ChangeWeapon(int weaponNum)
+    void ChangeWeapon(int weaponNum)
     {
         if (true == weaponArray[weaponNum].useAble)
         {
@@ -225,10 +225,6 @@ public class Player : MonoBehaviour
 
                 currentWeapon.reloading = false;
                 currentWeapon.SetBoolAnimation("WeaponPut", true);
-
-                yield return null;
-                yield return new WaitForSeconds(currentWeapon.GetAnimationTime());
-                yield return null;
 
                 currentWeapon.gameObject.SetActive(false);
                 currentWeapon = weaponArray[weaponNum];
@@ -248,6 +244,7 @@ public class Player : MonoBehaviour
                         break;
 
                     case 3:         // 스나
+                        currentWeapon.SetAnimationSpeed(2);
                         break;
                 }
 
