@@ -28248,7 +28248,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4985287158501456755}
   m_Layer: 0
-  m_Name: DINER
+  m_Name: Map1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
