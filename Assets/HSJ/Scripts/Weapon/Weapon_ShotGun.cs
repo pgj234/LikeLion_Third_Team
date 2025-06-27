@@ -6,8 +6,6 @@ using UnityEngine.Windows;
 
 public class Weapon_ShotGun : WeaponBase
 {
-    InputManager inputManager; // 입력 매니저 인스턴스
-    GameManager gameManager; // 게임 매니저 인스턴스
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletSpeed = 1f;
     [SerializeField] Transform shootPoint;
@@ -23,8 +21,6 @@ public class Weapon_ShotGun : WeaponBase
     protected override void Awake()
     {
         base.Awake(); // 부모 클래스의 Awake 호출
-        gameManager = GameManager.Instance; // 게임 매니저 인스턴스 초기화
-        inputManager = InputManager.Instance; // 입력 매니저 인스턴스 초기화
         //animator = GetComponentInChildren<Animator>(); // 애니메이터 컴포넌트 초기화
         if (audio == null)
         {
