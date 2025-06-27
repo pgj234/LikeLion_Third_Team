@@ -3503,9 +3503,12 @@ MonoBehaviour:
   shotAmount: 3
   nextShotTime: 0
   shotDamage: 0
+  range: 0
   shotSpreadMin: {x: 0.01, y: -0.01}
   shotSpreadMax: {x: 0, y: 0}
   reloadStepNum: 0
+  shotEffect: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
   bulletPrefab: {fileID: 196035611948102908, guid: 00b30ba3fe04e404eb527d096f839778, type: 3}
   bulletSpeed: 60
   shootPoint: {fileID: 377497357544499351}
@@ -5369,15 +5372,23 @@ MonoBehaviour:
   shotAmount: 10
   nextShotTime: 1
   shotDamage: 0
+  range: 0
   shotSpreadMin: {x: 0, y: 0}
   shotSpreadMax: {x: 0, y: 0}
   reloadStepNum: 2
+  shotEffect: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
   reloadRaiseDuration: 0.1
   sparkleDuration: 3
   reloadLowerDuration: 0.1
+  attackAnimationSpeed: 1
+  attackDuration: 0.6
+  attackCooldown: 0.8
   sparklePrefabs:
   - {fileID: 5281703823909813044, guid: ab4c63ea0690b254da615d1054521b20, type: 3}
   - {fileID: 5501976216335251706, guid: 987df892e7993d84e9eb67b14560dc32, type: 3}
+  reloadShot: 100
+  stage1InputTimeout: 2
   swordAnimator: {fileID: 0}
 --- !u!1 &5763840204029765886
 GameObject:
@@ -5606,9 +5617,12 @@ MonoBehaviour:
   shotAmount: 0
   nextShotTime: 0
   shotDamage: 0
+  range: 0
   shotSpreadMin: {x: 0, y: 0}
   shotSpreadMax: {x: 0, y: 0}
   reloadStepNum: 0
+  shotEffect: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
 --- !u!4 &6325670495162086777
 Transform:
   m_ObjectHideFlags: 0

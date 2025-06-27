@@ -6,7 +6,7 @@ public class Monster : MonoBehaviour
     private Animator anim;
     private CharacterController character;
     private NavMeshAgent agent;
-    private Transform player;
+    private Transform target;
 
     private float timer;
 
@@ -69,7 +69,7 @@ public class Monster : MonoBehaviour
         if (attackTimer > 0)
             attackTimer -= Time.deltaTime;
 
-        if (player != null && IsInAttackRange() && !isAttacking)
+        if (target != null && IsInAttackRange() && !isAttacking)
             Attack();
 
         if (isAttacking)
@@ -80,7 +80,7 @@ public class Monster : MonoBehaviour
             return;
         }
 
-        if (player != null) isRunning = true;
+        if (target != null) isRunning = true;
 
         if (isRunning)
             Run();
@@ -138,7 +138,7 @@ public class Monster : MonoBehaviour
         if (!agent.enabled) agent.enabled = true;
 
         agent.speed = runSpeed;
-        agent.SetDestination(player.position);
+        agent.SetDestination(target.position);
 
         if (agent.hasPath && agent.remainingDistance > agent.stoppingDistance)
         {
@@ -160,7 +160,7 @@ public class Monster : MonoBehaviour
     #region 감지
     private void DetectPlayer()
     {
-        if (player != null) return;
+        if (target != null) return;
 
         Collider[] hits = Physics.OverlapSphere(transform.position, detectRange, playerLayer);
 
@@ -168,7 +168,7 @@ public class Monster : MonoBehaviour
         {
             if (hit.CompareTag("Player"))
             {
-                player = hit.transform;
+                target = hit.transform;
                 break;
             }
         }
@@ -218,18 +218,22 @@ public class Monster : MonoBehaviour
 
         anim?.SetTrigger("Attack");
 
-        //if (player == null)
-        //{
-        //    GameObject target = GameObject.FindGameObjectWithTag("Player");
-        //    if (target != null)
-        //    {
-        //        player = target.transform;
-        //    }
-        //}
+        if (target == null)
+        {
+            GameObject goPlayer = GameObject.FindGameObjectWithTag("Player");
+            if (goPlayer != null)
+            {
+                this.target = goPlayer.transform;
+            }
+        }
 
-        //player.GetComponent<Player>().GetDamage(attackDamage);
 
-        Debug.Log($"플레이어 {attackDamage} 데미지" );
+        if (target.TryGetComponent(out Player player))
+        {
+            player.GetDamage(attackDamage);
+        }
+
+        Debug.Log($"플레이어 {attackDamage} 데미지 > 플레이어 체력 : {target.GetComponent<Player>().currentHp}");
 
         attackTimer = attackCooldown;
     }
@@ -243,12 +247,12 @@ public class Monster : MonoBehaviour
         isHit = true;
         isRunning = true;
 
-        if (player == null)
+        if (target == null)
         {
             GameObject target = GameObject.FindGameObjectWithTag("Player");
             if (target != null)
             {
-                player = target.transform;
+                this.target = target.transform;
             }
         }
 

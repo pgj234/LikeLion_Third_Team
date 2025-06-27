@@ -9,7 +9,9 @@ public class SniperTrigger : MonoBehaviour
         sniper = GetComponentInParent<Sniper>();
     }
 
-    private void Shoot() => sniper.ShootEvent();
-    private void ActOver() => sniper.ActOverEvent();
+    private void ShootOver() => sniper.ShootOverEvent();
     private void ReloadOver() => sniper.ReloadOverEvent();
+
+
+    private void ShootSound() => SoundManager.Instance.PlaySFX(SFX.SniperShoot);
 }

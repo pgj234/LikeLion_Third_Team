@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class Sniper : WeaponBase
 {
-    private bool isActing = true;
+    [Header("발사")]
     [SerializeField] private int reload = 0;
     [SerializeField] private Transform shootPoint;
+    private bool isShooting = false;
 
     [Header("조준")]
     [SerializeField] private GameObject scopeUI;
@@ -45,8 +46,6 @@ public class Sniper : WeaponBase
     {
         base.Update();
 
-        if (isActing) return;
-
         Debug.DrawRay(shootPoint.position, shootPoint.forward * 100, Color.red);
 
         if (input.mouse1_Input)
@@ -62,7 +61,7 @@ public class Sniper : WeaponBase
         if (input.mouse0_Input)
         {
             input.mouse0_Input = false;
-            anim.SetTrigger("WeaponAttack");
+            Shoot();
         }
 
         if (input.r_Input)
@@ -85,18 +84,7 @@ public class Sniper : WeaponBase
     {
         base.Shoot();
 
-        //if (isActing) return;
-
-        if (GameManager.Instance.RhythmCheck() > 0
-            || true) // 임시
-        {
-            Debug.Log("발사 박자 성공");
-        }
-        else
-        {
-            Debug.Log("발사 박자 실패");
-            return;
-        }
+        if (isShooting) return;
 
         if (nowAmmo <= 0)
         {
@@ -104,9 +92,21 @@ public class Sniper : WeaponBase
             return;
         }
 
-        isActing = true;
+        if (reloading) return;
 
-        SoundManager.Instance.PlaySFX(SFX.SniperShoot);
+        if (GameManager.Instance.RhythmCheck() > 0
+            || true) // 임시
+        {
+            Debug.Log("발사 박자 성공");
+            anim.SetTrigger("WeaponAttack");
+        }
+        else
+        {
+            Debug.Log("발사 박자 실패");
+            return;
+        }
+
+        isShooting = true;
 
         nowAmmo -= shotAmount;
 
@@ -134,7 +134,6 @@ public class Sniper : WeaponBase
         else
         {
             Debug.Log("빗나감");
-
             Vector3 missPoint = shootPoint.position + shootDir * 100;
             DrawTrail(shootPoint.position, missPoint);
         }
@@ -146,9 +145,7 @@ public class Sniper : WeaponBase
     {
         base.Reload();
 
-        if (isActing) return;
-
-        nowAmmo = maxAmmo;
+        reloading = true;
 
         if (GameManager.Instance.RhythmCheck() > 0
             || true) // 임시
@@ -216,15 +213,16 @@ public class Sniper : WeaponBase
         shootTrail.enabled = false;
     }
 
-    #region 애니메이션
-    public void ShootEvent() => Shoot();
-
-    public void ActOverEvent() => isActing = false;
+    #region 애니메이션 이벤트
+    public void ShootOverEvent() => isShooting = false;
 
     public void ReloadOverEvent()
     {
         Debug.Log("장전 성공");
 
+        nowAmmo = maxAmmo;
+
+        reloading = false;
         reload = 0;
         anim.SetInteger("WeaponReload", reload);
     }
