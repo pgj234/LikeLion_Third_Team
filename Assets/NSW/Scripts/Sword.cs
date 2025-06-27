@@ -18,7 +18,9 @@ public class Sword : WeaponBase
     [Tooltip("공격 애니메이션 속도")]
     [SerializeField] float attackAnimationSpeed = 1f;
     [Tooltip("공격 애니메이션 실제 길이 (초)")]
-    [SerializeField] float attackDuration = 0.6f;
+    // 이 값은 Animation 창에서 'Sword Slash' 애니메이션의 실제 길이를 확인하여 정확하게 설정해야 합니다.
+    // 예: 0.16초
+    [SerializeField] float attackDuration = 0.18f; // 이전 대화에서 0.16초 정도로 확인되었으므로 조정
     [Tooltip("공격 쿨다운 (초)")]
     [SerializeField] float attackCooldown = 0.8f;
 
@@ -128,7 +130,6 @@ public class Sword : WeaponBase
         // Draw 모션 시작 (Animator 트랜지션 사용)
         swordAnimator.SetBool("WeaponPull", true);
 
-        // --- 이 부분에 디버그 로그 추가 ---
         swordDrawSound = GetComponent<SwordDrawSound>();
         if (swordDrawSound == null)
         {
@@ -138,16 +139,13 @@ public class Sword : WeaponBase
         {
             Debug.Log("Sword.cs: SwordDrawSound 컴포넌트를 성공적으로 찾았습니다.");
         }
-        // ----------------------------------
 
-        PlaySparkleOnce();
+        // PlaySparkleOnce(); // Reload 2단계에서만 파티클 재생을 원하므로 이 줄을 제거 [Previous instruction to remove this line]
 
         // 애니메이션 길이 대기 (Animator의 특정 State의 길이를 사용하는 것이 더 정확합니다)
-        // 여기서는 reloadRaiseDuration을 Draw Sword 2 애니메이션 길이로 사용한다고 가정
         yield return new WaitForSeconds(reloadRaiseDuration);
 
-        // 파티클 정지 & Idle 복귀 (Animator 트랜지션 사용)
-        StopSparkle();
+        // StopSparkle(); // Reload 2단계에서만 파티클 재생을 원하므로 이 줄을 제거 [Previous instruction to remove this line]
         swordAnimator.SetBool("WeaponPull", false); // WeaponPull이 false가 되면 Idle로 트랜지션되도록 Animator 설정
 
         isDrawing = false;
@@ -233,7 +231,7 @@ public class Sword : WeaponBase
         swordAnimator.SetTrigger("LowerSword");
         Debug.Log("장전 2단계 시작: LowerSword 애니메이션");
 
-        PlaySparkleOnce(); // 성공 시 파티클 재생
+        PlaySparkleOnce(); // Reload 2단계에서만 파티클 재생
         yield return new WaitForSeconds(sparkleDuration); // 파티클 유지 시간
 
         // 2-3) LowerSword 애니메이션 길이만큼 대기
@@ -311,16 +309,27 @@ public class Sword : WeaponBase
     /// </summary>
     public void WeaponAttack()
     {
+        // 디버그 로그 추가
+        Debug.Log($"[Attack] Attempting attack. isAttacking: {isAttacking}, currentReloadStage: {currentReloadStage}, Time.time: {Time.time}, nextAttackTime: {nextAttackTime}");
+
         // 쿨다운 & 내구도 체크
         if (Time.time < nextAttackTime || nowAmmo < shotAmount)
+        {
+            Debug.Log("[Attack] Attack blocked: Cooldown or Ammo.");
             return;
+        }
 
         // 공격 중이 아니거나 장전 중이 아닐 때만 공격 허용
-        if (isAttacking || currentReloadStage != ReloadStage.None) return;
+        if (isAttacking || currentReloadStage != ReloadStage.None)
+        {
+            Debug.Log("[Attack] Attack blocked: Already attacking or reloading.");
+            return;
+        }
 
         // 내구도 차감 + 쿨다운 갱신
         nowAmmo -= shotAmount;
         nextAttackTime = Time.time + attackCooldown;
+        Debug.Log($"[Attack] Attack initiated. nextAttackTime set to: {nextAttackTime}");
 
         // 공격 애니 시작
         isAttacking = true;
@@ -333,20 +342,36 @@ public class Sword : WeaponBase
 
     IEnumerator EndAttack()
     {
-        yield return new WaitForSeconds(attackDuration / attackAnimationSpeed);
+        float waitTime = attackDuration / attackAnimationSpeed;
+        Debug.Log($"[EndAttack] Starting EndAttack coroutine. Waiting for: {waitTime} seconds.");
+        yield return new WaitForSeconds(waitTime);
+
+        Debug.Log("[EndAttack] Wait finished. Resetting attack state.");
         swordAnimator.SetBool("WeaponAttack", false);
         swordAnimator.speed = 1f;
         isAttacking = false;
+        Debug.Log($"[EndAttack] Attack state reset. isAttacking: {isAttacking}");
     }
 
     void PlaySparkleOnce()
     {
+        Debug.Log("[Particle] PlaySparkleOnce called.");
+        if (sparkleInstances == null || sparkleInstances.Count == 0)
+        {
+            Debug.LogWarning("[Particle] sparkleInstances is null or empty. No particles to play.");
+        }
+
         foreach (var inst in sparkleInstances)
         {
-            if (inst != null) // null 체크 추가
+            if (inst != null)
             {
                 inst.Clear();
                 inst.Play();
+                Debug.Log($"[Particle] Playing particle system: {inst.name}");
+            }
+            else
+            {
+                Debug.LogWarning("[Particle] Null particle system found in sparkleInstances.");
             }
         }
     }
