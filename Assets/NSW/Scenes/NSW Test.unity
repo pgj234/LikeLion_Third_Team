@@ -356,7 +356,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &431305427
 Transform:
   m_ObjectHideFlags: 0
@@ -1421,9 +1421,25 @@ PrefabInstance:
       value: Sword123
       objectReference: {fileID: 0}
     - target: {fileID: 1338425051026830311, guid: c1fac47aa1c9ecc48898fd4be06fbccb, type: 3}
+      propertyPath: shotAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1338425051026830311, guid: c1fac47aa1c9ecc48898fd4be06fbccb, type: 3}
       propertyPath: swordAnimator
       value: 
       objectReference: {fileID: 203443916}
+    - target: {fileID: 1338425051026830311, guid: c1fac47aa1c9ecc48898fd4be06fbccb, type: 3}
+      propertyPath: attackCooldown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1338425051026830311, guid: c1fac47aa1c9ecc48898fd4be06fbccb, type: 3}
+      propertyPath: attackDuration
+      value: 0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 1338425051026830311, guid: c1fac47aa1c9ecc48898fd4be06fbccb, type: 3}
+      propertyPath: attackAnimationSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1338425051026830311, guid: c1fac47aa1c9ecc48898fd4be06fbccb, type: 3}
       propertyPath: 'sparklePrefabs.Array.data[0]'
       value: 
@@ -3362,7 +3378,6 @@ MonoBehaviour:
   - {fileID: 5501976216335251706, guid: 987df892e7993d84e9eb67b14560dc32, type: 3}
   reloadShot: 100
   stage1InputTimeout: 2
-  swordAnimator: {fileID: 79026931211630907}
 --- !u!33 &2007168455079328279
 MeshFilter:
   m_ObjectHideFlags: 0
