@@ -39305,33 +39305,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 7763274555631188236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba00649ad45af4a47889acd748260a54, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dceb881dd25b314791f9f29a8593b05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 1000
   maxHP: 1000
   walkSpeed: 10
   jumpPower: 5
-  isFly: 1
+  isFly: 0
   anim: {fileID: 7703640834325964225}
   rb: {fileID: 4571957827383999205}
   col: {fileID: 567125660400263451}
   groundCheck: {fileID: 7154121476561873149}
-  groundCheckDistance: 1
+  groundCheckDistance: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
   wallCheck: {fileID: 2805129649561019169}
-  wallCheckDistance: 1
+  wallCheckDistance: 0
   whatIsWall:
     serializedVersion: 2
     m_Bits: 0
   hpImg: {fileID: 7299693113030788857}
-  bulletPrefab: {fileID: 3195716631388365644, guid: ebfc2c7e02f342a4a83509e82142dbd8, type: 3}
+  bulletPrefab: {fileID: 738672765570571470}
   bulletSpawnPoint: {fileID: 3251781253906905085}
-  bulletSpeed: 200
-  differ_angle: 5
-  max_time: 0.5
+  bulletSpeed: 10
+  differ_angle: 0
+  max_time: 0
 --- !u!222 &7075850984018699615
 CanvasRenderer:
   m_ObjectHideFlags: 0
