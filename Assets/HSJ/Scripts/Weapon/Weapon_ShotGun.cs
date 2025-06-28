@@ -175,6 +175,7 @@ public class Weapon_ShotGun : WeaponBase
 
         Vector3 pos = shootPoint.position;
         WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+        WaitForSeconds wait = new(0.1f);
         for (int i = 0; i < shotAmount; i++)
         {
             Quaternion rot = GetSpreadDirection();
@@ -192,7 +193,8 @@ public class Weapon_ShotGun : WeaponBase
                     );
             }
             //yield return waitForFixedUpdate; // 프레임 딜레이
-            yield return waitForFixedUpdate;
+            //yield return waitForFixedUpdate;
+            yield return wait;
         }
 
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);

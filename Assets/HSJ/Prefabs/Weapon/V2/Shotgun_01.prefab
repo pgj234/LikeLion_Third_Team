@@ -137,7 +137,7 @@ Animator:
   m_GameObject: {fileID: 897121543292511726}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: dffee622cbfe23e41b62ffe2ffc432b4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 213f704d8645e0444b11ed9b7eb25eaf, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -608,16 +608,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponNum: 0
-  nowAmmo: 99999
+  nowAmmo: 8
   maxAmmo: 8
   shotAmount: 3
   nextShotTime: 0
   shotDamage: 1
+  range: 0
   shotSpreadMin: {x: 0.01, y: -0.01}
   shotSpreadMax: {x: 0, y: 0}
   reloadStepNum: 0
+  shotEffect: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
   bulletPrefab: {fileID: 196035611948102908, guid: 00b30ba3fe04e404eb527d096f839778, type: 3}
-  bulletScale: {x: 1, y: 1, z: 1}
   bulletSpeed: 60
   shootPoint: {fileID: 7029570767048051594}
   shotSpread: 4.5
