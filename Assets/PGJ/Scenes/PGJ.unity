@@ -10551,6 +10551,7 @@ MonoBehaviour:
   sparklePrefabs:
   - {fileID: 5281703823909813044, guid: ab4c63ea0690b254da615d1054521b20, type: 3}
   - {fileID: 5501976216335251706, guid: 987df892e7993d84e9eb67b14560dc32, type: 3}
+  reloadShot: 100
   stage1InputTimeout: 2
 --- !u!4 &1783767287248989094
 Transform:
@@ -32848,8 +32849,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 999
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8c7d9cd4da6226243937d3a1afe22513, type: 2}
-  m_sharedMaterial: {fileID: 7127729936495877375, guid: 8c7d9cd4da6226243937d3a1afe22513, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -33324,43 +33325,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953cf3a528f27c445878fc3c37f4b7b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammoLabel: {fileID: 7766566056689033131}
-  hp: {fileID: 3554727616204258791}
-  hpMaxRect: 650
-  dash: {fileID: 4274712646906001695}
-  dashMaxRect: 170
-  weaponSlot:
-  - {fileID: 6187110075837091313}
-  - {fileID: 5802121233595877698}
-  - {fileID: 6493308484245781404}
-  - {fileID: 5895934825705433967}
-  scoreLabel: {fileID: 271230162378282068}
-  comboLabel: {fileID: 9206140610854993128}
-  comboBar: {fileID: 1039513553934683924}
-  comboCountLabel: {fileID: 3400185101182248541}
-  nowWeaponNum: 0
-  itemPickupPanel: {fileID: 6838533946725039431}
-  itemPickupViewport: {fileID: 3340973705784780637}
-  itemPickupPrefab: {fileID: 1262735681519370262, guid: e260cf239d9b4cf4b85246b01bbfdecf, type: 3}
-  itemIcon:
-  - {fileID: 1738140365, guid: ea53214bde0a7584c9469688d25d29b3, type: 3}
-  - {fileID: 1247450681, guid: 92a4fe653152e9244b4849b9dba1c92b, type: 3}
-  - {fileID: 937215883, guid: 92a4fe653152e9244b4849b9dba1c92b, type: 3}
-  - {fileID: 1039522688, guid: 92a4fe653152e9244b4849b9dba1c92b, type: 3}
-  - {fileID: 2136314749, guid: 92a4fe653152e9244b4849b9dba1c92b, type: 3}
-  pausePanel: {fileID: 5613215498646134174}
-  bgmSlider: {fileID: 3174800527449454474}
-  bgmLabel: {fileID: 7564330076078473424}
-  sfxSlider: {fileID: 7797084254284553518}
-  sfxLabel: {fileID: 5809151248043698301}
-  mouseSlider: {fileID: 1367099109111982696}
-  mouseLabel: {fileID: 3223104058056667058}
-  deathPanel: {fileID: 9199031468217791545}
-  resurrectionPanel: {fileID: 1449578225819486866}
-  resurrectionCountLabel: {fileID: 3889824420487675964}
-  gameOverPanel: {fileID: 8906550698141278129}
-  resurrectionCount: 3
-  resurrectionTime: 10
 --- !u!23 &5586413452309417839
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -42875,8 +42839,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 9999
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8c7d9cd4da6226243937d3a1afe22513, type: 2}
-  m_sharedMaterial: {fileID: 7127729936495877375, guid: 8c7d9cd4da6226243937d3a1afe22513, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
