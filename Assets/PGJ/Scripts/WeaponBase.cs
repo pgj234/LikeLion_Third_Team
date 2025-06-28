@@ -102,7 +102,7 @@ public class WeaponBase : MonoBehaviour
 
     protected int GetTotalDamage()
     {
-        return shotDamage + (shotDamage * (int)((float)gameManager.GetCombo() / gameManager.GetMaxCombo()));
+        return shotDamage + (int)(shotDamage * ((float)gameManager.GetCombo() / gameManager.GetMaxCombo()));
     }
 
     // 무기 집어넣기

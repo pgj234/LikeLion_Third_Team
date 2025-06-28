@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class Monster : MonoBehaviour
+public class Monster : Entity
 {
-    private Animator anim;
     private CharacterController character;
     private NavMeshAgent agent;
     private Transform player;
@@ -17,7 +16,6 @@ public class Monster : MonoBehaviour
     private bool isDead = false;
 
     [Header("이동")]
-    public float walkSpeed = 1.5f;
     public float runSpeed = 4;
     public float moveTime = 5;
     public float waitTime = 1;
@@ -39,9 +37,8 @@ public class Monster : MonoBehaviour
     [SerializeField] private float maxHp = 100;
     [SerializeField] private float currentHp;
 
-    private void Start()
+    protected override void Start()
     {
-        anim = GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
         character = GetComponent<CharacterController>();
         agent = GetComponent<NavMeshAgent>();
 
@@ -54,8 +51,10 @@ public class Monster : MonoBehaviour
         currentHp = maxHp;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (isDead) return;
 
         if (isHit)
@@ -244,7 +243,6 @@ public class Monster : MonoBehaviour
 
         if (player == null)
         {
-            GameObject target = GameObject.FindGameObjectWithTag("Player");
             if (target != null)
             {
                 player = target.transform;

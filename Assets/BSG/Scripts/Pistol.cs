@@ -89,49 +89,70 @@ public class Pistol : WeaponBase
 
     void Hit()
     {
+        // 적 약점
         RaycastHit[] results = new RaycastHit[1]; // 미리 배열 생성
-        int hitCount = Physics.SphereCastNonAlloc(cameraTr.position, 0.1f, cameraTr.forward, results, range, LayerMask.GetMask("Ground", "Enemy"));
+        int hitCount = Physics.SphereCastNonAlloc(cameraTr.position, 0.1f, cameraTr.forward, results, range, LayerMask.GetMask("Enemy_Weak"));
         
         if (0 < hitCount)
         {
-            GameObject go = Instantiate(hitEffectPrefab, results[0].point, Quaternion.LookRotation(results[0].normal) * Quaternion.Euler(90, 0, 0));
+            Instantiate(hitEffectPrefab, results[0].point, Quaternion.LookRotation(results[0].normal) * Quaternion.Euler(90, 0, 0));
 
-            if (results[0].transform.CompareTag("Enemy"))
+            if (results[0].transform.TryGetComponent(out Entity enemy))
             {
-                if (results[0].transform.TryGetComponent(out Entity enemy))
-                {
-                    enemy.GetDamage(GetTotalDamage());
-                }
+                Debug.Log("딜 2배! : " + GetTotalDamage() * 2);
+                enemy.GetDamage(GetTotalDamage() * 2);
             }
-            else if (results[0].transform.CompareTag("Enemy_Weak"))
+
+            return;
+        }
+
+        hitCount = Physics.SphereCastNonAlloc(cameraTr.position, 0.1f, cameraTr.forward, results, range, LayerMask.GetMask("Enemy"));
+        
+        // 적 기본
+        if (0 < hitCount)
+        {
+            Instantiate(hitEffectPrefab, results[0].point, Quaternion.LookRotation(results[0].normal) * Quaternion.Euler(90, 0, 0));
+
+            if (results[0].transform.TryGetComponent(out Entity enemy))
             {
-                if (results[0].transform.TryGetComponent(out EntityWeak enemyWeak))
-                {
-                    enemyWeak.GetDamage(GetTotalDamage() * 2);
-                }
+                Debug.Log("딜 : " + GetTotalDamage());
+                enemy.GetDamage(GetTotalDamage());
             }
+
+            return;
+        }
+
+        // 땅
+        hitCount = Physics.SphereCastNonAlloc(cameraTr.position, 0.1f, cameraTr.forward, results, range, LayerMask.GetMask("Ground"));
+
+        if (0 < hitCount)
+        {
+            Instantiate(hitEffectPrefab, results[0].point, Quaternion.LookRotation(results[0].normal) * Quaternion.Euler(90, 0, 0));
         }
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-
-        Vector3 origin = cameraTr.position;
-        Vector3 dir = cameraTr.forward;
-        
-        // 충돌 궤적 시각화
-        Gizmos.DrawLine(origin, origin + dir * range);
-        DrawWireSphere(origin, 0.1f); // 시작점
-        DrawWireSphere(origin + dir * range, 0.1f); // 끝점
-
-        // 중간을 따라 원 그려서 "터널"처럼 시각화 가능
-        int segments = 10;
-        for (int i = 1; i < segments; i++)
+        if (Application.isPlaying)
         {
-            float t = i / (float)segments;
-            Vector3 pos = origin + dir * range * t;
-            DrawWireSphere(pos, 0.1f);
+            Gizmos.color = Color.red;
+
+            Vector3 origin = cameraTr.position;
+            Vector3 dir = cameraTr.forward;
+
+            // 충돌 궤적 시각화
+            Gizmos.DrawLine(origin, origin + dir * range);
+            DrawWireSphere(origin, 0.1f); // 시작점
+            DrawWireSphere(origin + dir * range, 0.1f); // 끝점
+
+            // 중간을 따라 원 그려서 "터널"처럼 시각화 가능
+            int segments = 10;
+            for (int i = 1; i < segments; i++)
+            {
+                float t = i / (float)segments;
+                Vector3 pos = origin + dir * range * t;
+                DrawWireSphere(pos, 0.1f);
+            }
         }
     }
 

@@ -328,7 +328,7 @@ public class Player : MonoBehaviour
         {
             input.lShift_Input = false;
 
-            if (0 > dashTimer)
+            if (0 > dashTimer && true == gameManager.musicStart)
             {
                 if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
                 {

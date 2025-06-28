@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Net.NetworkInformation;
+using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 enum MonsterState
 {
@@ -29,7 +31,10 @@ public class Entity : MonoBehaviour
     [SerializeField] protected float wallCheckDistance;      // 벽 체크 거리
     [SerializeField] protected LayerMask whatIsWall;         // 벽 레이어
 
-    Player target;
+    [Space(10)]
+    [SerializeField] Image hpImg;
+
+    protected Player target;
 
     GameManager gameManager = null;
 
@@ -75,7 +80,7 @@ public class Entity : MonoBehaviour
 
         gameManager = GameManager.Instance;
 
-        monsterState = MonsterState.Chase;
+        monsterState = MonsterState.Idle;
         attackCnt = 0;
 
         currentTime = 0d;
@@ -133,8 +138,13 @@ public class Entity : MonoBehaviour
     internal void GetDamage(int dmg)
     {
         hp -= dmg;
+        Debug.Log("몽미 : " + hp);
+        if (null != hpImg)
+        {
+            hpImg.fillAmount = (float)hp / maxHP;
+        }
 
-        if (hp <= 0)
+        if (hp <= 0 && (MonsterState.Idle == monsterState || MonsterState.Chase == monsterState))
         {
             Die();
         }
