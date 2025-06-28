@@ -169,10 +169,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sniper_AWM
       objectReference: {fileID: 0}
-    - target: {fileID: 3761081563988886627, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
-      propertyPath: maxAmmo
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 4048834767988491185, guid: 2fa1716f22d27b24fa1b24f97f238d66, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.077
@@ -5259,8 +5255,8 @@ MonoBehaviour:
   SpeedChangeRate: 10
   dashCoolTime: 0.2
   dashDurationTime: 0.1
-  dashMaxStackNum: 2
-  dashStackCoolTime: 2
+  dashMaxStackNum: 0
+  dashStackCoolTime: 0
   weaponArray:
   - {fileID: 5763829880016405664}
   - {fileID: 6171984953885185894}
@@ -5848,6 +5844,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 849bb857817654547aac72070b927a12, type: 3}
   - {fileID: 8300000, guid: 9e8b381cbf62dbd48be9ae7388cf5e1c, type: 3}
   - {fileID: 8300000, guid: fe3b96895404ff04cb1211f03bdffa45, type: 3}
+  - {fileID: 8300000, guid: b19c973a2160d79418d8ce0feba5fe8c, type: 3}
+  - {fileID: 8300000, guid: 8850c5bfc92f7bf458ee32ed77bcce83, type: 3}
+  - {fileID: 8300000, guid: 394edca953c8cc44ca75c961093c1197, type: 3}
+  - {fileID: 8300000, guid: 4a6e06a996aed274d98b2d9d33802f4d, type: 3}
 --- !u!4 &6577062455759679187
 Transform:
   m_ObjectHideFlags: 0
