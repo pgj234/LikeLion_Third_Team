@@ -5,17 +5,25 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [Header("Player")]
+    public int maxHp;
+    int currentHp;
+
+    [Space(5)]
     public float moveSpeed;
     public float dashSpeed;
     public float RotationSmoothTime;
     public float SpeedChangeRate;
+    public float dashNormalCost;
+    public float dashRhythmCost;
     public float dashCoolTime;
+    public float maxDashGaugeNum;
     public float dashDurationTime;
-    public int dashMaxStackNum;
-    public float dashStackCoolTime;
 
-    int currentDashStack;
-    float dashStackCoolTimer;
+    float currentDashGaugeNum;
+
+    [Space(10)]
+    [Header("DashEffectImg")]
+    [SerializeField] GameObject dashEffect_Img_Obj;
 
     [Space(10)]
     [Header("Weapon")]
@@ -71,8 +79,11 @@ public class Player : MonoBehaviour
     public GameObject chestObj;
 
     private GameObject mainCamera;
+    GameManager gameManager;
+    EventManager eventManager;
     CharacterController controller;
     InputManager input;
+    UserSettingManager userSettingManager;
 
     WeaponBase currentWeapon;
     Coroutine coWeaponChange = null;
@@ -93,6 +104,9 @@ public class Player : MonoBehaviour
     void Start()
     {
         input = InputManager.Instance;
+        gameManager = GameManager.Instance;
+        eventManager = EventManager.Instance;
+        userSettingManager = UserSettingManager.Instance;
 
         Init();
     }
@@ -101,15 +115,15 @@ public class Player : MonoBehaviour
     {
         weaponSwapTimer -= Time.deltaTime;
 
-        DashCoolTimeProc();
+        DashGaugeProc();
 
         JumpAndGravity();
         GroundedCheck();
         Move();
 
         WeaponChangeInputCheck();
-        ReloadCheck();
-        ShootCheck();
+        //ReloadCheck();
+        //ShootCheck();
     }
 
     void LateUpdate()
@@ -123,11 +137,21 @@ public class Player : MonoBehaviour
         {
             input.weapon0_Choice_Input = false;
 
+            if (weaponArray[0] == currentWeapon)
+            {
+                return;
+            }
+
             coWeaponChange = StartCoroutine(ChangeWeapon(0));
         }
         else if (input.weapon1_Choice_Input)
         {
             input.weapon1_Choice_Input = false;
+
+            if (weaponArray[1] == currentWeapon)
+            {
+                return;
+            }
 
             coWeaponChange = StartCoroutine(ChangeWeapon(1));
         }
@@ -135,11 +159,21 @@ public class Player : MonoBehaviour
         {
             input.weapon2_Choice_Input = false;
 
+            if (weaponArray[2] == currentWeapon)
+            {
+                return;
+            }
+
             coWeaponChange = StartCoroutine(ChangeWeapon(2));
         }
         else if (input.weapon3_Choice_Input)
         {
             input.weapon3_Choice_Input = false;
+
+            if (weaponArray[3] == currentWeapon)
+            {
+                return;
+            }
 
             coWeaponChange = StartCoroutine(ChangeWeapon(3));
         }
@@ -147,24 +181,43 @@ public class Player : MonoBehaviour
 
     void Init()
     {
+        currentHp = maxHp;
+        eventManager.PlayerMaxHpEvent(maxHp);
+
         playerDie = false;
         isDash = false;
         weaponArray[startWeaponNum].useAble = true;
         remainRevival = 1;
-        currentDashStack = dashMaxStackNum;
-        dashStackCoolTimer = 0;
+        currentDashGaugeNum = maxDashGaugeNum;
 
         currentWeapon = weaponArray[startWeaponNum];
+        currentWeapon.SetAnimationSpeed(1.8f);
 
         jumpTimeoutDelta = JumpTimeout;
         fallTimeoutDelta = FallTimeout;
+    }
+
+    internal void GetDamage(int _dmg)
+    {
+        currentHp -= _dmg;
+
+        if (currentHp <= 0)
+        {
+            SetPlayerDie(true);
+        }
+        eventManager.OnPlayerDamageAction(currentHp);
     }
 
     internal void GetWeapon(int weaponNum)
     {
         weaponArray[weaponNum].useAble = true;
 
-        EventManager.Instance.PlayerWeaponUIRefresh();
+        bool[] weaponUseAbleArray = new bool[weaponArray.Length];
+        for (int i=0; i<weaponArray.Length; i++)
+        {
+            weaponUseAbleArray[i] = weaponArray[i].useAble;
+        }
+        eventManager.PlayerWeaponUIRefresh(weaponUseAbleArray);
     }
 
     IEnumerator ChangeWeapon(int weaponNum)
@@ -184,88 +237,52 @@ public class Player : MonoBehaviour
 
                 currentWeapon.gameObject.SetActive(false);
                 currentWeapon = weaponArray[weaponNum];
+                currentWeapon.gameObject.SetActive(true);
+
+                switch (weaponNum)
+                {
+                    case 0:         // 검
+                        currentWeapon.SetAnimationSpeed(1.5f);
+                        break;
+
+                    case 1:         // 권총
+                        currentWeapon.SetAnimationSpeed(1.8f);
+                        break;
+
+                    case 2:         // 샷건
+                        currentWeapon.SetAnimationSpeed(1.5f);
+                        break;
+
+                    case 3:         // 스나
+                        currentWeapon.SetAnimationSpeed(2.1f);
+                        break;
+                }
+
+                eventManager.PlayerCurrentBulletUIRefresh(currentWeapon.GetCurrentAmmo());
+                eventManager.PlayerMaxBulletUIRefresh(currentWeapon.GetMaxAmmo());
             }
         }
     }
 
-    void DashCoolTimeProc()
+    void DashGaugeProc()
     {
-        // 대쉬 스택 최대면 리턴
-        if (currentDashStack >= dashMaxStackNum)
+        if (maxDashGaugeNum < currentDashGaugeNum)
         {
             return;
         }
 
-        dashStackCoolTimer -= Time.deltaTime;
-
-        if (dashStackCoolTimer < 0)
-        {
-            dashStackCoolTimer = dashStackCoolTime;
-
-            currentDashStack += 1;
-            Debug.Log("현재 대쉬 스택 : " + currentDashStack);
-        }
+        currentDashGaugeNum += Time.deltaTime;
     }
 
-    void ReloadCheck()
+    internal float GetDashGauge()
     {
-        if (false == playerDie)
+        if (maxDashGaugeNum < currentDashGaugeNum)
         {
-            if (input.r_Input || input.mouse1_Input)
-            {
-                input.r_Input = false;
-                input.mouse1_Input = false;
-
-                if (false == currentWeapon.reloading)
-                {
-                    // 장전 진행
-                }
-            }
+            return maxDashGaugeNum;
         }
-    }
-
-    void ShootCheck()
-    {
-        if (input.mouse0_Input)
+        else
         {
-            input.mouse0_Input = false;
-            
-            // 음악 시작전이면 리턴
-            if (false == GameManager.Instance.musicStart)
-            {
-                return;
-            }
-
-            // 무기 장전중이면 리턴
-            if (true == currentWeapon.reloading)
-            {
-                return;
-            }
-
-            // 노트가 멀면 리턴
-            if (false == GameManager.Instance.GetNoteDisable())
-            {
-                return;
-            }
-
-            if (1 == GameManager.Instance.RhythmCheck())
-            {
-                Debug.Log("정박 성공!");
-                EventManager.Instance.PlayerAddComboEvent();
-            }
-            else if (2 == GameManager.Instance.RhythmCheck())
-            {
-                Debug.Log("반박 성공!");
-                EventManager.Instance.PlayerAddComboEvent();
-            }
-            else
-            {
-                Debug.Log("박자 타이밍 실패...");
-                SoundManager.Instance.PlaySFX(SFX.RhythmFail);
-                EventManager.Instance.PlayerReduceComboEvent();
-            }
-
-            GameManager.Instance.NotePush();
+            return currentDashGaugeNum;
         }
     }
 
@@ -273,17 +290,14 @@ public class Player : MonoBehaviour
     {
         if (input.look.sqrMagnitude >= threshold && !LockCameraPosition)
         {
-            cinemachineTargetYaw += input.look.x * 1;
-            cinemachineTargetPitch += input.look.y * 1;
+            cinemachineTargetYaw += input.look.x * userSettingManager.MouseSensitivity;
+            cinemachineTargetPitch += input.look.y * userSettingManager.MouseSensitivity;
         }
 
         cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
         cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, BottomClamp, TopClamp);
 
-        //cinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride, cinemachineTargetYaw, 0.0f);
-
         chestObj.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + CameraAngleOverride, cinemachineTargetYaw, 0.0f);
-        //transform.forward = new Vector3(cinemachineCameraTarget.transform.forward.x, 0, cinemachineCameraTarget.transform.forward.z);
     }
 
     float ClampAngle(float lfAngle, float lfMin, float lfMax)
@@ -300,6 +314,7 @@ public class Player : MonoBehaviour
         dashTimer -= Time.deltaTime;
         if (dashTimer + dashDurationTime < dashCoolTime && true == isDash)
         {
+            dashEffect_Img_Obj.SetActive(false);
             isDash = false;
             targetSpeed = 0.0f;
         }
@@ -315,12 +330,40 @@ public class Player : MonoBehaviour
 
             if (0 > dashTimer)
             {
-                if (0 < currentDashStack)
+                if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
                 {
-                    currentDashStack -= 1;
+                    if (dashRhythmCost < currentDashGaugeNum)
+                    {
+                        dashEffect_Img_Obj.SetActive(false);
+                        dashEffect_Img_Obj.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                        dashEffect_Img_Obj.SetActive(true);
 
-                    dashTimer = dashCoolTime;
-                    isDash = true;
+                        currentDashGaugeNum -= dashRhythmCost;
+
+                        gameManager.AddCombo();
+                        SoundManager.Instance.PlaySFX(SFX.DashRhythmSucces);
+
+                        dashTimer = dashCoolTime;
+                        isDash = true;
+                    }
+                }
+                else
+                {
+                    if (dashNormalCost < currentDashGaugeNum)
+                    {
+                        dashEffect_Img_Obj.SetActive(false);
+                        dashEffect_Img_Obj.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 180));
+                        dashEffect_Img_Obj.SetActive(true);
+
+                        currentDashGaugeNum -= dashNormalCost;
+
+                        Debug.Log("박자 타이밍 실패...");
+                        gameManager.SetHalfCombo();
+                        SoundManager.Instance.PlaySFX(SFX.DashRhythmFailed);
+
+                        dashTimer = dashCoolTime;
+                        isDash = true;
+                    }
                 }
             }
         }
@@ -426,13 +469,13 @@ public class Player : MonoBehaviour
         {
             playerDie = _playerDie;
 
-            EventManager.Instance.PlayerDieEvent();
+            eventManager.PlayerDieEvent();
         }
         else if (false == _playerDie && true == playerDie)          // 죽었다가 부활한 경우
         {
             playerDie = _playerDie;
 
-            EventManager.Instance.PlayerRevivalEvent();
+            eventManager.PlayerRevivalEvent();
         }
     }
 }

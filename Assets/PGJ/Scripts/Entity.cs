@@ -43,6 +43,8 @@ public class Entity : MonoBehaviour
 
     protected float sturnTime;              // 스턴 남은시간
 
+    bool pause = false;
+
     protected virtual void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
@@ -67,6 +69,8 @@ public class Entity : MonoBehaviour
 
     protected virtual void Init()
     {
+        EventManager.Instance.OnPauseAction += SetPause;
+
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
         gameManager = GameManager.Instance;
@@ -79,8 +83,23 @@ public class Entity : MonoBehaviour
         hp = maxHP;
     }
 
+    void OnDestroy()
+    {
+        EventManager.Instance.OnPauseAction -= SetPause;
+    }
+
+    void SetPause(bool _isPuase)
+    {
+        pause = _isPuase;
+    }
+
     protected virtual void Update()
     {
+        if (true == pause)
+        {
+            return;
+        }
+
         // 박자에 맞춰서 행동
         currentTime += Time.deltaTime;
 

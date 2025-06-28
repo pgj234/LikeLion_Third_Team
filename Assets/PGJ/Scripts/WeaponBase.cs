@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WeaponBase : MonoBehaviour
 {
@@ -7,14 +6,20 @@ public class WeaponBase : MonoBehaviour
     [SerializeField] protected int nowAmmo;                  // 발사준비된 탄환
     [SerializeField] protected int maxAmmo;                  // 재장전시 탄환 최대치 / -1 무제한
     [SerializeField] protected int shotAmount;               // 발사시 나가는 탄환수
-    [SerializeField] protected float nextShotTime;           // 다음 발사까지 딜레이시간
-    [SerializeField] protected float shotDamage;             // 탄 데미지
+    [SerializeField] protected int nextShotTime;             // 다음 발사까지 딜레이 박자
+    [SerializeField] protected int shotDamage;               // 탄 데미지
+    [SerializeField] protected float range;                  // 사거리
 
     [SerializeField] protected Vector2 shotSpreadMin;        // 탄퍼짐 최솟값
     [SerializeField] protected Vector2 shotSpreadMax;        // 탄퍼짐 최댓값
 
     [SerializeField] protected int reloadStepNum;            // 장전 단계
 
+    [Header("이펙트")]
+    [SerializeField] protected GameObject shotEffect;
+    [SerializeField] protected GameObject hitEffectPrefab;
+
+    protected GameManager gameManager;
     protected InputManager input;
     protected Animator anim;
 
@@ -29,10 +34,17 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        anim = GetComponentInChildren<Animator>();
+        anim = GetComponent<Animator>();
 
-        if (anim == null)
-            Debug.LogError("Animator 컴포넌트를 찾을 수 없습니다.");
+        if (null == anim)
+        {
+            anim = GetComponentInChildren<Animator>();
+
+            if (null == anim)
+            {
+                Debug.LogError("Animator 컴포넌트를 찾을 수 없습니다.");
+            }
+        }
     }
 
     //internal virtual void OnEnable()
@@ -42,22 +54,55 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void Start()
     {
+        gameManager = GameManager.Instance;
         input = InputManager.Instance;
+
+        nowAmmo = maxAmmo;
     }
 
     protected virtual void Update()
     {
-        rhythmTimingNum = GameManager.Instance.RhythmCheck();
+        // 음악 시작전이면 리턴
+        if (false == gameManager.musicStart)
+        {
+            if (input.mouse0_Input)
+            {
+                input.mouse0_Input = false;
+            }
+
+            if (input.r_Input)
+            {
+                input.r_Input = false;
+            }
+
+            return;
+        }
+
+        rhythmTimingNum = gameManager.RhythmCheck();
     }
 
     protected virtual void Shoot()         // 발사 메서드
     {
-
+        if (reloading)
+        {
+            return;
+        }
     }
 
     protected virtual void Reload()        // 재장전 메서드
     {
+        // 탄 꽉참
+        if (nowAmmo == maxAmmo)
+        {
+            return;
+        }
+
         reloading = true;
+    }
+
+    protected int GetTotalDamage()
+    {
+        return shotDamage + (shotDamage * (int)((float)gameManager.GetCombo() / gameManager.GetMaxCombo()));
     }
 
     // 무기 집어넣기
@@ -71,8 +116,28 @@ public class WeaponBase : MonoBehaviour
         anim.SetBool(_animParamName, _isTrue);
     }
 
+    internal void SetTrggierAnimation(string _animParamName)
+    {
+        anim.SetTrigger(_animParamName);
+    }
+
     internal float GetAnimationTime()
     {
         return anim.GetCurrentAnimatorStateInfo(0).length;
+    }
+
+    internal float SetAnimationSpeed(float speed)
+    {
+        return anim.speed = speed;
+    }
+
+    internal int GetMaxAmmo()
+    {
+        return maxAmmo;
+    }
+
+    internal int GetCurrentAmmo()
+    {
+        return nowAmmo;
     }
 }
