@@ -1,4 +1,4 @@
-ï»¿using TMPro;
+using TMPro;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,23 +9,23 @@ public class UserInterface : MonoBehaviour
 {
     #region Default Interface Variables
     [Header("Default Interface Variables")]
-    [SerializeField] TextMeshProUGUI ammoLabel;                 // íƒ„ì•½ ë ˆì´ë¸”
-    [SerializeField] RectTransform hp;                          // ì²´ë ¥ ì´ë¯¸ì§€
-    [SerializeField] float hpMaxRect = 650f;                    // ì²´ë ¥ ì´ë¯¸ì§€ ìµœëŒ€ í¬ê¸°
-    [SerializeField] RectTransform dash;                        // ëŒ€ì‰¬ ì´ë¯¸ì§€
-    [SerializeField] float dashMaxRect = 170f;                  // ëŒ€ì‰¬ ì´ë¯¸ì§€ ìµœëŒ€ í¬ê¸°
+    [SerializeField] TextMeshProUGUI ammoLabel;                 // Åº¾à ·¹ÀÌºí
+    [SerializeField] RectTransform hp;                          // Ã¼·Â ÀÌ¹ÌÁö
+    [SerializeField] float hpMaxRect = 650f;                    // Ã¼·Â ÀÌ¹ÌÁö ÃÖ´ë Å©±â
+    [SerializeField] RectTransform dash;                        // ´ë½¬ ÀÌ¹ÌÁö
+    [SerializeField] float dashMaxRect = 170f;                  // ´ë½¬ ÀÌ¹ÌÁö ÃÖ´ë Å©±â
 
-    [SerializeField] GameObject[] weaponSlot;                   // ë¬´ê¸° ìŠ¬ë¡¯ ì˜¤ë¸Œì íŠ¸ ë°°ì—´
-    [SerializeField] TextMeshProUGUI scoreLabel;                // ì ìˆ˜ ë ˆì´ë¸”
+    [SerializeField] GameObject[] weaponSlot;                   // ¹«±â ½½·Ô ¿ÀºêÁ§Æ® ¹è¿­
+    [SerializeField] TextMeshProUGUI scoreLabel;                // Á¡¼ö ·¹ÀÌºí
     [Header("Combo")]
-    [SerializeField] TextMeshProUGUI comboLabel;                // ì½¤ë³´ ë ˆì´ë¸”
-    [SerializeField] Image comboBar;                            // ì½¤ë³´ ë°” ì´ë¯¸ì§€
-    [SerializeField] TextMeshProUGUI comboCountLabel;           // ì½¤ë³´ ì¹´ìš´íŠ¸ ë ˆì´ë¸”
+    [SerializeField] TextMeshProUGUI comboLabel;                // ÄŞº¸ ·¹ÀÌºí
+    [SerializeField] Image comboBar;                            // ÄŞº¸ ¹Ù ÀÌ¹ÌÁö
+    [SerializeField] TextMeshProUGUI comboCountLabel;           // ÄŞº¸ Ä«¿îÆ® ·¹ÀÌºí
 
-    InputManager inputManager;                                  // InputManager ì¸ìŠ¤í„´ìŠ¤
-    EventManager eventManager;                                  // EventManager ì¸ìŠ¤í„´ìŠ¤
-    UserSettingManager settingManager;                          // UserSettingManager ì¸ìŠ¤í„´ìŠ¤
-    GameManager gameManager;                                    // GameManager ì¸ìŠ¤í„´ìŠ¤
+    InputManager inputManager;                                  // InputManager ÀÎ½ºÅÏ½º
+    EventManager eventManager;                                  // EventManager ÀÎ½ºÅÏ½º
+    UserSettingManager settingManager;                          // UserSettingManager ÀÎ½ºÅÏ½º
+    GameManager gameManager;                                    // GameManager ÀÎ½ºÅÏ½º
     [SerializeField] int nowWeaponNum = 0;
 
     #endregion
@@ -33,16 +33,16 @@ public class UserInterface : MonoBehaviour
     #region ItemPickup Interface Variables
     [Space(10)]
     [Header("ItemPickup Interface Variables")]
-    [SerializeField] GameObject itemPickupPanel;                // ì•„ì´í…œ íšë“ íŒ¨ë„ ì˜¤ë¸Œì íŠ¸
-    [SerializeField] Transform itemPickupViewport;              // ìŠ¤í¬ë¡¤ ë·°í¬íŠ¸ íŠ¸ëœìŠ¤í¼
-    [SerializeField] GameObject itemPickupPrefab;               // ì•„ì´í…œ í”½ì—… í”„ë¦¬íŒ¹
-    [SerializeField] List<Sprite> itemIcon;                     // ì•„ì´í…œ ì•„ì´ì½˜ ë¦¬ìŠ¤íŠ¸              / 0 : ê²€, 1 : ìƒ·ê±´, 2 : ìŠ¤ë‚˜, 3 : ê¶Œì´
+    [SerializeField] GameObject itemPickupPanel;                // ¾ÆÀÌÅÛ È¹µæ ÆĞ³Î ¿ÀºêÁ§Æ®
+    [SerializeField] Transform itemPickupViewport;              // ½ºÅ©·Ñ ºäÆ÷Æ® Æ®·£½ºÆû
+    [SerializeField] GameObject itemPickupPrefab;               // ¾ÆÀÌÅÛ ÇÈ¾÷ ÇÁ¸®ÆÕ
+    [SerializeField] List<Sprite> itemIcon;                     // ¾ÆÀÌÅÛ ¾ÆÀÌÄÜ ¸®½ºÆ®              / 0 : °Ë, 1 : ¼¦°Ç, 2 : ½º³ª, 3 : ±ÇÃÑ
     #endregion
 
     #region Pause Interface Variables
     [Space(10)]
     [Header("Pause Interface Variables")]
-    [SerializeField] GameObject pausePanel;                     // íŒ¨ë„ ì˜¤ë¸Œì íŠ¸
+    [SerializeField] GameObject pausePanel;                     // ÆĞ³Î ¿ÀºêÁ§Æ®
     [SerializeField] Slider bgmSlider;
     [SerializeField] TextMeshProUGUI bgmLabel;
     [SerializeField] Slider sfxSlider;
@@ -55,22 +55,22 @@ public class UserInterface : MonoBehaviour
     #region Death Interface Variables
     [Space(10)]
     [Header("Death Interface Variables")]
-    [SerializeField] GameObject deathPanel;                     // ì£½ìœ¼ë©´ ëœ¨ëŠ” ì°½
-    [SerializeField] GameObject resurrectionPanel;              // ë¶€í™œ ì°½
-    [SerializeField] TextMeshProUGUI resurrectionCountLabel;    // ë¶€í™œ ì¹´ìš´íŠ¸ ë ˆì´ë¸”
-    [SerializeField] GameObject gameOverPanel;                  // ê²Œì„ì˜¤ë²„ ì°½
-    [SerializeField] int resurrectionCount = 3;                 // ë¶€í™œ íšŸìˆ˜
-    [SerializeField] float resurrectionTime = 10f;               // ë¶€í™œ ëŒ€ê¸° ì‹œê°„
-    Coroutine resurrectionCoroutine; // ë¶€í™œ ì¹´ìš´íŠ¸ ì½”ë£¨í‹´
+    [SerializeField] GameObject deathPanel;                     // Á×À¸¸é ¶ß´Â Ã¢
+    [SerializeField] GameObject resurrectionPanel;              // ºÎÈ° Ã¢
+    [SerializeField] TextMeshProUGUI resurrectionCountLabel;    // ºÎÈ° Ä«¿îÆ® ·¹ÀÌºí
+    [SerializeField] GameObject gameOverPanel;                  // °ÔÀÓ¿À¹ö Ã¢
+    [SerializeField] int resurrectionCount = 3;                 // ºÎÈ° È½¼ö
+    [SerializeField] float resurrectionTime = 10f;               // ºÎÈ° ´ë±â ½Ã°£
+    Coroutine resurrectionCoroutine; // ºÎÈ° Ä«¿îÆ® ÄÚ·çÆ¾
 
     #endregion
 
 
     void Start()
     {
-        inputManager = InputManager.Instance;                  // InputManager ì¸ìŠ¤í„´ìŠ¤ ì´ˆê¸°í™”
-        eventManager = EventManager.Instance;                  // EventManager ì¸ìŠ¤í„´ìŠ¤ ì´ˆê¸°í™”
-        settingManager = UserSettingManager.Instance;          // UserSettingManager ì¸ìŠ¤í„´ìŠ¤ ì´ˆê¸°í™”
+        inputManager = InputManager.Instance;                  // InputManager ÀÎ½ºÅÏ½º ÃÊ±âÈ­
+        eventManager = EventManager.Instance;                  // EventManager ÀÎ½ºÅÏ½º ÃÊ±âÈ­
+        settingManager = UserSettingManager.Instance;          // UserSettingManager ÀÎ½ºÅÏ½º ÃÊ±âÈ­
 
         for (int i = 0; i < weaponSlot.Length; i++)
         {
@@ -81,16 +81,16 @@ public class UserInterface : MonoBehaviour
         }
 
         
-        //eventManager.OnPlayerDashUIRefreshAction += Dash;                   // ëŒ€ì‰¬ UI ìƒˆë¡œê³ ì¹¨ ì´ë²¤íŠ¸ ë“±ë¡
-        eventManager.OnPlayerCurrentBulletUIRefreshAction += UpdateAmmo;    // í”Œë ˆì´ì–´ í˜„ì¬ ì¥ì „ íƒ„ ìˆ˜ UI ìƒˆë¡œê³ ì¹¨ ì´ë²¤íŠ¸ ë“±ë¡
-        //eventManager.OnPlayerMaxBulletUIRefreshAction += (maxBullet) => ammoLabel.text = maxBullet.ToString(); // í”Œë ˆì´ì–´ ìµœëŒ€ ì¥ì „ íƒ„ ìˆ˜ UI ìƒˆë¡œê³ ì¹¨ ì´ë²¤íŠ¸ ë“±ë¡
+        eventManager.OnPlayerDashUIRefreshAction += Dash;                   // ´ë½¬ UI »õ·Î°íÄ§ ÀÌº¥Æ® µî·Ï
+        eventManager.OnPlayerCurrentBulletUIRefreshAction += UpdateAmmo;    // ÇÃ·¹ÀÌ¾î ÇöÀç ÀåÀü Åº ¼ö UI »õ·Î°íÄ§ ÀÌº¥Æ® µî·Ï
+        //eventManager.OnPlayerMaxBulletUIRefreshAction += (maxBullet) => ammoLabel.text = maxBullet.ToString(); // ÇÃ·¹ÀÌ¾î ÃÖ´ë ÀåÀü Åº ¼ö UI »õ·Î°íÄ§ ÀÌº¥Æ® µî·Ï
 
-        eventManager.OnPlayerWeaponUIRefreshAction += ChangeWeaponAnimation;// í”Œë ˆì´ì–´ ì‚¬ìš©ê°€ëŠ¥ ë¬´ê¸° UI ìƒˆë¡œê³ ì¹¨ ì´ë²¤íŠ¸ ë“±ë¡
-        eventManager.OnPlayerComboRefreshAction += PlayComboAnimation;      // ì½¤ë³´ ìƒˆë¡œê³ ì¹¨ ì´ë²¤íŠ¸ ë“±ë¡
+        eventManager.OnPlayerWeaponUIRefreshAction += ChangeWeaponAnimation;// ÇÃ·¹ÀÌ¾î »ç¿ë°¡´É ¹«±â UI »õ·Î°íÄ§ ÀÌº¥Æ® µî·Ï
+        eventManager.OnPlayerComboRefreshAction += PlayComboAnimation;      // ÄŞº¸ »õ·Î°íÄ§ ÀÌº¥Æ® µî·Ï
 
-        eventManager.OnPlayerDamageAction += UpdateHP;                      // í”Œë ˆì´ì–´ ë°ë¯¸ì§€ ì´ë²¤íŠ¸ ë“±ë¡
-        eventManager.OnPlayerDieAction += SelectDie;                        // í”Œë ˆì´ì–´ ì‚¬ë§ ì´ë²¤íŠ¸ ë“±ë¡
-        eventManager.OnPlayerRevivalAction += SelectResurrection;           // í”Œë ˆì´ì–´ ë¶€í™œ ì´ë²¤íŠ¸ ë“±ë¡
+        eventManager.OnPlayerDamageAction += UpdateHP;                      // ÇÃ·¹ÀÌ¾î µ¥¹ÌÁö ÀÌº¥Æ® µî·Ï
+        eventManager.OnPlayerDieAction += SelectDie;                        // ÇÃ·¹ÀÌ¾î »ç¸Á ÀÌº¥Æ® µî·Ï
+        eventManager.OnPlayerRevivalAction += SelectResurrection;           // ÇÃ·¹ÀÌ¾î ºÎÈ° ÀÌº¥Æ® µî·Ï
 
         foreach (Transform trf in itemPickupViewport)
             Destroy(trf.gameObject);
@@ -98,69 +98,69 @@ public class UserInterface : MonoBehaviour
 
     private void OnDisable()
     {
-        //eventManager.OnPlayerDashUIRefreshAction -= Dash;                       // ëŒ€ì‰¬ UI ìƒˆë¡œê³ ì¹¨ ì´ë²¤íŠ¸ ë“±ë¡í•´ì œ
-        eventManager.OnPlayerCurrentBulletUIRefreshAction -= UpdateAmmo;        // í”Œë ˆì´ì–´ í˜„ì¬ ì¥ì „ íƒ„ ìˆ˜ UI ìƒˆë¡œê³ ì¹¨ ì´ë²¤íŠ¸ ë“±ë¡í•´ì œ
+        eventManager.OnPlayerDashUIRefreshAction -= Dash;                       // ´ë½¬ UI »õ·Î°íÄ§ ÀÌº¥Æ® µî·ÏÇØÁ¦
+        eventManager.OnPlayerCurrentBulletUIRefreshAction -= UpdateAmmo;        // ÇÃ·¹ÀÌ¾î ÇöÀç ÀåÀü Åº ¼ö UI »õ·Î°íÄ§ ÀÌº¥Æ® µî·ÏÇØÁ¦
 
-        eventManager.OnPlayerWeaponUIRefreshAction -= ChangeWeaponAnimation;    // í”Œë ˆì´ì–´ ì‚¬ìš©ê°€ëŠ¥ ë¬´ê¸° UI ìƒˆë¡œê³ ì¹¨ ì´ë²¤íŠ¸ ë“±ë¡í•´ì œ
-        eventManager.OnPlayerComboRefreshAction -= PlayComboAnimation;          // ì½¤ë³´ ìƒˆë¡œê³ ì¹¨ ì´ë²¤íŠ¸ ë“±ë¡í•´ì œ
+        eventManager.OnPlayerWeaponUIRefreshAction -= ChangeWeaponAnimation;    // ÇÃ·¹ÀÌ¾î »ç¿ë°¡´É ¹«±â UI »õ·Î°íÄ§ ÀÌº¥Æ® µî·ÏÇØÁ¦
+        eventManager.OnPlayerComboRefreshAction -= PlayComboAnimation;          // ÄŞº¸ »õ·Î°íÄ§ ÀÌº¥Æ® µî·ÏÇØÁ¦
 
-        eventManager.OnPlayerDamageAction -= UpdateHP;                          // í”Œë ˆì´ì–´ ë°ë¯¸ì§€ ì´ë²¤íŠ¸ ë“±ë¡í•´ì œ
-        eventManager.OnPlayerDieAction -= SelectDie;                            // í”Œë ˆì´ì–´ ì‚¬ë§ ì´ë²¤íŠ¸ ë“±ë¡í•´ì œ
-        eventManager.OnPlayerRevivalAction -= SelectResurrection;               // í”Œë ˆì´ì–´ ë¶€í™œ ì´ë²¤íŠ¸ ë“±ë¡í•´ì œ
+        eventManager.OnPlayerDamageAction -= UpdateHP;                          // ÇÃ·¹ÀÌ¾î µ¥¹ÌÁö ÀÌº¥Æ® µî·ÏÇØÁ¦
+        eventManager.OnPlayerDieAction -= SelectDie;                            // ÇÃ·¹ÀÌ¾î »ç¸Á ÀÌº¥Æ® µî·ÏÇØÁ¦
+        eventManager.OnPlayerRevivalAction -= SelectResurrection;               // ÇÃ·¹ÀÌ¾î ºÎÈ° ÀÌº¥Æ® µî·ÏÇØÁ¦
     }
 
-    /// <summary> í…ŒìŠ¤íŠ¸ìš© ë©”ì„œë“œ </summary>
+    /// <summary> Å×½ºÆ®¿ë ¸Ş¼­µå </summary>
     private void Update()
     {
-        // ì½¤ë³´ ì• ë‹ˆë©”ì´ì…˜
-        //if (Input.GetKeyDown(KeyCode.F12))
-        //    PlayComboAnimation(999);
+        // ÄŞº¸ ¾Ö´Ï¸ŞÀÌ¼Ç
+        if (Input.GetKeyDown(KeyCode.F12))
+            PlayComboAnimation(999);
 
-        //// ê²€ ì„ íƒ
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //    ChangeWeaponAnimation(new bool[] { true, false, false, false });
-        //// ìƒ·ê±´ ì„ íƒ
-        //else if (Input.GetKeyDown(KeyCode.Alpha2))
-        //    ChangeWeaponAnimation(new bool[] { false, true, false, false });
-        //// ìŠ¤ë‚˜ ì„ íƒ
-        //else if (Input.GetKeyDown(KeyCode.Alpha3))
-        //    ChangeWeaponAnimation(new bool[] { false, false, true, false });
-        //// ê¶Œì´ ì„ íƒ
-        //else if (Input.GetKeyDown(KeyCode.Alpha4))
-        //    ChangeWeaponAnimation(new bool[] { false, false, false, true });
+        // °Ë ¼±ÅÃ
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            ChangeWeaponAnimation(new bool[] { true, false, false, false });
+        // ¼¦°Ç ¼±ÅÃ
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+            ChangeWeaponAnimation(new bool[] { false, true, false, false });
+        // ½º³ª ¼±ÅÃ
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+            ChangeWeaponAnimation(new bool[] { false, false, true, false });
+        // ±ÇÃÑ ¼±ÅÃ
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+            ChangeWeaponAnimation(new bool[] { false, false, false, true });
 
 
-        //// ê²€ í™œì„±í™”
-        //if (Input.GetKeyDown(KeyCode.F1))
-        //    AcquireWeapon(0); // ê²€ ìŠ¬ë¡¯ í™œì„±í™”
-        //// ìƒ·ê±´ í™œì„±í™”
-        //else if (Input.GetKeyDown(KeyCode.F2))
-        //    AcquireWeapon(1); // ìƒ·ê±´ ìŠ¬ë¡¯ í™œì„±í™”
-        //// ìŠ¤ë‚˜ í™œì„±í™”
-        //else if (Input.GetKeyDown(KeyCode.F3))
-        //    AcquireWeapon(2); // ìŠ¤ë‚˜ ìŠ¬ë¡¯ í™œì„±í™”
-        //// ê¶Œì´ í™œì„±í™”
-        //else if (Input.GetKeyDown(KeyCode.F4))
-        //    AcquireWeapon(3); // ê¶Œì´ ìŠ¬ë¡¯ í™œì„±í™”
+        // °Ë È°¼ºÈ­
+        if (Input.GetKeyDown(KeyCode.F1))
+            AcquireWeapon(0); // °Ë ½½·Ô È°¼ºÈ­
+        // ¼¦°Ç È°¼ºÈ­
+        else if (Input.GetKeyDown(KeyCode.F2))
+            AcquireWeapon(1); // ¼¦°Ç ½½·Ô È°¼ºÈ­
+        // ½º³ª È°¼ºÈ­
+        else if (Input.GetKeyDown(KeyCode.F3))
+            AcquireWeapon(2); // ½º³ª ½½·Ô È°¼ºÈ­
+        // ±ÇÃÑ È°¼ºÈ­
+        else if (Input.GetKeyDown(KeyCode.F4))
+            AcquireWeapon(3); // ±ÇÃÑ ½½·Ô È°¼ºÈ­
 
-        //// ê²€ ë¹„í™œì„±í™”
-        //if (Input.GetKeyDown(KeyCode.F5))
-        //    weaponSlot[0].SetActive(false); // ê²€ ìŠ¬ë¡¯ ë¹„í™œì„±í™”
-        //// ìƒ·ê±´ ë¹„í™œì„±í™”
-        //if (Input.GetKeyDown(KeyCode.F6))
-        //    weaponSlot[1].SetActive(false); // ìƒ·ê±´ ìŠ¬ë¡¯ ë¹„í™œì„±í™”
-        //// ìŠ¤ë‚˜ ë¹„í™œì„±í™”
-        //if (Input.GetKeyDown(KeyCode.F7))
-        //    weaponSlot[2].SetActive(false); // ìŠ¤ë‚˜ ìŠ¬ë¡¯ ë¹„í™œì„±í™”
-        //// ê¶Œì´ ë¹„í™œì„±í™”
-        //if (Input.GetKeyDown(KeyCode.F8))
-        //    weaponSlot[3].SetActive(false); // ê¶Œì´ ìŠ¬ë¡¯ ë¹„í™œì„±í™”
+        // °Ë ºñÈ°¼ºÈ­
+        if (Input.GetKeyDown(KeyCode.F5))
+            weaponSlot[0].SetActive(false); // °Ë ½½·Ô ºñÈ°¼ºÈ­
+        // ¼¦°Ç ºñÈ°¼ºÈ­
+        if (Input.GetKeyDown(KeyCode.F6))
+            weaponSlot[1].SetActive(false); // ¼¦°Ç ½½·Ô ºñÈ°¼ºÈ­
+        // ½º³ª ºñÈ°¼ºÈ­
+        if (Input.GetKeyDown(KeyCode.F7))
+            weaponSlot[2].SetActive(false); // ½º³ª ½½·Ô ºñÈ°¼ºÈ­
+        // ±ÇÃÑ ºñÈ°¼ºÈ­
+        if (Input.GetKeyDown(KeyCode.F8))
+            weaponSlot[3].SetActive(false); // ±ÇÃÑ ½½·Ô ºñÈ°¼ºÈ­
 
-        //// ì•„ì´í…œ í”½ì—… íŒ¨ë„ í…ŒìŠ¤íŠ¸ìš©
-        //if (Input.GetKeyDown(KeyCode.BackQuote))
-        //    ShowItemPickUpPanel(Random.Range(0, itemIcon.Count), Random.Range(1, 999)); 
+        // ¾ÆÀÌÅÛ ÇÈ¾÷ ÆĞ³Î Å×½ºÆ®¿ë
+        if (Input.GetKeyDown(KeyCode.BackQuote))
+            ShowItemPickUpPanel(Random.Range(0, itemIcon.Count), Random.Range(1, 999)); 
 
-        // Pause íŒ¨ë„ í† ê¸€
+        // Pause ÆĞ³Î Åä±Û
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePausePanel();
@@ -171,15 +171,15 @@ public class UserInterface : MonoBehaviour
     #region Player State Methods
     void UpdateAmmo(int ammo)
     {
-        ammoLabel.text = ammo.ToString(); // í˜„ì¬ ì¥ì „ íƒ„ ìˆ˜ ë ˆì´ë¸” ì—…ë°ì´íŠ¸
+        ammoLabel.text = ammo.ToString(); // ÇöÀç ÀåÀü Åº ¼ö ·¹ÀÌºí ¾÷µ¥ÀÌÆ®
     }
 
     void UpdateHP(int health)
     {
-        hp.sizeDelta = new Vector2(hpMaxRect * (health / 100f), hp.sizeDelta.y); // ì²´ë ¥ ì´ë¯¸ì§€ í¬ê¸° ì—…ë°ì´íŠ¸
+        hp.sizeDelta = new Vector2(hpMaxRect * (health / 100f), hp.sizeDelta.y); // Ã¼·Â ÀÌ¹ÌÁö Å©±â ¾÷µ¥ÀÌÆ®
     }
 
-    // TODO ëŒ€ì‰¬ë¶€ë¶„
+    // TODO ´ë½¬ºÎºĞ
     void Dash(int stack)
     {
         
@@ -194,15 +194,15 @@ public class UserInterface : MonoBehaviour
         {
             if (weapons[i])
             {
-                index = i; // í˜„ì¬ í™œì„±í™”ëœ ë¬´ê¸° ë²ˆí˜¸ ì—…ë°ì´íŠ¸
-                EnableWeaponSlot(weaponSlot[i]); // í˜„ì¬ ë¬´ê¸° ìŠ¬ë¡¯ í™œì„±í™”
+                index = i; // ÇöÀç È°¼ºÈ­µÈ ¹«±â ¹øÈ£ ¾÷µ¥ÀÌÆ®
+                EnableWeaponSlot(weaponSlot[i]); // ÇöÀç ¹«±â ½½·Ô È°¼ºÈ­
             }
             else if(nowWeaponNum == i)
             {
-                DisableWeaponSlot(weaponSlot[i]); // ì´ì „ ë¬´ê¸° ìŠ¬ë¡¯ ë¹„í™œì„±í™”
+                DisableWeaponSlot(weaponSlot[i]); // ÀÌÀü ¹«±â ½½·Ô ºñÈ°¼ºÈ­
             }
         }
-        nowWeaponNum = index; // í˜„ì¬ ë¬´ê¸° ë²ˆí˜¸ ì—…ë°ì´íŠ¸
+        nowWeaponNum = index; // ÇöÀç ¹«±â ¹øÈ£ ¾÷µ¥ÀÌÆ®
     }
 
     void EnableWeaponSlot(GameObject go)
@@ -226,15 +226,15 @@ public class UserInterface : MonoBehaviour
         disableImg.DOKill();
         disableImg.DOColor(enableStartColor, 0.5f).SetEase(Ease.OutQuad).OnComplete(() =>
         {
-            enableImg.enabled = true; // Enable ì´ë¯¸ì§€ í™œì„±í™”
-            enableImg.color = enableStartColor; // íˆ¬ëª…í•˜ê²Œ ì„¤ì •
+            enableImg.enabled = true; // Enable ÀÌ¹ÌÁö È°¼ºÈ­
+            enableImg.color = enableStartColor; // Åõ¸íÇÏ°Ô ¼³Á¤
             enableImg.DOKill();
             enableImg.DOColor(Color.white, 0.5f).SetEase(Ease.InQuad).OnComplete(() =>
             {
-                //enableRect.DOScale(Vector3.one, 0.5f); // Enable ì´ë¯¸ì§€ í¬ê¸° ì• ë‹ˆë©”ì´ì…˜
+                //enableRect.DOScale(Vector3.one, 0.5f); // Enable ÀÌ¹ÌÁö Å©±â ¾Ö´Ï¸ŞÀÌ¼Ç
             });
             disableImg.color = disableColor;
-            disableImg.enabled = false; // Disable ì´ë¯¸ì§€ ë¹„í™œì„±í™”
+            disableImg.enabled = false; // Disable ÀÌ¹ÌÁö ºñÈ°¼ºÈ­
         });
     }
 
@@ -250,7 +250,7 @@ public class UserInterface : MonoBehaviour
         Color disableInitColor = Color.white;
         disableInitColor.a = 0.65f;
         Color enableStartColor = Color.white;
-        enableStartColor.a = 0.03f; // Enable ì´ë¯¸ì§€ ì‹œì‘ ìƒ‰ìƒ (íˆ¬ëª…)
+        enableStartColor.a = 0.03f; // Enable ÀÌ¹ÌÁö ½ÃÀÛ »ö»ó (Åõ¸í)
 
         disableImg.enabled = false;
         enableImg.enabled = true;
@@ -264,7 +264,7 @@ public class UserInterface : MonoBehaviour
             disableImg.DOKill();
             disableImg.DOColor(disableColor, 0.5f).SetEase(Ease.InQuad).OnComplete(() =>
             {
-                //disableRect.DOScale(Vector3.zero, 0.5f); // Disable ì´ë¯¸ì§€ í¬ê¸° ì• ë‹ˆë©”ì´ì…˜
+                //disableRect.DOScale(Vector3.zero, 0.5f); // Disable ÀÌ¹ÌÁö Å©±â ¾Ö´Ï¸ŞÀÌ¼Ç
             });
             enableImg.color = new Color(1f, 1f, 1f, 0.5f);
             enableImg.enabled = false;
@@ -274,9 +274,9 @@ public class UserInterface : MonoBehaviour
     public void AcquireWeapon(int weaponNum)
     {
         if (weaponNum < 0 || weaponNum >= weaponSlot.Length)
-            return; // ìœ íš¨í•˜ì§€ ì•Šì€ ë¬´ê¸° ë²ˆí˜¸
+            return; // À¯È¿ÇÏÁö ¾ÊÀº ¹«±â ¹øÈ£
 
-        GameObject go = weaponSlot[weaponNum]; // í•´ë‹¹ ë¬´ê¸° ìŠ¬ë¡¯ ì˜¤ë¸Œì íŠ¸ ê°€ì ¸ì˜¤ê¸°
+        GameObject go = weaponSlot[weaponNum]; // ÇØ´ç ¹«±â ½½·Ô ¿ÀºêÁ§Æ® °¡Á®¿À±â
         go.SetActive(true);
 
         Image bg = go.GetComponent<Image>();
@@ -314,150 +314,148 @@ public class UserInterface : MonoBehaviour
     public void ShowItemPickUpPanel(int itemNum, int itemAmount)
     {
         GameObject go = Instantiate(itemPickupPrefab, itemPickupViewport);
-        Image bg = go.GetComponent<Image>(); // ë°°ê²½ ì´ë¯¸ì§€ ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
-        Image icon = go.transform.GetChild(0).GetComponent<Image>(); // ì•„ì´ì½˜ ì´ë¯¸ì§€ ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
+        Image bg = go.GetComponent<Image>(); // ¹è°æ ÀÌ¹ÌÁö ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+        Image icon = go.transform.GetChild(0).GetComponent<Image>(); // ¾ÆÀÌÄÜ ÀÌ¹ÌÁö ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
         if (itemIcon.Count > itemNum)
-            icon.sprite = itemIcon[itemNum]; // ì•„ì´ì½˜ ì´ë¯¸ì§€ ì„¤ì •
-        TextMeshProUGUI amountText = go.transform.GetChild(1).GetComponent<TextMeshProUGUI>(); // ì•„ì´í…œ ìˆ˜ëŸ‰ í…ìŠ¤íŠ¸ ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
-        amountText.text = itemAmount.ToString(); // ì•„ì´í…œ ìˆ˜ëŸ‰ ì„¤ì •
+            icon.sprite = itemIcon[itemNum]; // ¾ÆÀÌÄÜ ÀÌ¹ÌÁö ¼³Á¤
+        TextMeshProUGUI amountText = go.transform.GetChild(1).GetComponent<TextMeshProUGUI>(); // ¾ÆÀÌÅÛ ¼ö·® ÅØ½ºÆ® ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+        amountText.text = itemAmount.ToString(); // ¾ÆÀÌÅÛ ¼ö·® ¼³Á¤
 
         Color c = Color.white;
-        c.a = 0f; // ì´ˆê¸° íˆ¬ëª…ë„ ì„¤ì •
+        c.a = 0f; // ÃÊ±â Åõ¸íµµ ¼³Á¤
 
         bg.DOColor(c, 5f);
         icon.DOColor(c, 5f);
         amountText.DOColor(c, 5f);
-        Destroy(go, 5f); // 5ì´ˆ í›„ì— ì˜¤ë¸Œì íŠ¸ ì‚­ì œ
+        Destroy(go, 5f); // 5ÃÊ ÈÄ¿¡ ¿ÀºêÁ§Æ® »èÁ¦
     }
 
     #region Pause Panel Methods
 
     public void BGMChange()
     {
-        settingManager.BGM = bgmSlider.value; // BGM ìŠ¬ë¼ì´ë” ê°’ìœ¼ë¡œ ì„¤ì •
+        settingManager.BGM = bgmSlider.value; // BGM ½½¶óÀÌ´õ °ªÀ¸·Î ¼³Á¤
         bgmLabel.text = $"{Mathf.FloorToInt(bgmSlider.value * 100)} %";
     }
     public void SFXChange()
     {
-        settingManager.SFX = sfxSlider.value; // SFX ìŠ¬ë¼ì´ë” ê°’ìœ¼ë¡œ ì„¤ì •
+        settingManager.SFX = sfxSlider.value; // SFX ½½¶óÀÌ´õ °ªÀ¸·Î ¼³Á¤
         sfxLabel.text = $"{Mathf.FloorToInt(sfxSlider.value * 100)} %";
     }
 
     public void MouseSensitivityChange()
     {
-        settingManager.MouseSensitivity = mouseSlider.value; // ë§ˆìš°ìŠ¤ ê°ë„ ìŠ¬ë¼ì´ë” ê°’ìœ¼ë¡œ ì„¤ì •
+        settingManager.MouseSensitivity = mouseSlider.value; // ¸¶¿ì½º °¨µµ ½½¶óÀÌ´õ °ªÀ¸·Î ¼³Á¤
         mouseLabel.text = $"{Mathf.FloorToInt(mouseSlider.value * 100)} %";
     }
 
     public void SceneMove(string sceneName)
     {
-        Time.timeScale = 1f; // ê²Œì„ ì‹œê°„ ì¬ê°œ
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName); // ì”¬ ì´ë™
+        Time.timeScale = 1f; // °ÔÀÓ ½Ã°£ Àç°³
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName); // ¾À ÀÌµ¿
     }
     #endregion
 
     #region Death Event Methods
     void PlayComboAnimation(int combo)
     {
-        Color whiteEnd = new Color(1f, 1f, 1f, 0f);             // ì½¤ë³´ ì¹´ìš´íŠ¸ ë ˆì´ë¸” ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ ìƒ‰ìƒ
-        Color redEnd = new Color(1f, 0f, 0f, 0f);               // ì½¤ë³´ ë°” ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ ìƒ‰ìƒ
+        Color whiteEnd = new Color(1f, 1f, 1f, 0f);             // ÄŞº¸ Ä«¿îÆ® ·¹ÀÌºí ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á »ö»ó
+        Color redEnd = new Color(1f, 0f, 0f, 0f);               // ÄŞº¸ ¹Ù ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á »ö»ó
 
-        comboBar.DOKill();                                      // í˜„ì¬ ì§„í–‰ ì¤‘ì¸ ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì§€
-        comboBar.color = Color.white;                           // ì½¤ë³´ ë°” ìƒ‰ìƒì„ í°ìƒ‰ìœ¼ë¡œ ì„¤ì •
+        comboBar.DOKill();                                      // ÇöÀç ÁøÇà ÁßÀÎ ¾Ö´Ï¸ŞÀÌ¼Ç ÁßÁö
+        comboBar.color = Color.white;                           // ÄŞº¸ ¹Ù »ö»óÀ» Èò»öÀ¸·Î ¼³Á¤
         comboBar.DOColor(redEnd, 5f).SetEase(Ease.OutQuad);
-        comboBar.fillAmount = 1f;                              // ì½¤ë³´ ë°”ì˜ ì±„ì›€ ì–‘ì„ 1ë¡œ ì„¤ì • (100% ì±„ì›€)
+        comboBar.fillAmount = 1f;                              // ÄŞº¸ ¹ÙÀÇ Ã¤¿ò ¾çÀ» 1·Î ¼³Á¤ (100% Ã¤¿ò)
         comboBar.DOFillAmount(0f, 5f).OnComplete(() =>
         {
             // combo 0
         });
 
-        comboCountLabel.DOKill();                               // í˜„ì¬ ì§„í–‰ ì¤‘ì¸ ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì§€
-        comboCountLabel.color = Color.white;                    // ì½¤ë³´ ì¹´ìš´íŠ¸ ë ˆì´ë¸” ìƒ‰ìƒì„ í°ìƒ‰ìœ¼ë¡œ ì„¤ì •
+        comboCountLabel.DOKill();                               // ÇöÀç ÁøÇà ÁßÀÎ ¾Ö´Ï¸ŞÀÌ¼Ç ÁßÁö
+        comboCountLabel.color = Color.white;                    // ÄŞº¸ Ä«¿îÆ® ·¹ÀÌºí »ö»óÀ» Èò»öÀ¸·Î ¼³Á¤
         comboCountLabel.text = combo.ToString();
         comboCountLabel.DOColor(whiteEnd, 5f).SetEase(Ease.OutQuad);
 
-        comboLabel.DOKill();                                    // í˜„ì¬ ì§„í–‰ ì¤‘ì¸ ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì§€
-        comboLabel.color = Color.white;                         // ì½¤ë³´ ë ˆì´ë¸” ìƒ‰ìƒì„ í°ìƒ‰ìœ¼ë¡œ ì„¤ì •
+        comboLabel.DOKill();                                    // ÇöÀç ÁøÇà ÁßÀÎ ¾Ö´Ï¸ŞÀÌ¼Ç ÁßÁö
+        comboLabel.color = Color.white;                         // ÄŞº¸ ·¹ÀÌºí »ö»óÀ» Èò»öÀ¸·Î ¼³Á¤
         comboLabel.DOColor(redEnd, 5f).SetEase(Ease.OutQuad);
     }
 
     public void TogglePausePanel()
     {
-        pausePanel.SetActive(!pausePanel.activeSelf); // Pause íŒ¨ë„ì˜ í™œì„±í™” ìƒíƒœë¥¼ í† ê¸€
+        pausePanel.SetActive(!pausePanel.activeSelf); // Pause ÆĞ³ÎÀÇ È°¼ºÈ­ »óÅÂ¸¦ Åä±Û
         if (pausePanel.activeSelf)
         {
-            eventManager.OnPauseAction(true);
-            //Time.timeScale = 0f; // ê²Œì„ ì¼ì‹œ ì •ì§€
-            inputManager.cursorInputForLook = false; // ë§ˆìš°ìŠ¤ ì»¤ì„œ ì ê¸ˆ í•´ì œ
-            inputManager.cursorLocked = false; // ì»¤ì„œ ì ê¸ˆ í•´ì œ
-            // ìŠ¬ë¼ì´ë” ê°’ ì´ˆê¸°í™”
-            bgmSlider.value = settingManager.BGM; // BGM ìŠ¬ë¼ì´ë” ê°’ ì´ˆê¸°í™”
-            bgmLabel.text = $"{Mathf.FloorToInt(bgmSlider.value * 100)} %"; // BGM ë ˆì´ë¸” ì—…ë°ì´íŠ¸
-            sfxSlider.value = settingManager.SFX; // SFX ìŠ¬ë¼ì´ë” ê°’ ì´ˆê¸°í™”
-            sfxLabel.text = $"{Mathf.FloorToInt(sfxSlider.value * 100)} %"; // SFX ë ˆì´ë¸” ì—…ë°ì´íŠ¸
-            mouseSlider.value = settingManager.MouseSensitivity; // ë§ˆìš°ìŠ¤ ê°ë„ ìŠ¬ë¼ì´ë” ê°’ ì´ˆê¸°í™”
-            mouseLabel.text = $"{Mathf.FloorToInt(mouseSlider.value * 100)} %"; // ë§ˆìš°ìŠ¤ ê°ë„ ë ˆì´ë¸” ì—…ë°ì´íŠ¸
+            Time.timeScale = 0f; // °ÔÀÓ ÀÏ½Ã Á¤Áö
+            inputManager.cursorInputForLook = false; // ¸¶¿ì½º Ä¿¼­ Àá±İ ÇØÁ¦
+            inputManager.cursorLocked = false; // Ä¿¼­ Àá±İ ÇØÁ¦
+            // ½½¶óÀÌ´õ °ª ÃÊ±âÈ­
+            bgmSlider.value = settingManager.BGM; // BGM ½½¶óÀÌ´õ °ª ÃÊ±âÈ­
+            bgmLabel.text = $"{Mathf.FloorToInt(bgmSlider.value * 100)} %"; // BGM ·¹ÀÌºí ¾÷µ¥ÀÌÆ®
+            sfxSlider.value = settingManager.SFX; // SFX ½½¶óÀÌ´õ °ª ÃÊ±âÈ­
+            sfxLabel.text = $"{Mathf.FloorToInt(sfxSlider.value * 100)} %"; // SFX ·¹ÀÌºí ¾÷µ¥ÀÌÆ®
+            mouseSlider.value = settingManager.MouseSensitivity; // ¸¶¿ì½º °¨µµ ½½¶óÀÌ´õ °ª ÃÊ±âÈ­
+            mouseLabel.text = $"{Mathf.FloorToInt(mouseSlider.value * 100)} %"; // ¸¶¿ì½º °¨µµ ·¹ÀÌºí ¾÷µ¥ÀÌÆ®
 
-            //SoundManager.Instance.StopBGM(); // BGM ì •ì§€
+            SoundManager.Instance.StopBGM(); // BGM Á¤Áö
         }
         else
         {
-            eventManager.OnPauseAction(false);
-            //Time.timeScale = 1f; // ê²Œì„ ì¬ê°œ
-            inputManager.cursorInputForLook = true; // ë§ˆìš°ìŠ¤ ì»¤ì„œ ì ê¸ˆ
-            inputManager.cursorLocked = true; // ì»¤ì„œ ì ê¸ˆ
-            //SoundManager.Instance.PlayBGM(BGM.Test_Bgm); // BGM ì¬ìƒ
+            Time.timeScale = 1f; // °ÔÀÓ Àç°³
+            inputManager.cursorInputForLook = true; // ¸¶¿ì½º Ä¿¼­ Àá±İ
+            inputManager.cursorLocked = true; // Ä¿¼­ Àá±İ
+            SoundManager.Instance.PlayBGM(BGM.Test_Bgm); // BGM Àç»ı
         }
     }
 
     public void ShowDeathPanel(int resurrectionCount)
     {
-        //deathPanel.SetActive(!deathPanel.activeSelf); // Death íŒ¨ë„ì˜ í™œì„±í™” ìƒíƒœë¥¼ í† ê¸€
+        //deathPanel.SetActive(!deathPanel.activeSelf); // Death ÆĞ³ÎÀÇ È°¼ºÈ­ »óÅÂ¸¦ Åä±Û
 
         if (resurrectionCount > 0)
         {
-            Time.timeScale = 0f; // ê²Œì„ ì¼ì‹œ ì •ì§€
-            resurrectionPanel.SetActive(true); // ë¶€í™œ íŒ¨ë„ í™œì„±í™”
-            gameOverPanel.SetActive(false); // ê²Œì„ì˜¤ë²„ íŒ¨ë„ ë¹„í™œì„±í™”
-            resurrectionCoroutine = StartCoroutine(ResurrectionCounter()); // ë¶€í™œ ì¹´ìš´íŠ¸ ì‹œì‘
+            Time.timeScale = 0f; // °ÔÀÓ ÀÏ½Ã Á¤Áö
+            resurrectionPanel.SetActive(true); // ºÎÈ° ÆĞ³Î È°¼ºÈ­
+            gameOverPanel.SetActive(false); // °ÔÀÓ¿À¹ö ÆĞ³Î ºñÈ°¼ºÈ­
+            resurrectionCoroutine = StartCoroutine(ResurrectionCounter()); // ºÎÈ° Ä«¿îÆ® ½ÃÀÛ
         }
         else
         {
-            Time.timeScale = 0f; // ê²Œì„ ì¬ê°œ
-            gameOverPanel.SetActive(true); // ê²Œì„ì˜¤ë²„ íŒ¨ë„ í™œì„±í™”
-            resurrectionPanel.SetActive(false); // ë¶€í™œ íŒ¨ë„ ë¹„í™œì„±í™”
+            Time.timeScale = 0f; // °ÔÀÓ Àç°³
+            gameOverPanel.SetActive(true); // °ÔÀÓ¿À¹ö ÆĞ³Î È°¼ºÈ­
+            resurrectionPanel.SetActive(false); // ºÎÈ° ÆĞ³Î ºñÈ°¼ºÈ­
         }
     }
 
     IEnumerator ResurrectionCounter()
     {
-        int count = resurrectionCount; // ë¶€í™œ íšŸìˆ˜ ì´ˆê¸°í™”
-        WaitForSecondsRealtime wait = new WaitForSecondsRealtime(1f); // 1ì´ˆ ëŒ€ê¸°
+        int count = resurrectionCount; // ºÎÈ° È½¼ö ÃÊ±âÈ­
+        WaitForSecondsRealtime wait = new WaitForSecondsRealtime(1f); // 1ÃÊ ´ë±â
         while (count > 0)
         {
-            resurrectionCountLabel.text = count.ToString(); // ë¶€í™œ ì¹´ìš´íŠ¸ ë ˆì´ë¸” ì—…ë°ì´íŠ¸
-            yield return wait; // 1ì´ˆ ëŒ€ê¸°
-            count--; // ì¹´ìš´íŠ¸ ê°ì†Œ
+            resurrectionCountLabel.text = count.ToString(); // ºÎÈ° Ä«¿îÆ® ·¹ÀÌºí ¾÷µ¥ÀÌÆ®
+            yield return wait; // 1ÃÊ ´ë±â
+            count--; // Ä«¿îÆ® °¨¼Ò
         }
 
-        resurrectionPanel.SetActive(false); // ë¶€í™œ íŒ¨ë„ ë¹„í™œì„±í™”
-        gameOverPanel.SetActive(true); // ê²Œì„ì˜¤ë²„ íŒ¨ë„ í™œì„±í™”
+        resurrectionPanel.SetActive(false); // ºÎÈ° ÆĞ³Î ºñÈ°¼ºÈ­
+        gameOverPanel.SetActive(true); // °ÔÀÓ¿À¹ö ÆĞ³Î È°¼ºÈ­
     }
 
-    /// <summary> ë¶€í™œ </summary>
+    /// <summary> ºÎÈ° </summary>
     public void SelectResurrection()
     {
         StopCoroutine(resurrectionCoroutine);
-        resurrectionPanel.SetActive(false); // ë¶€í™œ íŒ¨ë„ ë¹„í™œì„±í™”
-        Time.timeScale = 1f; // ê²Œì„ ì‹œê°„ ì¬ê°œ
+        resurrectionPanel.SetActive(false); // ºÎÈ° ÆĞ³Î ºñÈ°¼ºÈ­
+        Time.timeScale = 1f; // °ÔÀÓ ½Ã°£ Àç°³
     }
 
     public void SelectDie()
     {
         if (resurrectionCoroutine != null)
             StopCoroutine(resurrectionCoroutine);
-        resurrectionPanel.SetActive(false); // ë¶€í™œ íŒ¨ë„ ë¹„í™œì„±í™”
-        gameOverPanel.SetActive(true); // ê²Œì„ì˜¤ë²„ íŒ¨ë„ í™œì„±í™”
+        resurrectionPanel.SetActive(false); // ºÎÈ° ÆĞ³Î ºñÈ°¼ºÈ­
+        gameOverPanel.SetActive(true); // °ÔÀÓ¿À¹ö ÆĞ³Î È°¼ºÈ­
         Time.timeScale = 0f;
     }
     #endregion
