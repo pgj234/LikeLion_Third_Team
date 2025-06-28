@@ -227,7 +227,6 @@ public class Monster : MonoBehaviour
             }
         }
 
-
         if (target.TryGetComponent(out Player player))
         {
             player.GetDamage(attackDamage);
