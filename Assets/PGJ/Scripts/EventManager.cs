@@ -3,14 +3,20 @@ using UnityEngine;
 
 public class EventManager : SingletonBehaviour<EventManager>
 {
+    // 스코어링 이벤트
+    public Action<int> OnScoreRefreshAction;
+
+    // Pause 윈도우 오픈 여부 이벤트
+    public Action<bool> OnPauseAction;
+
     // 플레이어
 
+    // 플레이어 최대 체력
+    public Action<int> OnPlayerMaxHpAction;
     // 데미지 이벤트 (플레이어 체력 UI 표시)
     public Action<int> OnPlayerDamageAction;
     // 플레이어 사용가능 무기 UI 새로고침 이벤트
     public Action<bool[]> OnPlayerWeaponUIRefreshAction;
-    // 플레이어 대쉬 스택 UI 새로고침 이벤트
-    public Action<int> OnPlayerDashUIRefreshAction;
     // 플레이어 현재 장전 탄 수 UI 새로고침 이벤트
     public Action<int> OnPlayerCurrentBulletUIRefreshAction;
     // 플레이어 최대 장전 탄 수 UI 새로고침 이벤트
@@ -29,6 +35,24 @@ public class EventManager : SingletonBehaviour<EventManager>
         base.Init();
     }
 
+    // Puase 윈도우 오픈 여부
+    public void PauseWindowOpen(bool isOpen)
+    {
+        OnPauseAction?.Invoke(isOpen);
+    }
+
+    // 스코어링 이벤트 발생 메서드
+    public void ScoreRefreshEvent(int score)
+    {
+        OnScoreRefreshAction?.Invoke(score);
+    }
+
+    // 플레이어 최대 체력
+    public void PlayerMaxHpEvent(int maxHp)
+    {
+        OnPlayerMaxHpAction?.Invoke(maxHp);
+    }
+
     // 플레이어 데미지 이벤트 발생 메서드
     public void PlayerDamageEvent(int damage)
     {
@@ -39,12 +63,6 @@ public class EventManager : SingletonBehaviour<EventManager>
     public void PlayerWeaponUIRefresh(bool[] weaponUseAbleArray)
     {
         OnPlayerWeaponUIRefreshAction?.Invoke(weaponUseAbleArray);
-    }
-
-    // 플레이어 대쉬 스택 UI 새로고침
-    public void PlayerDashUIRefresh(int currentStackNum)
-    {
-        OnPlayerDashUIRefreshAction?.Invoke(currentStackNum);
     }
 
     // 플레이어 사망 이벤트 실행 메서드

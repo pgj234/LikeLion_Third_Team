@@ -1,5 +1,4 @@
-﻿using DG.Tweening.Core.Easing;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WeaponBase : MonoBehaviour
 {
@@ -8,12 +7,17 @@ public class WeaponBase : MonoBehaviour
     [SerializeField] protected int maxAmmo;                  // 재장전시 탄환 최대치 / -1 무제한
     [SerializeField] protected int shotAmount;               // 발사시 나가는 탄환수
     [SerializeField] protected int nextShotTime;             // 다음 발사까지 딜레이 박자
-    [SerializeField] protected float shotDamage;             // 탄 데미지
+    [SerializeField] protected int shotDamage;               // 탄 데미지
+    [SerializeField] protected float range;                  // 사거리
 
     [SerializeField] protected Vector2 shotSpreadMin;        // 탄퍼짐 최솟값
     [SerializeField] protected Vector2 shotSpreadMax;        // 탄퍼짐 최댓값
 
     [SerializeField] protected int reloadStepNum;            // 장전 단계
+
+    [Header("이펙트")]
+    [SerializeField] protected GameObject shotEffect;
+    [SerializeField] protected GameObject hitEffectPrefab;
 
     protected GameManager gameManager;
     protected InputManager input;
@@ -79,12 +83,26 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void Shoot()         // 발사 메서드
     {
-
+        if (reloading)
+        {
+            return;
+        }
     }
 
     protected virtual void Reload()        // 재장전 메서드
     {
+        // 탄 꽉참
+        if (nowAmmo == maxAmmo)
+        {
+            return;
+        }
+
         reloading = true;
+    }
+
+    protected int GetTotalDamage()
+    {
+        return shotDamage + (shotDamage * (int)((float)gameManager.GetCombo() / gameManager.GetMaxCombo()));
     }
 
     // 무기 집어넣기
@@ -106,6 +124,11 @@ public class WeaponBase : MonoBehaviour
     internal float GetAnimationTime()
     {
         return anim.GetCurrentAnimatorStateInfo(0).length;
+    }
+
+    internal float SetAnimationSpeed(float speed)
+    {
+        return anim.speed = speed;
     }
 
     internal int GetMaxAmmo()

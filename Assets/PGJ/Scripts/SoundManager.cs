@@ -10,10 +10,16 @@ public enum BGM
 // SFX 목록 enum
 public enum SFX
 {
-    TestRhythm,
+    RhythmFailShot,
     SwordDraw,
     SniperShoot,
-    WeaponGet
+    WeaponGet,
+    PistolShot,
+    PistolCocked,
+    PistolSlide,
+    PistolEmpty,
+    DashRhythmSucces,
+    DashRhythmFailed
 }
 
 public class SoundManager : SingletonBehaviour<SoundManager>
