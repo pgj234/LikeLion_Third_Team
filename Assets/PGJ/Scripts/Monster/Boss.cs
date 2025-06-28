@@ -9,6 +9,7 @@ public class Boss : Entity
     [SerializeField] float max_time; //
 
     float curtime;
+    Quaternion d_angle;
 
     protected override void Awake()
     {
@@ -26,10 +27,25 @@ public class Boss : Entity
     {
         base.Update();
 
+        if (isDie)
+        {
+            return;
+        }
+        
         Quaternion dir = Quaternion.LookRotation(target.transform.position - transform.position);
         Vector3 angle = Quaternion.RotateTowards(transform.rotation, dir, 1200 * Time.deltaTime).eulerAngles;
         transform.rotation = Quaternion.Euler(0, angle.y, 0);
-        Quaternion d_angle = Quaternion.Euler(0, dir.eulerAngles.y, 0);
+        d_angle = Quaternion.Euler(0, dir.eulerAngles.y, 0);
+    }
+
+    protected override void StateProc()
+    {
+        base.StateProc();
+
+        if (isDie)
+        {
+            return;
+        }
 
         // 보스의 상태에 따라 행동
         switch (monsterState)
@@ -45,7 +61,7 @@ public class Boss : Entity
 
             case MonsterState.Attack:
                 // 플레이어에게 총알 발사
-                Shoot(d_angle);
+                Shoot();
                 break;
 
             case MonsterState.Die:
@@ -55,9 +71,11 @@ public class Boss : Entity
         }
     }
 
-    void Idle()
+    protected override void Idle()
     {
-        //anim.set
+        base.Idle();
+
+        //anim.SetBool("Idle", true);
     }
 
     void Chase()
@@ -69,7 +87,7 @@ public class Boss : Entity
         }
     }
 
-    void Shoot(Quaternion _d_angle)
+    void Shoot()
     {
         int attackCount = 3;
 
@@ -77,7 +95,7 @@ public class Boss : Entity
         {
             attackCount--;
 
-            if (Quaternion.Angle(transform.rotation, _d_angle) < differ_angle)
+            if (Quaternion.Angle(transform.rotation, d_angle) < differ_angle)
             {
                 curtime -= Time.deltaTime;
                 if (curtime <= 0)
@@ -90,5 +108,10 @@ public class Boss : Entity
         }
     }
 
+    protected override void Die()
+    {
+        base.Die();
 
+        isDie = true;
+    }
 }

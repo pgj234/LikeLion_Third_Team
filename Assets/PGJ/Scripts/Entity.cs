@@ -1,4 +1,5 @@
-﻿using System.Net.NetworkInformation;
+﻿using System.ComponentModel;
+using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ public class Entity : MonoBehaviour
 
     [SerializeField] protected Animator anim;
     [SerializeField] protected Rigidbody rb;
-    [SerializeField] protected Collider col;
+    [SerializeField] protected Collider[] col;
 
     [SerializeField] protected Transform groundCheck;        // 바닥 체크 위치
     [SerializeField] protected float groundCheckDistance;    // 바닥 체크 거리
@@ -44,11 +45,13 @@ public class Entity : MonoBehaviour
 
     int attackCnt;
 
+    protected bool isDie;
+
     protected NavMeshAgent navAgent;
 
     protected float sturnTime;              // 스턴 남은시간
 
-    bool pause = false;
+    protected bool pause = false;
 
     protected virtual void Awake()
     {
@@ -74,6 +77,8 @@ public class Entity : MonoBehaviour
 
     protected virtual void Init()
     {
+        isDie = false;
+
         EventManager.Instance.OnPauseAction += SetPause;
 
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -100,7 +105,7 @@ public class Entity : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (true == pause)
+        if (true == pause || true == isDie)
         {
             return;
         }
@@ -117,28 +122,20 @@ public class Entity : MonoBehaviour
     }
 
     // 행동 양식
-    protected void StateProc()
+    protected virtual void StateProc()
     {
-        switch (monsterState)
-        {
-            case MonsterState.Idle:
-                break;
 
-            case MonsterState.Chase:
-                break;
-
-            case MonsterState.Attack:
-                break;
-
-            case MonsterState.Die:
-                break;
-        }
     }
 
     internal void GetDamage(int dmg)
     {
+        if (true == isDie)
+        {
+            return;
+        }
+
         hp -= dmg;
-        Debug.Log("몽미 : " + hp);
+        
         if (null != hpImg)
         {
             hpImg.fillAmount = (float)hp / maxHP;
@@ -177,7 +174,14 @@ public class Entity : MonoBehaviour
     // 사망
     protected virtual void Die()
     {
-        
+        rb.useGravity = false;
+
+        for (int i=0; i<col.Length; i++)
+        {
+            col[i].enabled = false;
+        }
+
+        anim.SetTrigger("Die");
     }
 
     // 움직임 처리
