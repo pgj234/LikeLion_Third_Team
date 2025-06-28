@@ -82,9 +82,13 @@ public class Sword : WeaponBase
 
         // 좌클릭으로 Attack
         // 이제 매번 클릭 시도 (쿨다운, 내구도, isAttacking 체크 없이)
-        if (input.mouse0_Input)
+        // input.mouse0_Input 변수의 현재 상태를 항상 출력하여 확인합니다.
+        //Debug.Log($"[InputDebug] input.mouse0_Input: {input.mouse0_Input}"); // 디버그 로그 추가
+
+        if (Input.GetMouseButtonDown(0)) // <-- 이 줄로 변경
         {
-            input.mouse0_Input = false; // 입력 소비
+            // input.mouse0_Input = false; // 커스텀 입력을 사용하지 않으므로 이 줄은 주석 처리하거나 제거합니다.
+            Debug.Log("[InputDebug] WeaponAttack() called via Input.GetMouseButtonDown(0).");
 
             WeaponAttack();
         }
@@ -302,7 +306,7 @@ public class Sword : WeaponBase
     public void WeaponAttack()
     {
         // 디버그 로그 추가
-        //Debug.Log($"[Attack] Attempting attack. currentReloadStage: {currentReloadStage}");
+        Debug.Log($"[Attack] Attempting attack. currentReloadStage: {currentReloadStage}");
 
         // 리로드 중일 때는 공격을 막습니다.
         if (currentReloadStage != ReloadStage.None)
@@ -320,7 +324,7 @@ public class Sword : WeaponBase
 
         // WeaponAttack Trigger 발동 (Animator에서 WeaponAttack을 Trigger 타입으로 변경했어야 합니다.)
         anim.SetTrigger("WeaponAttack");
-        //Debug.Log("[Attack] WeaponAttack Trigger sent.");
+        Debug.Log("[Attack] WeaponAttack Trigger sent.");
 
         // EndAttack 코루틴 시작 (애니메이션 재생 시간에 맞춰 다른 로직 처리용)
         StartCoroutine(EndAttack());
@@ -329,10 +333,10 @@ public class Sword : WeaponBase
     IEnumerator EndAttack()
     {
         float waitTime = attackDuration / attackAnimationSpeed;
-        //Debug.Log($"[EndAttack] Starting EndAttack coroutine. Waiting for: {waitTime} seconds.");
+        Debug.Log($"[EndAttack] Starting EndAttack coroutine. Waiting for: {waitTime} seconds.");
         yield return new WaitForSeconds(waitTime);
 
-        //Debug.Log("[EndAttack] Wait finished. Animator speed reset.");
+        Debug.Log("[EndAttack] Wait finished. Animator speed reset.");
         anim.speed = 1f; // 애니메이터 재생 속도를 원래대로 되돌립니다.
     }
 
