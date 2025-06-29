@@ -94,8 +94,7 @@ public class Sniper : WeaponBase
 
         if (reloading) return;
 
-        if (GameManager.Instance.RhythmCheck() > 0
-            || true) // 임시
+        if (GameManager.Instance.RhythmCheck() > 0)
         {
             Debug.Log("발사 박자 성공");
             anim.SetTrigger("WeaponAttack");
@@ -147,8 +146,7 @@ public class Sniper : WeaponBase
 
         reloading = true;
 
-        if (GameManager.Instance.RhythmCheck() > 0
-            || true) // 임시
+        if (GameManager.Instance.RhythmCheck() > 0)
         {
             Debug.Log("장전 박자 성공");
             reload++;
@@ -156,7 +154,6 @@ public class Sniper : WeaponBase
         else
         {
             Debug.Log("장전 박자 실패");
-            reload = 0;
         }
 
         anim.SetInteger("WeaponReload", reload);

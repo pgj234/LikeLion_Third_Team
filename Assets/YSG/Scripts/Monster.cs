@@ -12,6 +12,7 @@ public class Monster : MonoBehaviour
     private float timer;
 
     private bool isWaiting = false;
+    private bool isSpawning = true;
     private bool isRunning = false;
     private bool isAttacking = false;
     private bool isHitting = false;
@@ -64,7 +65,7 @@ public class Monster : MonoBehaviour
 
     private void Update()
     {
-        if (isDead) return;
+        if (isDead || isSpawning) return;
 
         if (isHitting)
         {
@@ -271,9 +272,6 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public void EndAttack() => isAttacking = false;
-    public void EndHit() => isHitting = false;
-
     private void Die()
     {
         anim?.SetTrigger("Death");
@@ -286,6 +284,12 @@ public class Monster : MonoBehaviour
         if (agent != null) agent.enabled = false;
         if (character != null) character.enabled = false;
     }
+    #endregion
+
+    #region 애니메이션
+    public void EndAttack() => isAttacking = false;
+    public void EndHit() => isHitting = false;
+    public void EndSpawn() => isSpawning = false;
     #endregion
 
     #region 사운드
