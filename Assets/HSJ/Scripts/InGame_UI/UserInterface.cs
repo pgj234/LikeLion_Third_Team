@@ -87,6 +87,9 @@ public class UserInterface : MonoBehaviour
 
         eventManager.OnPlayerWeaponUIRefreshAction += ChangeWeaponAnimation;// 플레이어 사용가능 무기 UI 새로고침 이벤트 등록
         eventManager.OnPlayerComboRefreshAction += PlayComboAnimation;      // 콤보 새로고침 이벤트 등록
+        eventManager.OnScoreRefreshAction += UpdateScore;                   // 스코어 새로고침 이벤트 등록
+        //inputManager.player
+
 
         eventManager.OnPlayerDamageAction += UpdateHP;                      // 플레이어 데미지 이벤트 등록
         eventManager.OnPlayerDieAction += SelectDie;                        // 플레이어 사망 이벤트 등록
@@ -112,53 +115,53 @@ public class UserInterface : MonoBehaviour
     /// <summary> 테스트용 메서드 </summary>
     private void Update()
     {
-        // 콤보 애니메이션
-        if (Input.GetKeyDown(KeyCode.F12))
-            PlayComboAnimation(999);
+        //// 콤보 애니메이션
+        //if (Input.GetKeyDown(KeyCode.F12))
+        //    PlayComboAnimation(999);
 
-        // 검 선택
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            ChangeWeaponAnimation(new bool[] { true, false, false, false });
-        // 샷건 선택
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-            ChangeWeaponAnimation(new bool[] { false, true, false, false });
-        // 스나 선택
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-            ChangeWeaponAnimation(new bool[] { false, false, true, false });
-        // 권총 선택
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-            ChangeWeaponAnimation(new bool[] { false, false, false, true });
+        //// 검 선택
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //    ChangeWeaponAnimation(new bool[] { true, false, false, false });
+        //// 샷건 선택
+        //else if (Input.GetKeyDown(KeyCode.Alpha2))
+        //    ChangeWeaponAnimation(new bool[] { false, true, false, false });
+        //// 스나 선택
+        //else if (Input.GetKeyDown(KeyCode.Alpha3))
+        //    ChangeWeaponAnimation(new bool[] { false, false, true, false });
+        //// 권총 선택
+        //else if (Input.GetKeyDown(KeyCode.Alpha4))
+        //    ChangeWeaponAnimation(new bool[] { false, false, false, true });
 
 
-        // 검 활성화
-        if (Input.GetKeyDown(KeyCode.F1))
-            AcquireWeapon(0); // 검 슬롯 활성화
-        // 샷건 활성화
-        else if (Input.GetKeyDown(KeyCode.F2))
-            AcquireWeapon(1); // 샷건 슬롯 활성화
-        // 스나 활성화
-        else if (Input.GetKeyDown(KeyCode.F3))
-            AcquireWeapon(2); // 스나 슬롯 활성화
-        // 권총 활성화
-        else if (Input.GetKeyDown(KeyCode.F4))
-            AcquireWeapon(3); // 권총 슬롯 활성화
+        //// 검 활성화
+        //if (Input.GetKeyDown(KeyCode.F1))
+        //    AcquireWeapon(0); // 검 슬롯 활성화
+        //// 샷건 활성화
+        //else if (Input.GetKeyDown(KeyCode.F2))
+        //    AcquireWeapon(1); // 샷건 슬롯 활성화
+        //// 스나 활성화
+        //else if (Input.GetKeyDown(KeyCode.F3))
+        //    AcquireWeapon(2); // 스나 슬롯 활성화
+        //// 권총 활성화
+        //else if (Input.GetKeyDown(KeyCode.F4))
+        //    AcquireWeapon(3); // 권총 슬롯 활성화
 
-        // 검 비활성화
-        if (Input.GetKeyDown(KeyCode.F5))
-            weaponSlot[0].SetActive(false); // 검 슬롯 비활성화
-        // 샷건 비활성화
-        if (Input.GetKeyDown(KeyCode.F6))
-            weaponSlot[1].SetActive(false); // 샷건 슬롯 비활성화
-        // 스나 비활성화
-        if (Input.GetKeyDown(KeyCode.F7))
-            weaponSlot[2].SetActive(false); // 스나 슬롯 비활성화
-        // 권총 비활성화
-        if (Input.GetKeyDown(KeyCode.F8))
-            weaponSlot[3].SetActive(false); // 권총 슬롯 비활성화
+        //// 검 비활성화
+        //if (Input.GetKeyDown(KeyCode.F5))
+        //    weaponSlot[0].SetActive(false); // 검 슬롯 비활성화
+        //// 샷건 비활성화
+        //if (Input.GetKeyDown(KeyCode.F6))
+        //    weaponSlot[1].SetActive(false); // 샷건 슬롯 비활성화
+        //// 스나 비활성화
+        //if (Input.GetKeyDown(KeyCode.F7))
+        //    weaponSlot[2].SetActive(false); // 스나 슬롯 비활성화
+        //// 권총 비활성화
+        //if (Input.GetKeyDown(KeyCode.F8))
+        //    weaponSlot[3].SetActive(false); // 권총 슬롯 비활성화
 
-        // 아이템 픽업 패널 테스트용
-        if (Input.GetKeyDown(KeyCode.BackQuote))
-            ShowItemPickUpPanel(Random.Range(0, itemIcon.Count), Random.Range(1, 999)); 
+        //// 아이템 픽업 패널 테스트용
+        //if (Input.GetKeyDown(KeyCode.BackQuote))
+        //    ShowItemPickUpPanel(Random.Range(0, itemIcon.Count), Random.Range(1, 999)); 
 
         // Pause 패널 토글
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -168,7 +171,7 @@ public class UserInterface : MonoBehaviour
     }
 
 
-    #region Player State Methods
+    #region Player Event State Methods
     void UpdateAmmo(int ammo)
     {
         ammoLabel.text = ammo.ToString(); // 현재 장전 탄 수 레이블 업데이트
@@ -182,7 +185,12 @@ public class UserInterface : MonoBehaviour
     // TODO 대쉬부분
     void Dash(int stack)
     {
-        
+        //2���� Max
+    }
+
+    void UpdateScore(int score)
+    {
+        scoreLabel.text = score.ToString("#,##0"); // 점수 레이블 업데이트
     }
     #endregion
 
@@ -199,7 +207,10 @@ public class UserInterface : MonoBehaviour
             }
             else if(nowWeaponNum == i)
             {
-                DisableWeaponSlot(weaponSlot[i]); // 이전 무기 슬롯 비활성화
+                if (weaponSlot[i].activeSelf)
+                    DisableWeaponSlot(weaponSlot[i]); // 이전 무기 슬롯 비활성화
+                else
+                    AcquireWeapon(i);
             }
         }
         nowWeaponNum = index; // 현재 무기 번호 업데이트
@@ -224,12 +235,12 @@ public class UserInterface : MonoBehaviour
 
         disableImg.color = disableColor;
         disableImg.DOKill();
-        disableImg.DOColor(enableStartColor, 0.5f).SetEase(Ease.OutQuad).OnComplete(() =>
+        disableImg.DOColor(enableStartColor, 0.2f).SetEase(Ease.OutQuad).OnComplete(() =>
         {
             enableImg.enabled = true; // Enable 이미지 활성화
             enableImg.color = enableStartColor; // 투명하게 설정
             enableImg.DOKill();
-            enableImg.DOColor(Color.white, 0.5f).SetEase(Ease.InQuad).OnComplete(() =>
+            enableImg.DOColor(Color.white, 0.2f).SetEase(Ease.InQuad).OnComplete(() =>
             {
                 //enableRect.DOScale(Vector3.one, 0.5f); // Enable 이미지 크기 애니메이션
             });
@@ -257,12 +268,12 @@ public class UserInterface : MonoBehaviour
 
         enableImg.color = Color.white;
         enableImg.DOKill();
-        enableImg.DOColor(enableStartColor, 0.5f).SetEase(Ease.OutQuad).OnComplete(() =>
+        enableImg.DOColor(enableStartColor, 0.2f).SetEase(Ease.OutQuad).OnComplete(() =>
         {
             disableImg.enabled = true;
             disableImg.color = enableStartColor;
             disableImg.DOKill();
-            disableImg.DOColor(disableColor, 0.5f).SetEase(Ease.InQuad).OnComplete(() =>
+            disableImg.DOColor(disableColor, 0.2f).SetEase(Ease.InQuad).OnComplete(() =>
             {
                 //disableRect.DOScale(Vector3.zero, 0.5f); // Disable 이미지 크기 애니메이션
             });
@@ -300,13 +311,13 @@ public class UserInterface : MonoBehaviour
 
         disableImg.color = c;
         disableImg.DOKill();
-        disableImg.DOColor(disableColor, 0.5f);
+        disableImg.DOColor(disableColor, 0.2f);
         bg.color = c;
         bg.DOKill();
-        bg.DOColor(Color.white, 0.5f);
+        bg.DOColor(Color.white, 0.2f);
         icon.color = c;
         icon.DOKill();
-        icon.DOColor(iconColor, 0.5f);
+        icon.DOColor(iconColor, 0.2f);
     }
 
     #endregion
@@ -354,9 +365,44 @@ public class UserInterface : MonoBehaviour
         Time.timeScale = 1f; // 게임 시간 재개
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName); // 씬 이동
     }
+
+    public void TogglePausePanel()
+    {
+        pausePanel.SetActive(!pausePanel.activeSelf); // Pause 패널의 활성화 상태를 토글
+        if (pausePanel.activeSelf)
+        {
+            eventManager.PauseWindowOpen(true);
+
+            //Time.timeScale = 0f; // 게임 일시 정지
+            inputManager.cursorInputForLook = false; // 마우스 커서 잠금 해제
+            inputManager.cursorLocked = false; // 커서 잠금 해제
+            // 슬라이더 값 초기화
+            bgmSlider.maxValue = 1f; // BGM 슬라이더 최대값 설정
+            bgmSlider.value = settingManager.BGM; // BGM 슬라이더 값 초기화
+            bgmLabel.text = $"{Mathf.FloorToInt(bgmSlider.value * 100)} %"; // BGM 레이블 업데이트
+            sfxSlider.maxValue = 1f; // SFX 슬라이더 최대값 설정
+            sfxSlider.value = settingManager.SFX; // SFX 슬라이더 값 초기화
+            sfxLabel.text = $"{Mathf.FloorToInt(sfxSlider.value * 100)} %"; // SFX 레이블 업데이트
+            mouseSlider.maxValue = 1f; // 마우스 감도 슬라이더 최대값 설정
+            mouseSlider.value = settingManager.MouseSensitivity; // 마우스 감도 슬라이더 값 초기화
+            mouseLabel.text = $"{Mathf.FloorToInt(mouseSlider.value * 100)} %"; // 마우스 감도 레이블 업데이트
+
+            //SoundManager.Instance.StopBGM(); // BGM 정지
+        }
+        else
+        {
+            eventManager.PauseWindowOpen(false);
+
+            //Time.timeScale = 1f; // 게임 재개
+            inputManager.cursorInputForLook = true; // 마우스 커서 잠금
+            inputManager.cursorLocked = true; // 커서 잠금
+            //SoundManager.Instance.PlayBGM(BGM.Test_Bgm); // BGM 재생
+        }
+    }
+
     #endregion
 
-    #region Death Event Methods
+    #region Death Panel Methods
     void PlayComboAnimation(int combo)
     {
         Color whiteEnd = new Color(1f, 1f, 1f, 0f);             // 콤보 카운트 레이블 애니메이션 종료 색상
@@ -364,9 +410,9 @@ public class UserInterface : MonoBehaviour
 
         comboBar.DOKill();                                      // 현재 진행 중인 애니메이션 중지
         comboBar.color = Color.white;                           // 콤보 바 색상을 흰색으로 설정
-        comboBar.DOColor(redEnd, 5f).SetEase(Ease.OutQuad);
+        comboBar.DOColor(redEnd, 10f).SetEase(Ease.OutQuad);
         comboBar.fillAmount = 1f;                              // 콤보 바의 채움 양을 1로 설정 (100% 채움)
-        comboBar.DOFillAmount(0f, 5f).OnComplete(() =>
+        comboBar.DOFillAmount(0f, 10f).OnComplete(() =>
         {
             // combo 0
         });
@@ -374,38 +420,11 @@ public class UserInterface : MonoBehaviour
         comboCountLabel.DOKill();                               // 현재 진행 중인 애니메이션 중지
         comboCountLabel.color = Color.white;                    // 콤보 카운트 레이블 색상을 흰색으로 설정
         comboCountLabel.text = combo.ToString();
-        comboCountLabel.DOColor(whiteEnd, 5f).SetEase(Ease.OutQuad);
+        comboCountLabel.DOColor(whiteEnd, 10f).SetEase(Ease.OutQuad);
 
         comboLabel.DOKill();                                    // 현재 진행 중인 애니메이션 중지
         comboLabel.color = Color.white;                         // 콤보 레이블 색상을 흰색으로 설정
-        comboLabel.DOColor(redEnd, 5f).SetEase(Ease.OutQuad);
-    }
-
-    public void TogglePausePanel()
-    {
-        pausePanel.SetActive(!pausePanel.activeSelf); // Pause 패널의 활성화 상태를 토글
-        if (pausePanel.activeSelf)
-        {
-            Time.timeScale = 0f; // 게임 일시 정지
-            inputManager.cursorInputForLook = false; // 마우스 커서 잠금 해제
-            inputManager.cursorLocked = false; // 커서 잠금 해제
-            // 슬라이더 값 초기화
-            bgmSlider.value = settingManager.BGM; // BGM 슬라이더 값 초기화
-            bgmLabel.text = $"{Mathf.FloorToInt(bgmSlider.value * 100)} %"; // BGM 레이블 업데이트
-            sfxSlider.value = settingManager.SFX; // SFX 슬라이더 값 초기화
-            sfxLabel.text = $"{Mathf.FloorToInt(sfxSlider.value * 100)} %"; // SFX 레이블 업데이트
-            mouseSlider.value = settingManager.MouseSensitivity; // 마우스 감도 슬라이더 값 초기화
-            mouseLabel.text = $"{Mathf.FloorToInt(mouseSlider.value * 100)} %"; // 마우스 감도 레이블 업데이트
-
-            SoundManager.Instance.StopBGM(); // BGM 정지
-        }
-        else
-        {
-            Time.timeScale = 1f; // 게임 재개
-            inputManager.cursorInputForLook = true; // 마우스 커서 잠금
-            inputManager.cursorLocked = true; // 커서 잠금
-            SoundManager.Instance.PlayBGM(BGM.Test_Bgm); // BGM 재생
-        }
+        comboLabel.DOColor(redEnd, 10f).SetEase(Ease.OutQuad);
     }
 
     public void ShowDeathPanel(int resurrectionCount)

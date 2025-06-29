@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System.ComponentModel;
+using System.Net.NetworkInformation;
+using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 enum MonsterState
 {
@@ -19,7 +22,7 @@ public class Entity : MonoBehaviour
 
     [SerializeField] protected Animator anim;
     [SerializeField] protected Rigidbody rb;
-    [SerializeField] protected Collider col;
+    [SerializeField] protected Collider[] col;
 
     [SerializeField] protected Transform groundCheck;        // 바닥 체크 위치
     [SerializeField] protected float groundCheckDistance;    // 바닥 체크 거리
@@ -29,7 +32,10 @@ public class Entity : MonoBehaviour
     [SerializeField] protected float wallCheckDistance;      // 벽 체크 거리
     [SerializeField] protected LayerMask whatIsWall;         // 벽 레이어
 
-    Player target;
+    [Space(10)]
+    [SerializeField] Image hpImg;
+
+    protected Player target;
 
     GameManager gameManager = null;
 
@@ -39,9 +45,13 @@ public class Entity : MonoBehaviour
 
     int attackCnt;
 
+    protected bool isDie;
+
     protected NavMeshAgent navAgent;
 
     protected float sturnTime;              // 스턴 남은시간
+
+    protected bool pause = false;
 
     protected virtual void Awake()
     {
@@ -67,11 +77,15 @@ public class Entity : MonoBehaviour
 
     protected virtual void Init()
     {
+        isDie = false;
+
+        EventManager.Instance.OnPauseAction += SetPause;
+
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
         gameManager = GameManager.Instance;
 
-        monsterState = MonsterState.Chase;
+        monsterState = MonsterState.Idle;
         attackCnt = 0;
 
         currentTime = 0d;
@@ -79,8 +93,23 @@ public class Entity : MonoBehaviour
         hp = maxHP;
     }
 
+    void OnDestroy()
+    {
+        EventManager.Instance.OnPauseAction -= SetPause;
+    }
+
+    void SetPause(bool _isPuase)
+    {
+        pause = _isPuase;
+    }
+
     protected virtual void Update()
     {
+        if (true == pause || true == isDie)
+        {
+            return;
+        }
+
         // 박자에 맞춰서 행동
         currentTime += Time.deltaTime;
 
@@ -93,29 +122,26 @@ public class Entity : MonoBehaviour
     }
 
     // 행동 양식
-    protected void StateProc()
+    protected virtual void StateProc()
     {
-        switch (monsterState)
-        {
-            case MonsterState.Idle:
-                break;
 
-            case MonsterState.Chase:
-                break;
-
-            case MonsterState.Attack:
-                break;
-
-            case MonsterState.Die:
-                break;
-        }
     }
 
     internal void GetDamage(int dmg)
     {
-        hp -= dmg;
+        if (true == isDie)
+        {
+            return;
+        }
 
-        if (hp <= 0)
+        hp -= dmg;
+        
+        if (null != hpImg)
+        {
+            hpImg.fillAmount = (float)hp / maxHP;
+        }
+
+        if (hp <= 0 && (MonsterState.Idle == monsterState || MonsterState.Chase == monsterState))
         {
             Die();
         }
@@ -148,7 +174,14 @@ public class Entity : MonoBehaviour
     // 사망
     protected virtual void Die()
     {
-        
+        rb.useGravity = false;
+
+        for (int i=0; i<col.Length; i++)
+        {
+            col[i].enabled = false;
+        }
+
+        anim.SetTrigger("Die");
     }
 
     // 움직임 처리

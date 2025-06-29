@@ -10,11 +10,11 @@ public class UserSettingManager : SingletonBehaviour<UserSettingManager>
     UnityAction<float> sfxChangedAction;
     public float SFX
     {
-        get => sfx;
+        get { return sfx; }
         set
         {
             sfx = value;
-            sfxChangedAction?.Invoke(sfx);
+            sfxChangedAction?.Invoke(value);
             PlayerPrefs.SetFloat("Setting.SFX", sfx);
         }
     }
@@ -24,7 +24,7 @@ public class UserSettingManager : SingletonBehaviour<UserSettingManager>
     UnityAction<float> bgmChangedAction;
     public float BGM
     {
-        get => bgm;
+        get { return bgm; }
         set
         {
             bgm = value;
@@ -37,7 +37,7 @@ public class UserSettingManager : SingletonBehaviour<UserSettingManager>
     UnityAction<float> mouseSensitivityChangedAction;
     public float MouseSensitivity
     {
-        get => mouseSensitivity;
+        get { return mouseSensitivity; }
         set
         {
             mouseSensitivity = value;
@@ -50,7 +50,7 @@ public class UserSettingManager : SingletonBehaviour<UserSettingManager>
     [SerializeField] FPSSetting fps = FPSSetting.Low;
     public FPSSetting FPS
     {
-        get => fps;
+        get { return fps; }
         set
         {
             fps = value;

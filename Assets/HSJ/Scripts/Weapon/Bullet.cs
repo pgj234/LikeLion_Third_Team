@@ -1,25 +1,25 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
     [Header("Bullet")]
-    [SerializeField] protected float speed;                  //ÀÌµ¿¼Óµµ
-    [SerializeField] protected float lifeTime = 5f;          //»ıÁ¸½Ã°£
-    [SerializeField] protected float timer = 0f;    //Å¸ÀÌ¸Ó
-    [SerializeField] protected int damage = 1;               //µ¥¹ÌÁö
-    protected Vector3 dir;                                   //¹æÇâ
-    protected WeaponBase weapon;                             //¹«±â
-    protected Entity shooter;                                //¹ß»çÀÚ (Entity)
+    [SerializeField] protected float speed;                  //ì´ë™ì†ë„
+    [SerializeField] protected float lifeTime = 5f;          //ìƒì¡´ì‹œê°„
+    [SerializeField] protected float timer = 0f;    //íƒ€ì´ë¨¸
+    [SerializeField] protected int damage = 1;               //ë°ë¯¸ì§€
+    protected Vector3 dir;                                   //ë°©í–¥
+    protected WeaponBase weapon;                             //ë¬´ê¸°
+    protected Entity shooter;                                //ë°œì‚¬ì (Entity)
 
     [Header("Component")]
-    [SerializeField] protected Rigidbody rb;                 //¸®Áöµå¹Ùµğ ÄÄÆ÷³ÍÆ®
-    [SerializeField] protected Collider col;                 //Äİ¶óÀÌ´õ ÄÄÆ÷³ÍÆ®
+    [SerializeField] protected Rigidbody rb;                 //ë¦¬ì§€ë“œë°”ë”” ì»´í¬ë„ŒíŠ¸
+    [SerializeField] protected Collider col;                 //ì½œë¼ì´ë” ì»´í¬ë„ŒíŠ¸
 
     [Header("Effect")]
-    [SerializeField] protected GameObject hitEffect;         //¸Â¾ÒÀ» ¶§ ÀÌÆåÆ®
-    [SerializeField] protected AudioSource hitSound;         //¸Â¾ÒÀ» ¶§ »ç¿îµå
-    [SerializeField] protected AudioClip hitAudioClip;       //¸Â¾ÒÀ» ¶§ »ç¿îµå Å¬¸³
-    [SerializeField] protected HitEffectObj hitObj;          //¸Â¾ÒÀ» ¶§ Ä¿½ºÅÒ ÀÌÆåÆ® ¿ÀºêÁ§Æ®
+    [SerializeField] protected GameObject hitEffect;         //ë§ì•˜ì„ ë•Œ ì´í™íŠ¸
+    [SerializeField] protected AudioSource hitSound;         //ë§ì•˜ì„ ë•Œ ì‚¬ìš´ë“œ
+    [SerializeField] protected AudioClip hitAudioClip;       //ë§ì•˜ì„ ë•Œ ì‚¬ìš´ë“œ í´ë¦½
+    [SerializeField] protected HitEffectObj hitObj;          //ë§ì•˜ì„ ë•Œ ì»¤ìŠ¤í…€ ì´í™íŠ¸ ì˜¤ë¸Œì íŠ¸
 
     protected virtual void Start()
     {
@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
         col = GetComponent<Collider>();
     }
 
-    /// <summary> »ı¼º½Ã È£Ãâ </summary>
+    /// <summary> ìƒì„±ì‹œ í˜¸ì¶œ </summary>
     public virtual Bullet Set(Vector3 _position, Quaternion _lotation, Vector3 _direction, float _speed,
         float _lifeTime = default, int _damage = 1, WeaponBase _weapon = null, GameObject _hitEffect = null, AudioSource _hitAudio = null, HitEffectObj _hitObj = null, AudioClip _hitAudioClip = null, Entity _shooter = null)
     {
@@ -51,10 +51,10 @@ public class Bullet : MonoBehaviour
         return this;
     }
 
-    /// <summary> Áö¼ÓÀûÀÎ ¿òÁ÷ÀÓ </summary>
+    /// <summary> ì§€ì†ì ì¸ ì›€ì§ì„ </summary>
     protected virtual void Update()
     {
-        // »ıÁ¸½Ã°£ÀÌ ¼³Á¤µÇ¾î ÀÖ´Ù¸é Å¸ÀÌ¸Ó¸¦ Áõ°¡½ÃÅ°°í, ½Ã°£ÀÌ ÃÊ°úµÇ¸é ºñÈ°¼ºÈ­
+        // ìƒì¡´ì‹œê°„ì´ ì„¤ì •ë˜ì–´ ìˆë‹¤ë©´ íƒ€ì´ë¨¸ë¥¼ ì¦ê°€ì‹œí‚¤ê³ , ì‹œê°„ì´ ì´ˆê³¼ë˜ë©´ ë¹„í™œì„±í™”
         if (lifeTime > 0f)
         {
             timer += Time.deltaTime;
@@ -62,28 +62,28 @@ public class Bullet : MonoBehaviour
                 gameObject.SetActive(false);
         }
 
-        // ÀÌµ¿
+        // ì´ë™
         //transform.position += dir.normalized * speed * Time.deltaTime;
         rb.linearVelocity = dir.normalized * speed;
-        transform.rotation = Quaternion.LookRotation(rb.linearVelocity.normalized, Vector3.up); // ÀÌµ¿ ¹æÇâÀ¸·Î È¸Àü
+        transform.rotation = Quaternion.LookRotation(rb.linearVelocity.normalized, Vector3.up); // ì´ë™ ë°©í–¥ìœ¼ë¡œ íšŒì „
 
     }
 
-    /// <summary>  º®¿¡ ºÎµúÄ¡¸é »èÁ¦ </summary>
-    protected virtual void OnTriggerEnter(Collider col)
+    /// <summary>  ë²½ì— ë¶€ë”ªì¹˜ë©´ ì‚­ì œ </summary>
+    protected virtual void OnCollisionEnter(Collision collision)
     {
-        if(col.GetComponent<Entity>() != null)
+        if(collision.transform.GetComponent<Entity>() != null)
         {
             Entity entity = col.GetComponent<Entity>();
-            //entity.Damage(damage); // µ¥¹ÌÁö Àû¿ë
+            entity.GetDamage(damage); // ë°ë¯¸ì§€ ì ìš©
         }
 
-        //weapon.hitAction?.Invoke(col); // ¹«±â¿¡¼­ ¼³Á¤µÈ ¸Â¾ÒÀ» ¶§ ¾×¼Ç È£Ãâ
+        //weapon.hitAction?.Invoke(col); // ë¬´ê¸°ì—ì„œ ì„¤ì •ëœ ë§ì•˜ì„ ë•Œ ì•¡ì…˜ í˜¸ì¶œ
         HitEffectPlay();
         gameObject.SetActive(false);
     }
 
-    /// <summary> ¿ÀºêÁ§Æ® Ç® ºñÈ°¼ºÈ­ È£Ãâ </summary>
+    /// <summary> ì˜¤ë¸Œì íŠ¸ í’€ ë¹„í™œì„±í™” í˜¸ì¶œ </summary>
     protected virtual void OnDisable()
     {
 
@@ -91,7 +91,7 @@ public class Bullet : MonoBehaviour
 
     protected virtual void HitEffectPlay()
     {
-        // ÆÄÆ¼Å¬ ¿ÀºêÁ§Æ® ÀÏ°æ¿ì?
+        // íŒŒí‹°í´ ì˜¤ë¸Œì íŠ¸ ì¼ê²½ìš°?
         if (hitEffect != null)
         {
             GameObject effect = Instantiate(hitEffect, transform.position, Quaternion.identity);
@@ -102,12 +102,12 @@ public class Bullet : MonoBehaviour
                 effect.GetComponent<ParticleSystem>().Play();
             }
         }
-        // ¿Àµğ¿À ¼Ò½º°¡ ÀÖ´Ù¸é Àç»ı
+        // ì˜¤ë””ì˜¤ ì†ŒìŠ¤ê°€ ìˆë‹¤ë©´ ì¬ìƒ
         if (hitSound != null)
         {
             hitSound.Play();
         }
-        // Ä¿½ºÅÒ ÀÌÆåÆ® ¿ÀºêÁ§Æ®°¡ ÀÖ´Ù¸é ¼³Á¤ ÈÄ Àç»ı
+        // ì»¤ìŠ¤í…€ ì´í™íŠ¸ ì˜¤ë¸Œì íŠ¸ê°€ ìˆë‹¤ë©´ ì„¤ì • í›„ ì¬ìƒ
         if (hitObj != null)
         {
             //hitObj.ObjSet(_callback:() => weapon?.effectEndAction?.Invoke());

@@ -1,16 +1,15 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Windows;
 
 public class Weapon_ShotGun : WeaponBase
 {
-    InputManager inputManager; // ÀÔ·Â ¸Å´ÏÀú ÀÎ½ºÅÏ½º
-    GameManager gameManager; // °ÔÀÓ ¸Å´ÏÀú ÀÎ½ºÅÏ½º
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletSpeed = 1f;
     [SerializeField] Transform shootPoint;
-    //Animator animator; // ¾Ö´Ï¸ŞÀÌÅÍ ÄÄÆ÷³ÍÆ®
+    //Animator animator; // ì• ë‹ˆë©”ì´í„° ì»´í¬ë„ŒíŠ¸
     [SerializeField] float shotSpread;
     [SerializeField] List<AudioClip> gunSound = new();
     [SerializeField] List<GameObject> hitEffect = new();
@@ -21,18 +20,16 @@ public class Weapon_ShotGun : WeaponBase
 
     protected override void Awake()
     {
-        base.Awake(); // ºÎ¸ğ Å¬·¡½ºÀÇ Awake È£Ãâ
-        gameManager = GameManager.Instance; // °ÔÀÓ ¸Å´ÏÀú ÀÎ½ºÅÏ½º ÃÊ±âÈ­
-        inputManager = InputManager.Instance; // ÀÔ·Â ¸Å´ÏÀú ÀÎ½ºÅÏ½º ÃÊ±âÈ­
-        //animator = GetComponentInChildren<Animator>(); // ¾Ö´Ï¸ŞÀÌÅÍ ÄÄÆ÷³ÍÆ® ÃÊ±âÈ­
+        base.Awake(); // ë¶€ëª¨ í´ë˜ìŠ¤ì˜ Awake í˜¸ì¶œ
+        //animator = GetComponentInChildren<Animator>(); // ì• ë‹ˆë©”ì´í„° ì»´í¬ë„ŒíŠ¸ ì´ˆê¸°í™”
         if (audio == null)
         {
-            audio = GetComponent<AudioSource>(); // ¿Àµğ¿À ¼Ò½º ÃÊ±âÈ­
+            audio = GetComponent<AudioSource>(); // ì˜¤ë””ì˜¤ ì†ŒìŠ¤ ì´ˆê¸°í™”
             if(audio == null)
-                audio = gameObject.AddComponent<AudioSource>(); // ¿Àµğ¿À ¼Ò½º°¡ ¾øÀ¸¸é Ãß°¡
+                audio = gameObject.AddComponent<AudioSource>(); // ì˜¤ë””ì˜¤ ì†ŒìŠ¤ê°€ ì—†ìœ¼ë©´ ì¶”ê°€
         }
 
-        player = transform.parent.GetComponentInParent<Player>();
+        player = transform.root.GetComponent<Player>();
 
     }
 
@@ -40,39 +37,42 @@ public class Weapon_ShotGun : WeaponBase
     {
         if (audio == null)
         {
-            audio = GetComponent<AudioSource>(); // ¿Àµğ¿À ¼Ò½º ÃÊ±âÈ­
+            audio = GetComponent<AudioSource>(); // ì˜¤ë””ì˜¤ ì†ŒìŠ¤ ì´ˆê¸°í™”
             if (audio == null)
-                audio = gameObject.AddComponent<AudioSource>(); // ¿Àµğ¿À ¼Ò½º°¡ ¾øÀ¸¸é Ãß°¡
+                audio = gameObject.AddComponent<AudioSource>(); // ì˜¤ë””ì˜¤ ì†ŒìŠ¤ê°€ ì—†ìœ¼ë©´ ì¶”ê°€
         }
         audio.PlayOneShot(gunSound[4], 1f);
     }
 
     private void OnDisable()
     {
-        audio.Stop(); // ¿Àµğ¿À ¼Ò½º Á¤Áö
-        FindAnyObjectByType<AudioSource>()?.PlayOneShot(gunSound[4], .5f); // ´Ù¸¥ ¿Àµğ¿À ¼Ò½º¿¡¼­ »ç¿îµå Àç»ı
+        audio.Stop(); // ì˜¤ë””ì˜¤ ì†ŒìŠ¤ ì •ì§€
+        FindAnyObjectByType<AudioSource>()?.PlayOneShot(gunSound[4], .5f); // ë‹¤ë¥¸ ì˜¤ë””ì˜¤ ì†ŒìŠ¤ì—ì„œ ì‚¬ìš´ë“œ ì¬ìƒ
     }
 
     protected override void Update()
     {
         //base.Update();
-        gameManager = gameManager ?? GameManager.Instance; // °ÔÀÓ ¸Å´ÏÀú ÀÎ½ºÅÏ½º Àç¼³Á¤
+        gameManager = gameManager ?? GameManager.Instance; // ê²Œì„ ë§¤ë‹ˆì € ì¸ìŠ¤í„´ìŠ¤ ì¬ì„¤ì •
         rhythmTimingNum = gameManager.RhythmCheck();
 
         //Debug.Log($"input r : {inputManager.r_Input}");
         //Debug.Log($"mouse 0 : {inputManager.mouse0_Input}");
         //if (inputManager.r_Input)
-        if(Input.GetKeyDown(KeyCode.R))
+        if(input.r_Input)
         {
+            input.r_Input = false;
+
             Reload();
-            //inputManager.r_Input = false; // ÀçÀåÀü ÀÔ·Â ÃÊ±âÈ­
+            //inputManager.r_Input = false; // ì¬ì¥ì „ ì…ë ¥ ì´ˆê¸°í™”
         }
 
-        else if(Input.GetMouseButtonDown(0))
-        //else if(inputManager.mouse0_Input)
+        else if(input.mouse0_Input)
         {
+            input.mouse0_Input = false;
+
             Shoot();
-            //inputManager.mouse0_Input = false; // ¹ß»ç ÀÔ·Â ÃÊ±âÈ­
+            //inputManager.mouse0_Input = false; // ë°œì‚¬ ì…ë ¥ ì´ˆê¸°í™”
         }
     }
 
@@ -80,25 +80,25 @@ public class Weapon_ShotGun : WeaponBase
     {
         if (nowAmmo == maxAmmo)
         {
-            Debug.Log("ÀçÀåÀüÀÌ ÇÊ¿ä ¾ø½À´Ï´Ù!"); // ÀçÀåÀüÀÌ ÇÊ¿ä ¾øÀ¸¸é ¿¡·¯ ·Î±× Ãâ·Â
+            Debug.Log("ì¬ì¥ì „ì´ í•„ìš” ì—†ìŠµë‹ˆë‹¤!"); // ì¬ì¥ì „ì´ í•„ìš” ì—†ìœ¼ë©´ ì—ëŸ¬ ë¡œê·¸ ì¶œë ¥
             return; 
         }
         if(anim.GetBool("Reload") == true)
         {
-            Debug.Log("ÀÌ¹Ì ÀçÀåÀü ÁßÀÔ´Ï´Ù!"); // ÀÌ¹Ì ÀçÀåÀü ÁßÀÌ¸é ¿¡·¯ ·Î±× Ãâ·Â
+            Debug.Log("ì´ë¯¸ ì¬ì¥ì „ ì¤‘ì…ë‹ˆë‹¤!"); // ì´ë¯¸ ì¬ì¥ì „ ì¤‘ì´ë©´ ì—ëŸ¬ ë¡œê·¸ ì¶œë ¥
             return;
         }
 
-        int beat = gameManager.RhythmCheck(); // ÇöÀç ¹ÚÀÚ Ã¼Å©
-        Debug.Log($"Beat: {beat}"); // ÇöÀç ¹ÚÀÚ ·Î±× Ãâ·Â
+        int beat = gameManager.RhythmCheck(); // í˜„ì¬ ë°•ì ì²´í¬
+        Debug.Log($"Beat: {beat}"); // í˜„ì¬ ë°•ì ë¡œê·¸ ì¶œë ¥
 
         //if (currentReloadStepNum >= reloadStepNum)
         //{
-        //    return; // ÇöÀç ÀåÀü ´Ü°è°¡ ÃÖ´ë ´Ü°è¿¡ µµ´ŞÇßÀ¸¸é ¸®ÅÏ
+        //    return; // í˜„ì¬ ì¥ì „ ë‹¨ê³„ê°€ ìµœëŒ€ ë‹¨ê³„ì— ë„ë‹¬í–ˆìœ¼ë©´ ë¦¬í„´
         //}
 
-        gameManager.NotePush(); // ³ëÆ® Çª½Ã È£Ãâ
-        nowAmmo += 1; // ¹ß»ç ÁØºñµÈ ÅºÈ¯ Áõ°¡
+        gameManager.NotePush(); // ë…¸íŠ¸ í‘¸ì‹œ í˜¸ì¶œ
+        nowAmmo += 1; // ë°œì‚¬ ì¤€ë¹„ëœ íƒ„í™˜ ì¦ê°€
 
         if(animDic.ContainsKey("Reload") == false)
         {
@@ -109,19 +109,19 @@ public class Weapon_ShotGun : WeaponBase
         }
 
         audio.PlayOneShot(gunSound[beat == 0 ? 2 : 3]);
-        anim.SetBool("Reload", true); // ¾Ö´Ï¸ŞÀÌÅÍ Æ®¸®°Å ¼³Á¤
+        anim.SetBool("Reload", true); // ì• ë‹ˆë©”ì´í„° íŠ¸ë¦¬ê±° ì„¤ì •
         
 
         var stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
         anim.speed = beat == 0 ? 2 : 1;
 
-        float delay = (animDic["Reload"].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // ¾Ö´Ï¸ŞÀÌ¼Ç µô·¹ÀÌ °è»ê
+        float delay = (animDic["Reload"].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // ì• ë‹ˆë©”ì´ì…˜ ë”œë ˆì´ ê³„ì‚°
         StartCoroutine(ActionDelay(() =>
         {
             anim.SetBool("Reload", false);
-            anim.speed = 1; // ¾Ö´Ï¸ŞÀÌ¼Ç ¼Óµµ ÃÊ±âÈ­
-        }, delay)); // ÀçÀåÀü ¾Ö´Ï¸ŞÀÌ¼Ç µô·¹ÀÌ
+            anim.speed = 1; // ì• ë‹ˆë©”ì´ì…˜ ì†ë„ ì´ˆê¸°í™”
+        }, delay)); // ì¬ì¥ì „ ì• ë‹ˆë©”ì´ì…˜ ë”œë ˆì´
         //base.Reload();
     }
 
@@ -129,26 +129,26 @@ public class Weapon_ShotGun : WeaponBase
     {
         if(anim.GetBool("Reload") == true)
         {
-            Debug.Log("ÀçÀåÀü Áß¿¡´Â ¹ß»çÇÒ ¼ö ¾ø½À´Ï´Ù!"); // ÀçÀåÀü ÁßÀÌ¸é ¿¡·¯ ·Î±× Ãâ·Â
+            Debug.Log("ì¬ì¥ì „ ì¤‘ì—ëŠ” ë°œì‚¬í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!"); // ì¬ì¥ì „ ì¤‘ì´ë©´ ì—ëŸ¬ ë¡œê·¸ ì¶œë ¥
             return;
         }
         if (anim.GetBool("Fire") == true)
         {
-            Debug.Log("ÀÌ¹Ì ¹ß»ç ÁßÀÔ´Ï´Ù!"); // ÀÌ¹Ì ¹ß»ç ÁßÀÌ¸é ¿¡·¯ ·Î±× Ãâ·Â
+            Debug.Log("ì´ë¯¸ ë°œì‚¬ ì¤‘ì…ë‹ˆë‹¤!"); // ì´ë¯¸ ë°œì‚¬ ì¤‘ì´ë©´ ì—ëŸ¬ ë¡œê·¸ ì¶œë ¥
             return;
         }
         if (nowAmmo <= 0)
         {
-            Debug.Log("¹ß»ç ÁØºñµÈ ÅºÈ¯ÀÌ ¾ø½À´Ï´Ù!"); // ¹ß»ç ÁØºñµÈ ÅºÈ¯ÀÌ ¾øÀ¸¸é ¿¡·¯ ·Î±× Ãâ·Â
+            Debug.Log("ë°œì‚¬ ì¤€ë¹„ëœ íƒ„í™˜ì´ ì—†ìŠµë‹ˆë‹¤!"); // ë°œì‚¬ ì¤€ë¹„ëœ íƒ„í™˜ì´ ì—†ìœ¼ë©´ ì—ëŸ¬ ë¡œê·¸ ì¶œë ¥
             return;            
         }
 
-        int beat = gameManager.RhythmCheck(); // ÇöÀç ¹ÚÀÚ Ã¼Å©
-        Debug.Log($"Beat: {beat}"); // ÇöÀç ¹ÚÀÚ ·Î±× Ãâ·Â
+        int beat = gameManager.RhythmCheck(); // í˜„ì¬ ë°•ì ì²´í¬
+        Debug.Log($"Beat: {beat}"); // í˜„ì¬ ë°•ì ë¡œê·¸ ì¶œë ¥
 
         gameManager.NotePush();
 
-        nowAmmo--;                          // ¹ß»ç ÁØºñµÈ ÅºÈ¯ °¨¼Ò
+        nowAmmo--;                          // ë°œì‚¬ ì¤€ë¹„ëœ íƒ„í™˜ ê°ì†Œ
         //base.Shoot();
 
         StartCoroutine(Fire(beat));
@@ -158,8 +158,8 @@ public class Weapon_ShotGun : WeaponBase
 
     IEnumerator Fire(int beat)
     {
-        audio.PlayOneShot(gunSound[beat == 0 ? 1 : 0]); // ¹ß»ç »ç¿îµå Àç»ı
-        anim.SetBool("Fire", true); // ¾Ö´Ï¸ŞÀÌÅÍ Æ®¸®°Å ¼³Á¤
+        audio.PlayOneShot(gunSound[beat == 0 ? 1 : 0]); // ë°œì‚¬ ì‚¬ìš´ë“œ ì¬ìƒ
+        anim.SetBool("Fire", true); // ì• ë‹ˆë©”ì´í„° íŠ¸ë¦¬ê±° ì„¤ì •
         Transform trf = Camera.main.transform;
 
         //beat == 0 ? gunSound[0] : gunSound[1]
@@ -171,15 +171,16 @@ public class Weapon_ShotGun : WeaponBase
                 animDic.Add("Fire", clip);
         }
 
-        anim.speed = beat == 0 ? 2f : 1f; // ¾Ö´Ï¸ŞÀÌ¼Ç ¼Óµµ ¼³Á¤
+        anim.speed = beat == 0 ? 2f : 1f; // ì• ë‹ˆë©”ì´ì…˜ ì†ë„ ì„¤ì •
 
         Vector3 pos = shootPoint.position;
         WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+        WaitForSeconds wait = new(0.1f);
         for (int i = 0; i < shotAmount; i++)
         {
             Quaternion rot = GetSpreadDirection();
             Vector3 v = (trf.forward + trf.right * Mathf.Tan(rot.x * Mathf.Rad2Deg) + trf.up * Mathf.Tan(rot.y * Mathf.Rad2Deg)).normalized;
-            Vector3 dir = rot * trf.forward; // ÆÛÁü ¹æÇâ °è»ê
+            Vector3 dir = rot * trf.forward; // í¼ì§ ë°©í–¥ ê³„ì‚°
             GameObject bullet = Instantiate(bulletPrefab, pos, Quaternion.LookRotation(v));
             bullet.transform.forward = v;
             Bullet b = bullet.GetComponent<Bullet>();
@@ -191,32 +192,33 @@ public class Weapon_ShotGun : WeaponBase
                     //_shooter: player
                     );
             }
-            //yield return waitForFixedUpdate; // ÇÁ·¹ÀÓ µô·¹ÀÌ
-            yield return waitForFixedUpdate;
+            //yield return waitForFixedUpdate; // í”„ë ˆì„ ë”œë ˆì´
+            //yield return waitForFixedUpdate;
+            yield return wait;
         }
 
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
         
-        float delay = (animDic["Fire"].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // ¾Ö´Ï¸ŞÀÌ¼Ç µô·¹ÀÌ °è»ê
+        float delay = (animDic["Fire"].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // ì• ë‹ˆë©”ì´ì…˜ ë”œë ˆì´ ê³„ì‚°
         StartCoroutine(ActionDelay(() =>
         {
             anim.SetBool("Fire", false);
             anim.speed = 1f;
-        }, delay)); // ÀçÀåÀü ¾Ö´Ï¸ŞÀÌ¼Ç µô·¹ÀÌ
+        }, delay)); // ì¬ì¥ì „ ì• ë‹ˆë©”ì´ì…˜ ë”œë ˆì´
     }
 
     Quaternion GetSpreadDirection()
     {
-        // ±âº» ¹æÇâ
+        // ê¸°ë³¸ ë°©í–¥
         //Vector3 forward = shootPoint.forward;
 
-        // ÆÛÁü Àû¿ë
+        // í¼ì§ ì ìš©
         //float x = Random.Range(shotSpreadMin.x, shotSpreadMax.x);
         //float y = Random.Range(shotSpreadMin.x, shotSpreadMax.y);
         var x = UnityEngine.Random.Range(-shotSpread, shotSpread);
         var y = UnityEngine.Random.Range(-shotSpread, shotSpread);
 
-        // ·ÎÅ×ÀÌ¼ÇÀ» ¸¸µé°í È¸Àü Àû¿ë
+        // ë¡œí…Œì´ì…˜ì„ ë§Œë“¤ê³  íšŒì „ ì ìš©
         return Quaternion.Euler(y, x, 0f);
         //Quaternion spreadRotation = Quaternion.Euler(y, x, 0);
         //return spreadRotation * forward;
@@ -224,8 +226,8 @@ public class Weapon_ShotGun : WeaponBase
 
     IEnumerator ActionDelay(UnityAction action, float delayTime)
     {
-        yield return new WaitForSeconds(delayTime); // µô·¹ÀÌ ½Ã°£ ´ë±â
-        action?.Invoke(); // ¾×¼Ç È£Ãâ
+        yield return new WaitForSeconds(delayTime); // ë”œë ˆì´ ì‹œê°„ ëŒ€ê¸°
+        action?.Invoke(); // ì•¡ì…˜ í˜¸ì¶œ
     }
 
     private AnimationClip GetAnimClip(string name, bool isMach = true)

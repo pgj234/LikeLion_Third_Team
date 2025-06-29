@@ -1,14 +1,14 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
 public class Sniper : WeaponBase
 {
-    [Header("¹ß»ç")]
+    [Header("ë°œì‚¬")]
     [SerializeField] private int reload = 0;
     [SerializeField] private Transform shootPoint;
     private bool isShooting = false;
 
-    [Header("Á¶ÁØ")]
+    [Header("ì¡°ì¤€")]
     [SerializeField] private GameObject scopeUI;
     [SerializeField] private float zoomScale = 4;
     private bool isZooming = false;
@@ -18,7 +18,7 @@ public class Sniper : WeaponBase
     private Quaternion originCamRot;
     private Transform originCamParent;
 
-    [Header("ÀÌÆåÆ®")]
+    [Header("ì´í™íŠ¸")]
     [SerializeField] private GameObject shootFire;
     [SerializeField] private LineRenderer shootTrail;
     [SerializeField] private float trailDuration = 0.5f;
@@ -46,7 +46,7 @@ public class Sniper : WeaponBase
     {
         base.Update();
 
-        Debug.DrawRay(shootPoint.position, shootPoint.forward * 100, Color.red);
+        //Debug.DrawRay(shootPoint.position, shootPoint.forward * 100, Color.red);
 
         if (input.mouse1_Input)
         {
@@ -96,12 +96,14 @@ public class Sniper : WeaponBase
 
         if (GameManager.Instance.RhythmCheck() > 0)
         {
-            Debug.Log("¹ß»ç ¹ÚÀÚ ¼º°ø");
+            Debug.Log("ë°œì‚¬ ë°•ì ì„±ê³µ");
             anim.SetTrigger("WeaponAttack");
+            gameManager.AddCombo();
         }
         else
         {
-            Debug.Log("¹ß»ç ¹ÚÀÚ ½ÇÆĞ");
+            Debug.Log("ë°œì‚¬ ë°•ì ì‹¤íŒ¨");
+            gameManager.SetHalfCombo();
             return;
         }
 
@@ -118,19 +120,27 @@ public class Sniper : WeaponBase
         Vector3 shootDir = shootPoint.forward;
 
         Ray ray = new Ray(shootPoint.position, shootDir);
-        if (Physics.Raycast(ray, out RaycastHit hit, 100))
+        if (Physics.Raycast(ray, out RaycastHit hit_Weak, 100, LayerMask.GetMask("Enemy_Weak")))
         {
-            if (hit.collider.CompareTag("Enemy"))
-            {
-                Debug.Log("¸íÁß");
-                hit.collider.GetComponent<Monster>()?.Hit(shotDamage);
-            }
+            Debug.Log("ì¶©ëŒ ëŒ€ìƒ : " + hit_Weak.collider.name);
+
+            Debug.Log("ì•½ì  ëª…ì¤‘");
+            hit_Weak.collider.GetComponent<EntityWeak>().GetDamage(shotDamage * 2);
+
+            DrawTrail(shootPoint.position, hit_Weak.point);
+        }
+        else if (Physics.Raycast(ray, out RaycastHit hit, 100, LayerMask.GetMask("Enemy")))
+        {
+            Debug.Log("ì¶©ëŒ ëŒ€ìƒ : " + hit.collider.name);
+
+            Debug.Log("ëª…ì¤‘");
+            hit.collider.GetComponent<Entity>().GetDamage(shotDamage);
 
             DrawTrail(shootPoint.position, hit.point);
         }
         else
         {
-            Debug.Log("ºø³ª°¨");
+            Debug.Log("ë¹—ë‚˜ê°");
             Vector3 missPoint = shootPoint.position + shootDir * 100;
             DrawTrail(shootPoint.position, missPoint);
         }
@@ -140,18 +150,23 @@ public class Sniper : WeaponBase
 
     protected override void Reload()
     {
-        base.Reload();
+        if (nowAmmo == maxAmmo)
+        {
+            return;
+        }
 
         reloading = true;
 
         if (GameManager.Instance.RhythmCheck() > 0)
         {
-            Debug.Log("ÀåÀü ¹ÚÀÚ ¼º°ø");
+            Debug.Log("ì¥ì „ ë°•ì ì„±ê³µ");
             reload++;
+            gameManager.AddCombo();
         }
         else
         {
-            Debug.Log("ÀåÀü ¹ÚÀÚ ½ÇÆĞ");
+            Debug.Log("ì¥ì „ ë°•ì ì‹¤íŒ¨");
+            gameManager.SetHalfCombo();
         }
 
         anim.SetInteger("WeaponReload", reload);
@@ -208,12 +223,12 @@ public class Sniper : WeaponBase
         shootTrail.enabled = false;
     }
 
-    #region ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®
+    #region ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸
     public void ShootOverEvent() => isShooting = false;
 
     public void ReloadOverEvent()
     {
-        Debug.Log("ÀåÀü ¼º°ø");
+        Debug.Log("ì¥ì „ ì„±ê³µ");
 
         nowAmmo = maxAmmo;
 
