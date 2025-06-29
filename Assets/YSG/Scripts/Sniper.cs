@@ -125,7 +125,7 @@ public class Sniper : WeaponBase
             Debug.Log("충돌 대상 : " + hit_Weak.collider.name);
 
             Debug.Log("약점 명중");
-            hit_Weak.collider.GetComponent<EntityWeak>().GetDamage(shotDamage * 2);
+            hit_Weak.collider.GetComponent<EntityWeak>()?.GetDamage(shotDamage * 2);
 
             DrawTrail(shootPoint.position, hit_Weak.point);
         }
@@ -134,7 +134,8 @@ public class Sniper : WeaponBase
             Debug.Log("충돌 대상 : " + hit.collider.name);
 
             Debug.Log("명중");
-            hit.collider.GetComponent<Entity>().GetDamage(shotDamage);
+            hit.collider.GetComponent<Entity>()?.GetDamage(shotDamage);
+            hit.collider.GetComponent<Monster>()?.Hit(shotDamage);
 
             DrawTrail(shootPoint.position, hit.point);
         }

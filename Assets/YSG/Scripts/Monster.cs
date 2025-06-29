@@ -45,13 +45,12 @@ public class Monster : MonoBehaviour
     [SerializeField] private float maxHp = 100;
     [SerializeField] private float currentHp;
 
-    [Header("이펙트")]
     [Header("효과음")]
     [SerializeField] private AudioClip spawnSound;
     [SerializeField] private AudioClip moveSound;
     [SerializeField] private AudioClip hitSound;
     [SerializeField] private AudioClip attackSound;
-    [SerializeField] private AudioClip death;
+    [SerializeField] private AudioClip deathSound;
 
     private void Start()
     {
@@ -331,7 +330,7 @@ public class Monster : MonoBehaviour
     private void MoveSound() => sfx.PlayOneShot(moveSound, GetVolume());
     private void HitSound() => sfx.PlayOneShot(hitSound, GetVolume());
     private void AttackSound() => sfx.PlayOneShot(attackSound, GetVolume());
-    private void DeathSound() => sfx.PlayOneShot(death, GetVolume());
+    private void DeathSound() => sfx.PlayOneShot(deathSound, GetVolume());
     #endregion
 
     private float GetVolume()

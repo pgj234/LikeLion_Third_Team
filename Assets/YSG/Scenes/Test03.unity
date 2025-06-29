@@ -1657,10 +1657,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4158492502133352247, guid: a184a59c3d95bf244ba8e7890d531a62, type: 3}
-      propertyPath: m_Volume
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8189179709687727534, guid: a184a59c3d95bf244ba8e7890d531a62, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3
@@ -4715,10 +4711,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2077622765895032364, guid: 6e238c58259467240b3125606581eebc, type: 3}
-      propertyPath: m_Volume
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6334826068141619221, guid: 6e238c58259467240b3125606581eebc, type: 3}
       propertyPath: m_Name
       value: Monster_Demon
@@ -5260,10 +5252,12 @@ MonoBehaviour:
   dashSpeed: 40
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
+  dashNormalCost: 0
+  dashRhythmCost: 0
   dashCoolTime: 0.2
+  maxDashGaugeNum: 0
   dashDurationTime: 0.1
-  dashMaxStackNum: 0
-  dashStackCoolTime: 0
+  dashEffect_Img_Obj: {fileID: 0}
   weaponArray:
   - {fileID: 5763829880016405664}
   - {fileID: 6171984953885185894}
@@ -5397,7 +5391,6 @@ MonoBehaviour:
   - {fileID: 5501976216335251706, guid: 987df892e7993d84e9eb67b14560dc32, type: 3}
   reloadShot: 100
   stage1InputTimeout: 2
-  swordAnimator: {fileID: 0}
 --- !u!1 &5763840204029765886
 GameObject:
   m_ObjectHideFlags: 0
