@@ -231,8 +231,8 @@ public class Player : MonoBehaviour
                 currentWeapon.reloading = false;
                 currentWeapon.SetBoolAnimation("WeaponPut", true);
 
-                yield return null;
-                yield return new WaitForSeconds(currentWeapon.GetAnimationTime());
+                //yield return null;
+                //yield return new WaitForSeconds(currentWeapon.GetAnimationTime());
                 yield return null;
 
                 currentWeapon.gameObject.SetActive(false);
@@ -250,7 +250,7 @@ public class Player : MonoBehaviour
                         break;
 
                     case 2:         // 샷건
-                        currentWeapon.SetAnimationSpeed(1.5f);
+                        currentWeapon.SetAnimationSpeed(2.5f);
                         break;
 
                     case 3:         // 스나

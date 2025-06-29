@@ -29,7 +29,7 @@ public class Weapon_ShotGun : WeaponBase
                 audio = gameObject.AddComponent<AudioSource>(); // 오디오 소스가 없으면 추가
         }
 
-        player = transform.parent.GetComponentInParent<Player>();
+        player = transform.root.GetComponent<Player>();
 
     }
 

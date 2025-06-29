@@ -46,7 +46,7 @@ public class Sniper : WeaponBase
     {
         base.Update();
 
-        Debug.DrawRay(shootPoint.position, shootPoint.forward * 100, Color.red);
+        //Debug.DrawRay(shootPoint.position, shootPoint.forward * 100, Color.red);
 
         if (input.mouse1_Input)
         {
