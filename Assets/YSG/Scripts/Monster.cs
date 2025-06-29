@@ -1,11 +1,13 @@
-Ôªøusing UnityEngine;
+using UnityEngine;
 using UnityEngine.AI;
 
-public class Monster : Entity
+public class Monster : MonoBehaviour
 {
+    private Animator anim;
     private CharacterController character;
     private NavMeshAgent agent;
-    private Transform player;
+    private Transform target;
+    private AudioSource sfx;
 
     private float timer;
 
@@ -15,32 +17,41 @@ public class Monster : Entity
     private bool isHit = false;
     private bool isDead = false;
 
-    [Header("Ïù¥Îèô")]
+    [Header("¿Ãµø")]
+    public float walkSpeed = 1.5f;
     public float runSpeed = 4;
     public float moveTime = 5;
     public float waitTime = 1;
     private Vector3 moveDirection;
 
-    [Header("Í∞êÏßÄ")]
+    [Header("∞®¡ˆ")]
     [SerializeField] private float detectRange = 5;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private LayerMask groundLayer;
 
-    [Header("Í≥µÍ≤©")]
+    [Header("∞¯∞›")]
     [SerializeField] private int attackDamage = 10;
     [SerializeField] private Transform attackCenter;
     [SerializeField] private float attackRadius = 1;
     [SerializeField] private float attackCooldown = 1.5f;
     private float attackTimer = 0;
 
-    [Header("Ï≤¥Î†•")]
+    [Header("√º∑¬")]
     [SerializeField] private float maxHp = 100;
     [SerializeField] private float currentHp;
 
-    protected override void Start()
+    [Header("»ø∞˙¿Ω")]
+    [SerializeField] private AudioClip move;
+    [SerializeField] private AudioClip hit;
+    [SerializeField] private AudioClip attack;
+    [SerializeField] private AudioClip death;
+
+    private void Start()
     {
+        anim = GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
         character = GetComponent<CharacterController>();
         agent = GetComponent<NavMeshAgent>();
+        sfx = GetComponent<AudioSource>();
 
         agent.updatePosition = true;
         agent.updateRotation = true;
@@ -51,10 +62,8 @@ public class Monster : Entity
         currentHp = maxHp;
     }
 
-    protected override void Update()
+    private void Update()
     {
-        base.Update();
-
         if (isDead) return;
 
         if (isHit)
@@ -68,7 +77,7 @@ public class Monster : Entity
         if (attackTimer > 0)
             attackTimer -= Time.deltaTime;
 
-        if (player != null && IsInAttackRange() && !isAttacking)
+        if (target != null && IsInAttackRange() && !isAttacking)
             Attack();
 
         if (isAttacking)
@@ -79,7 +88,7 @@ public class Monster : Entity
             return;
         }
 
-        if (player != null) isRunning = true;
+        if (target != null) isRunning = true;
 
         if (isRunning)
             Run();
@@ -87,7 +96,7 @@ public class Monster : Entity
             Walk();
     }
 
-    #region Ïù¥Îèô
+    #region ¿Ãµø
     private void Walk()
     {
         if (agent.enabled) agent.enabled = false;
@@ -137,7 +146,7 @@ public class Monster : Entity
         if (!agent.enabled) agent.enabled = true;
 
         agent.speed = runSpeed;
-        agent.SetDestination(player.position);
+        agent.SetDestination(target.position);
 
         if (agent.hasPath && agent.remainingDistance > agent.stoppingDistance)
         {
@@ -156,10 +165,10 @@ public class Monster : Entity
     }
     #endregion
 
-    #region Í∞êÏßÄ
+    #region ∞®¡ˆ
     private void DetectPlayer()
     {
-        if (player != null) return;
+        if (target != null) return;
 
         Collider[] hits = Physics.OverlapSphere(transform.position, detectRange, playerLayer);
 
@@ -167,7 +176,7 @@ public class Monster : Entity
         {
             if (hit.CompareTag("Player"))
             {
-                player = hit.transform;
+                target = hit.transform;
                 break;
             }
         }
@@ -208,7 +217,7 @@ public class Monster : Entity
     }
     #endregion
 
-    #region Ï†ÑÌà¨
+    #region ¿¸≈ı
     private void Attack()
     {
         if (attackTimer > 0) return;
@@ -216,18 +225,22 @@ public class Monster : Entity
         isAttacking = true;
 
         anim?.SetTrigger("Attack");
-        //if (player == null)
-        //{
-        //    GameObject target = GameObject.FindGameObjectWithTag("Player");
-        //    if (target != null)
-        //    {
-        //        player = target.transform;
-        //    }
-        //}
 
-        //player.GetComponent<Player>().GetDamage(attackDamage);
+        if (target == null)
+        {
+            GameObject goPlayer = GameObject.FindGameObjectWithTag("Player");
+            if (goPlayer != null)
+            {
+                this.target = goPlayer.transform;
+            }
+        }
 
-        Debug.Log($"ÌîåÎ†àÏù¥Ïñ¥ {attackDamage} Îç∞ÎØ∏ÏßÄ > ÌòÑÏû¨ Ï≤¥Î†• : " );
+        if (target.TryGetComponent(out Player player))
+        {
+            player.GetDamage(attackDamage);
+        }
+
+        Debug.Log($"«√∑π¿ÃæÓ {attackDamage} µ•πÃ¡ˆ > «√∑π¿ÃæÓ √º∑¬ : {target.GetComponent<Player>().currentHp}");
 
         attackTimer = attackCooldown;
     }
@@ -241,17 +254,18 @@ public class Monster : Entity
         isHit = true;
         isRunning = true;
 
-        if (player == null)
+        if (target == null)
         {
+            GameObject target = GameObject.FindGameObjectWithTag("Player");
             if (target != null)
             {
-                player = target.transform;
+                this.target = target.transform;
             }
         }
 
         if (currentHp <= 0)
         {
-            Debug.Log("ÏÇ¨Îßù");
+            Debug.Log("ªÁ∏¡");
 
             Die();
         }
@@ -272,6 +286,12 @@ public class Monster : Entity
         if (agent != null) agent.enabled = false;
         if (character != null) character.enabled = false;
     }
+    #endregion
 
+    #region ªÁøÓµÂ
+    private void MoveSound() => sfx.PlayOneShot(move);
+    private void HitSound() => sfx.PlayOneShot(hit);
+    private void AttackSound() => sfx.PlayOneShot(attack);
+    private void DeathSound() => sfx.PlayOneShot(death);
     #endregion
 }
