@@ -59,7 +59,7 @@ public class UserInterface : MonoBehaviour
     [SerializeField] GameObject resurrectionPanel;              // 부활 창
     [SerializeField] TextMeshProUGUI resurrectionCountLabel;    // 부활 카운트 레이블
     [SerializeField] GameObject gameOverPanel;                  // 게임오버 창
-    [SerializeField] int resurrectionCount = 3;                 // 부활 횟수
+    [SerializeField] int resurrectionCount = 1;                 // 부활 횟수
     [SerializeField] float resurrectionTime = 10f;               // 부활 대기 시간
     Coroutine resurrectionCoroutine; // 부활 카운트 코루틴
 
@@ -94,11 +94,19 @@ public class UserInterface : MonoBehaviour
 
 
         eventManager.OnPlayerDamageAction += UpdateHP;                      // 플레이어 데미지 이벤트 등록
-        eventManager.OnPlayerDieAction += SelectDie;                        // 플레이어 사망 이벤트 등록
-        eventManager.OnPlayerRevivalAction += SelectResurrection;           // 플레이어 부활 이벤트 등록
+        eventManager.OnPlayerDieAction += ShowDeathPanel;                        // 플레이어 사망 이벤트 등록
+        //eventManager.OnPlayerRevivalAction += SelectResurrection;           // 플레이어 부활 이벤트 등록
 
         foreach (Transform trf in itemPickupViewport)
             Destroy(trf.gameObject);
+
+        for(int i=0;i<player.weaponArray.Length; i++)
+        {
+            if (player.weaponArray[i].useAble)
+                AcquireWeapon(i); // 플레이어가 가진 무기 슬롯 활성화
+            else if (weaponSlot[i].activeSelf)
+                weaponSlot[i].SetActive(false); // 플레이어가 가진 무기 슬롯 비활성화
+        }
     }
 
     private void OnDisable()
@@ -447,22 +455,19 @@ public class UserInterface : MonoBehaviour
         comboLabel.DOColor(redEnd, 10f).SetEase(Ease.OutQuad);
     }
 
-    public void ShowDeathPanel(int resurrectionCount)
+    public void ShowDeathPanel()
     {
         //deathPanel.SetActive(!deathPanel.activeSelf); // Death 패널의 활성화 상태를 토글
-
+        eventManager.PauseWindowOpen(true); // Pause 패널 열기
         if (resurrectionCount > 0)
         {
-            Time.timeScale = 0f; // 게임 일시 정지
             resurrectionPanel.SetActive(true); // 부활 패널 활성화
             gameOverPanel.SetActive(false); // 게임오버 패널 비활성화
             resurrectionCoroutine = StartCoroutine(ResurrectionCounter()); // 부활 카운트 시작
         }
         else
         {
-            Time.timeScale = 0f; // 게임 재개
-            gameOverPanel.SetActive(true); // 게임오버 패널 활성화
-            resurrectionPanel.SetActive(false); // 부활 패널 비활성화
+            SelectDie(); // 부활 횟수가 0이면 죽음 선택
         }
     }
 
@@ -485,17 +490,19 @@ public class UserInterface : MonoBehaviour
     public void SelectResurrection()
     {
         StopCoroutine(resurrectionCoroutine);
+        resurrectionCount--; // 부활 횟수 감소
         resurrectionPanel.SetActive(false); // 부활 패널 비활성화
-        Time.timeScale = 1f; // 게임 시간 재개
+        eventManager.PauseWindowOpen(false); // Pause 패널 닫기
+        eventManager.PlayerRevivalEvent();
     }
 
     public void SelectDie()
     {
+        eventManager.PauseWindowOpen(true); // Pause 패널 닫기
         if (resurrectionCoroutine != null)
             StopCoroutine(resurrectionCoroutine);
         resurrectionPanel.SetActive(false); // 부활 패널 비활성화
         gameOverPanel.SetActive(true); // 게임오버 패널 활성화
-        Time.timeScale = 0f;
     }
     #endregion
 
