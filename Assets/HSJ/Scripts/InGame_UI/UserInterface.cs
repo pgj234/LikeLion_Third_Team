@@ -182,7 +182,7 @@ public class UserInterface : MonoBehaviour
     // TODO 대쉬부분
     void Dash(int stack)
     {
-        
+        //2���� Max
     }
     #endregion
 
@@ -224,12 +224,12 @@ public class UserInterface : MonoBehaviour
 
         disableImg.color = disableColor;
         disableImg.DOKill();
-        disableImg.DOColor(enableStartColor, 0.5f).SetEase(Ease.OutQuad).OnComplete(() =>
+        disableImg.DOColor(enableStartColor, 0.2f).SetEase(Ease.OutQuad).OnComplete(() =>
         {
             enableImg.enabled = true; // Enable 이미지 활성화
             enableImg.color = enableStartColor; // 투명하게 설정
             enableImg.DOKill();
-            enableImg.DOColor(Color.white, 0.5f).SetEase(Ease.InQuad).OnComplete(() =>
+            enableImg.DOColor(Color.white, 0.2f).SetEase(Ease.InQuad).OnComplete(() =>
             {
                 //enableRect.DOScale(Vector3.one, 0.5f); // Enable 이미지 크기 애니메이션
             });
@@ -257,12 +257,12 @@ public class UserInterface : MonoBehaviour
 
         enableImg.color = Color.white;
         enableImg.DOKill();
-        enableImg.DOColor(enableStartColor, 0.5f).SetEase(Ease.OutQuad).OnComplete(() =>
+        enableImg.DOColor(enableStartColor, 0.2f).SetEase(Ease.OutQuad).OnComplete(() =>
         {
             disableImg.enabled = true;
             disableImg.color = enableStartColor;
             disableImg.DOKill();
-            disableImg.DOColor(disableColor, 0.5f).SetEase(Ease.InQuad).OnComplete(() =>
+            disableImg.DOColor(disableColor, 0.2f).SetEase(Ease.InQuad).OnComplete(() =>
             {
                 //disableRect.DOScale(Vector3.zero, 0.5f); // Disable 이미지 크기 애니메이션
             });
