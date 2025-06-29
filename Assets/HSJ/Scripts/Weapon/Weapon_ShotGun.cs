@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Windows;
 
 public class Weapon_ShotGun : WeaponBase
 {
@@ -83,7 +82,7 @@ public class Weapon_ShotGun : WeaponBase
             Debug.Log("재장전이 필요 없습니다!"); // 재장전이 필요 없으면 에러 로그 출력
             return; 
         }
-        if(anim.GetBool("Reload") == true)
+        if(reloading == true)
         {
             Debug.Log("이미 재장전 중입니다!"); // 이미 재장전 중이면 에러 로그 출력
             return;
@@ -97,10 +96,20 @@ public class Weapon_ShotGun : WeaponBase
         //    return; // 현재 장전 단계가 최대 단계에 도달했으면 리턴
         //}
 
-        gameManager.NotePush(); // 노트 푸시 호출
         nowAmmo += 1; // 발사 준비된 탄환 증가
+        EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
 
-        if(animDic.ContainsKey("Reload") == false)
+        if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
+        {
+            gameManager.AddCombo();
+        }
+        else
+        {
+            Debug.Log("박자 타이밍 실패...");
+            gameManager.SetHalfCombo();
+        }
+
+        if (animDic.ContainsKey("Reload") == false)
         {
             AnimationClip clip = GetAnimClip("Reload", false);
             if (clip != null)
@@ -110,7 +119,7 @@ public class Weapon_ShotGun : WeaponBase
 
         audio.PlayOneShot(gunSound[beat == 0 ? 2 : 3]);
         anim.SetBool("Reload", true); // 애니메이터 트리거 설정
-        
+        reloading = true;
 
         var stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
@@ -120,14 +129,17 @@ public class Weapon_ShotGun : WeaponBase
         StartCoroutine(ActionDelay(() =>
         {
             anim.SetBool("Reload", false);
+            reloading = false;
             anim.speed = 1; // 애니메이션 속도 초기화
         }, delay)); // 재장전 애니메이션 딜레이
         //base.Reload();
+
+        gameManager.NotePush();
     }
 
     protected override void Shoot()
     {
-        if(anim.GetBool("Reload") == true)
+        if(reloading == true)
         {
             Debug.Log("재장전 중에는 발사할 수 없습니다!"); // 재장전 중이면 에러 로그 출력
             return;
@@ -146,10 +158,21 @@ public class Weapon_ShotGun : WeaponBase
         int beat = gameManager.RhythmCheck(); // 현재 박자 체크
         Debug.Log($"Beat: {beat}"); // 현재 박자 로그 출력
 
-        gameManager.NotePush();
-
         nowAmmo--;                          // 발사 준비된 탄환 감소
+        EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
         //base.Shoot();
+
+        if (1 == gameManager.RhythmCheck() || 2 == gameManager.RhythmCheck())
+        {
+            gameManager.AddCombo();
+        }
+        else
+        {
+            Debug.Log("박자 타이밍 실패...");
+            gameManager.SetHalfCombo();
+        }
+
+        gameManager.NotePush();
 
         StartCoroutine(Fire(beat));
     }
@@ -186,7 +209,7 @@ public class Weapon_ShotGun : WeaponBase
             Bullet b = bullet.GetComponent<Bullet>();
             if(b != null)
             {
-                b.Set(_position: pos, _lotation: Quaternion.LookRotation(v), _direction: dir, _speed: bulletSpeed,
+                b.Set(_position: pos, _lotation: Quaternion.LookRotation(v), _direction: dir, _speed: bulletSpeed, _lifeTime:5, 
                     _damage: beat == 0 ? 4 : beat == 1 ? 2 : 1, _weapon: this,
                     _hitObj: beat == 0 ? hitEffect[1].GetComponent<HitEffectObj>() : hitEffect[0].GetComponent<HitEffectObj>()//,
                     //_shooter: player

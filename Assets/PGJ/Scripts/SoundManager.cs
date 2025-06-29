@@ -23,7 +23,8 @@ public enum SFX
     PistolSlide,
     PistolEmpty,
     DashRhythmSucces,
-    DashRhythmFailed
+    DashRhythmFailed,
+    SwordSlash
 }
 
 public class SoundManager : SingletonBehaviour<SoundManager>

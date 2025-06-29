@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using DG.Tweening.Core.Easing;
+using UnityEngine;
 
 public class Boss : Entity
 {
@@ -11,6 +13,9 @@ public class Boss : Entity
     float curtime;
     Quaternion d_angle;
 
+    WaitForSeconds patternIntervalTime = new WaitForSeconds(5);
+    WaitForSeconds patternTime = new WaitForSeconds(3);
+
     protected override void Awake()
     {
         base.Awake();
@@ -20,6 +25,8 @@ public class Boss : Entity
     {
         base.Start();
 
+        StartCoroutine(StateTimer());
+
         curtime = 0;
     }
 
@@ -27,21 +34,60 @@ public class Boss : Entity
     {
         base.Update();
 
-        if (isDie)
+        if (true == pause || true == isDie)
         {
             return;
         }
-        
+
+        // 박자에 맞춰서 행동
+        currentTime += Time.deltaTime;
+
+        if (currentTime >= 30d / gameManager.bpm)
+        {
+            StateProc();
+
+            currentTime -= 30d / gameManager.bpm;
+        }
+
         Quaternion dir = Quaternion.LookRotation(target.transform.position - transform.position);
         Vector3 angle = Quaternion.RotateTowards(transform.rotation, dir, 1200 * Time.deltaTime).eulerAngles;
         transform.rotation = Quaternion.Euler(0, angle.y, 0);
         d_angle = Quaternion.Euler(0, dir.eulerAngles.y, 0);
     }
 
-    protected override void StateProc()
+    IEnumerator StateTimer()
     {
-        base.StateProc();
+        while (false == isDie)
+        {
+            yield return patternIntervalTime;
 
+            if (true == isDie)
+            {
+                break;
+            }
+
+            switch (Random.Range(0, 2))
+            {
+                case 0:             // 3연사 패턴
+                    monsterState = MonsterState.Shoot_Attack;
+                    break;
+
+                case 1:             // 점프 패턴
+                    monsterState = MonsterState.Jump_Attack;
+                    break;
+            }
+
+            yield return patternTime;
+
+            if (10 > Vector3.Distance(transform.position, target.transform.position))
+            {
+                monsterState = MonsterState.Chase;
+            }
+        }
+    }
+
+    void StateProc()
+    {
         if (isDie)
         {
             return;
@@ -59,7 +105,7 @@ public class Boss : Entity
                 Chase();
                 break;
 
-            case MonsterState.Attack:
+            case MonsterState.Shoot_Attack:
                 // 플레이어에게 총알 발사
                 Shoot();
                 break;
@@ -83,7 +129,7 @@ public class Boss : Entity
         navAgent.SetDestination(target.transform.position);
         if (Vector3.Distance(transform.position, target.transform.position) < 20f)
         {
-            monsterState = MonsterState.Attack;
+            monsterState = MonsterState.Shoot_Attack;
         }
     }
 

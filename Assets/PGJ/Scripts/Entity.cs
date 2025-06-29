@@ -8,7 +8,8 @@ enum MonsterState
 {
     Idle,
     Chase,
-    Attack,
+    Shoot_Attack,
+    Jump_Attack,
     Die
 }
 
@@ -37,11 +38,11 @@ public class Entity : MonoBehaviour
 
     protected Player target;
 
-    GameManager gameManager = null;
+    protected GameManager gameManager = null;
 
     internal MonsterState monsterState;
 
-    double currentTime;
+    protected double currentTime;
 
     int attackCnt;
 
@@ -109,22 +110,6 @@ public class Entity : MonoBehaviour
         {
             return;
         }
-
-        // 박자에 맞춰서 행동
-        currentTime += Time.deltaTime;
-
-        if (currentTime >= 30d / gameManager.bpm)
-        {
-            StateProc();
-
-            currentTime -= 30d / gameManager.bpm;
-        }
-    }
-
-    // 행동 양식
-    protected virtual void StateProc()
-    {
-
     }
 
     internal void GetDamage(int dmg)
@@ -135,7 +120,7 @@ public class Entity : MonoBehaviour
         }
 
         hp -= dmg;
-        
+        Debug.Log(name + " 체력 : " + hp + " / " + maxHP);
         if (null != hpImg)
         {
             hpImg.fillAmount = (float)hp / maxHP;
@@ -174,7 +159,10 @@ public class Entity : MonoBehaviour
     // 사망
     protected virtual void Die()
     {
-        rb.useGravity = false;
+        if (null != rb)
+        {
+            rb.useGravity = false;
+        }
 
         for (int i=0; i<col.Length; i++)
         {

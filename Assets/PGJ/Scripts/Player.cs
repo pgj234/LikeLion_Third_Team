@@ -184,6 +184,8 @@ public class Player : MonoBehaviour
         currentHp = maxHp;
         eventManager.PlayerMaxHpEvent(maxHp);
 
+        GetWeapon(1);
+
         playerDie = false;
         isDash = false;
         weaponArray[startWeaponNum].useAble = true;
@@ -257,9 +259,6 @@ public class Player : MonoBehaviour
                         currentWeapon.SetAnimationSpeed(2.1f);
                         break;
                 }
-
-                eventManager.PlayerCurrentBulletUIRefresh(currentWeapon.GetCurrentAmmo());
-                eventManager.PlayerMaxBulletUIRefresh(currentWeapon.GetMaxAmmo());
             }
         }
     }
@@ -290,8 +289,8 @@ public class Player : MonoBehaviour
     {
         if (input.look.sqrMagnitude >= threshold && !LockCameraPosition)
         {
-            cinemachineTargetYaw += input.look.x * userSettingManager.MouseSensitivity;
-            cinemachineTargetPitch += input.look.y * userSettingManager.MouseSensitivity;
+            cinemachineTargetYaw += input.look.x * 1;
+            cinemachineTargetPitch += input.look.y * 1;
         }
 
         cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);

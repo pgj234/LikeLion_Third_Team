@@ -2068,14 +2068,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3177862647833405973, guid: b60e56de62792074885007cfacc7ce6f, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3728750989147681425, guid: b60e56de62792074885007cfacc7ce6f, type: 3}
       propertyPath: m_Name
       value: Interface_Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5571939357912099144, guid: b60e56de62792074885007cfacc7ce6f, type: 3}
+      propertyPath: 'dash.Array.data[2]'
+      value: 
+      objectReference: {fileID: 6951816882322888488}
     - target: {fileID: 7944901604159133806, guid: b60e56de62792074885007cfacc7ce6f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2181,6 +2181,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b60e56de62792074885007cfacc7ce6f, type: 3}
+--- !u!224 &6951816882322888488 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8543836324862722634, guid: b60e56de62792074885007cfacc7ce6f, type: 3}
+  m_PrefabInstance: {fileID: 6951816882322888487}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
