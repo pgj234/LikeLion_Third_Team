@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4827221539665744960}
   - component: {fileID: 5617528667003419902}
   - component: {fileID: 7457406216566430154}
+  - component: {fileID: 7559123493750722344}
   m_Layer: 0
   m_Name: Sword123
   m_TagString: Untagged
@@ -105,7 +106,7 @@ MonoBehaviour:
   weaponNum: 0
   nowAmmo: 30
   maxAmmo: 30
-  shotAmount: 10
+  shotAmount: 1
   nextShotTime: 1
   shotDamage: 5
   shotSpreadMin: {x: 0, y: 0}
@@ -115,14 +116,13 @@ MonoBehaviour:
   sparkleDuration: 3
   reloadLowerDuration: 0.1
   attackAnimationSpeed: 1
-  attackDuration: 0.6
-  attackCooldown: 0.8
+  attackDuration: 0.16
+  attackCooldown: 0
   sparklePrefabs:
   - {fileID: 5281703823909813044, guid: ab4c63ea0690b254da615d1054521b20, type: 3}
   - {fileID: 5501976216335251706, guid: 987df892e7993d84e9eb67b14560dc32, type: 3}
   reloadShot: 30
   stage1InputTimeout: 2
-  swordAnimator: {fileID: 7457406216566430154}
 --- !u!82 &4827221539665744960
 AudioSource:
   m_ObjectHideFlags: 0
@@ -255,3 +255,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &7559123493750722344
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5778158555919324499}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.050182, y: 1.0036713, z: 0.026318539}
+  m_Center: {x: -0.009680525, y: 0.36505356, z: 0.0021967913}
