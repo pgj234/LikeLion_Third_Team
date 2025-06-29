@@ -135,7 +135,7 @@ public class Entity : MonoBehaviour
         }
 
         hp -= dmg;
-        
+        Debug.Log(name + " 체력 : " + hp + " / " + maxHP);
         if (null != hpImg)
         {
             hpImg.fillAmount = (float)hp / maxHP;
@@ -174,7 +174,10 @@ public class Entity : MonoBehaviour
     // 사망
     protected virtual void Die()
     {
-        rb.useGravity = false;
+        if (null != rb)
+        {
+            rb.useGravity = false;
+        }
 
         for (int i=0; i<col.Length; i++)
         {

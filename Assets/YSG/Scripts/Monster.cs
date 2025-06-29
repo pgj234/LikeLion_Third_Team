@@ -279,7 +279,7 @@ public class Monster : Entity
 
     protected override void Die()
     {
-        anim?.SetTrigger("Death");
+        base.Die();
 
         isAttacking = false;
         isHit = false;
@@ -292,9 +292,9 @@ public class Monster : Entity
     #endregion
 
     #region 사운드
-    private void MoveSound() => sfx.PlayOneShot(move);
-    private void HitSound() => sfx.PlayOneShot(hit);
-    private void AttackSound() => sfx.PlayOneShot(attack);
-    private void DeathSound() => sfx.PlayOneShot(death);
+    //private void MoveSound() => sfx.PlayOneShot(move);
+    //private void HitSound() => sfx.PlayOneShot(hit);
+    //private void AttackSound() => sfx.PlayOneShot(attack);
+    //private void DeathSound() => sfx.PlayOneShot(death);
     #endregion
 }

@@ -111,6 +111,8 @@ public class Sniper : WeaponBase
 
         nowAmmo -= shotAmount;
 
+        EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
+
         if (shootFire != null)
         {
             GameObject fire = Instantiate(shootFire, shootPoint.position, shootPoint.rotation, shootPoint);
@@ -146,6 +148,8 @@ public class Sniper : WeaponBase
         }
 
         Unzoom();
+
+        gameManager.NotePush();
     }
 
     protected override void Reload()
@@ -231,6 +235,7 @@ public class Sniper : WeaponBase
         Debug.Log("장전 성공");
 
         nowAmmo = maxAmmo;
+        EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
 
         reloading = false;
         reload = 0;

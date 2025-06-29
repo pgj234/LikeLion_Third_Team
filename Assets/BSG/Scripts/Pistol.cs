@@ -99,7 +99,6 @@ public class Pistol : WeaponBase
 
             if (results[0].transform.TryGetComponent(out Entity enemy))
             {
-                Debug.Log("딜 2배! : " + GetTotalDamage() * 2);
                 enemy.GetDamage(GetTotalDamage() * 2);
             }
 
@@ -115,7 +114,6 @@ public class Pistol : WeaponBase
 
             if (results[0].transform.TryGetComponent(out Entity enemy))
             {
-                Debug.Log("딜 : " + GetTotalDamage());
                 enemy.GetDamage(GetTotalDamage());
             }
 

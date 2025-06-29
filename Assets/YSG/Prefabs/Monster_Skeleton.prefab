@@ -533,8 +533,16 @@ PrefabInstance:
       addedObject: {fileID: 1613341927098710113}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 8276785554984837389}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 5729168775652039576}
   m_SourcePrefab: {fileID: 100100000, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
+--- !u!95 &2829917917779058644 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
+  m_PrefabInstance: {fileID: 8516156209441235525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8189179709687727534 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
@@ -689,6 +697,29 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &8276785554984837389
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8858051749441068820}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.28
+  m_Height: 1.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!114 &5729168775652039576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -701,24 +732,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc73830d59939e4c95cdc3358778e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 25
+  maxHP: 25
   walkSpeed: 1.5
-  runSpeed: 4
-  moveTime: 5
+  jumpPower: 0
+  isFly: 0
+  anim: {fileID: 2829917917779058644}
+  rb: {fileID: 0}
+  col:
+  - {fileID: 5503199366270775857}
+  groundCheck: {fileID: 0}
+  groundCheckDistance: 0
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
+  wallCheck: {fileID: 0}
+  wallCheckDistance: 0
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 0
+  hpImg: {fileID: 0}
+  runSpeed: 3
+  moveTime: 4
   waitTime: 1
-  detectRange: 5
+  detectRange: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  attackDamage: 10
+  attackDamage: 7
   attackCenter: {fileID: 1582615829231290225}
   attackRadius: 0.7
   attackCooldown: 1.5
-  maxHp: 200
-  currentHp: 0
-  move: {fileID: 8300000, guid: 987501c3610c159438e443979d4d62a6, type: 3}
-  hit: {fileID: 8300000, guid: 74557b347897b5849b2913798c73d577, type: 3}
-  attack: {fileID: 8300000, guid: 254444d67418bd0469c7cad606f2b7d9, type: 3}
-  death: {fileID: 8300000, guid: b20b188a351ebbb47b7e146f68805da9, type: 3}
+  maxHp: 30
+  currentHp: 30
+  move: {fileID: 0}
+  hit: {fileID: 0}
+  attack: {fileID: 0}
+  death: {fileID: 0}

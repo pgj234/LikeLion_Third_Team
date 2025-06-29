@@ -47,10 +47,11 @@ public class WeaponBase : MonoBehaviour
         }
     }
 
-    //internal virtual void OnEnable()
-    //{
-
-    //}
+    void OnEnable()
+    {
+        EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
+        EventManager.Instance.PlayerMaxBulletUIRefresh(nowAmmo);
+    }
 
     protected virtual void Start()
     {
@@ -58,6 +59,9 @@ public class WeaponBase : MonoBehaviour
         input = InputManager.Instance;
 
         nowAmmo = maxAmmo;
+
+        EventManager.Instance.PlayerCurrentBulletUIRefresh(nowAmmo);
+        EventManager.Instance.PlayerMaxBulletUIRefresh(nowAmmo);
     }
 
     protected virtual void Update()

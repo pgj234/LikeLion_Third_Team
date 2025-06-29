@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Boss : Entity
 {
@@ -11,6 +12,8 @@ public class Boss : Entity
     float curtime;
     Quaternion d_angle;
 
+    WaitForSeconds patternTime = new WaitForSeconds(5);
+
     protected override void Awake()
     {
         base.Awake();
@@ -19,6 +22,8 @@ public class Boss : Entity
     protected override void Start()
     {
         base.Start();
+
+        StartCoroutine(StateTimer());
 
         curtime = 0;
     }
@@ -36,6 +41,23 @@ public class Boss : Entity
         Vector3 angle = Quaternion.RotateTowards(transform.rotation, dir, 1200 * Time.deltaTime).eulerAngles;
         transform.rotation = Quaternion.Euler(0, angle.y, 0);
         d_angle = Quaternion.Euler(0, dir.eulerAngles.y, 0);
+    }
+
+    IEnumerator StateTimer()
+    {
+        while (gameObject.activeSelf)
+        {
+            yield return patternTime;
+
+            switch (Random.Range(0, 2))
+            {
+                case 0:             // 3연사 패턴
+                    break;
+
+                case 1:             // 점프 패턴
+                    break;
+            }
+        }
     }
 
     protected override void StateProc()

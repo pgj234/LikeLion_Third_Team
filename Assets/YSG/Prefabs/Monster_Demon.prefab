@@ -1289,6 +1289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6334826068141619242}
   - component: {fileID: 6489504559590719131}
+  - component: {fileID: 1683290074993121549}
   - component: {fileID: 2077622765895032364}
   - component: {fileID: 4451255872144831819}
   - component: {fileID: 7489469655570628856}
@@ -1341,6 +1342,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!136 &1683290074993121549
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6334826068141619221}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Height: 2.9
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.4, z: 0}
 --- !u!82 &2077622765895032364
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1497,26 +1521,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc73830d59939e4c95cdc3358778e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 65
+  maxHP: 65
   walkSpeed: 1.5
+  jumpPower: 0
+  isFly: 0
+  anim: {fileID: 6489504559590719131}
+  rb: {fileID: 0}
+  col:
+  - {fileID: 1683290074993121549}
+  groundCheck: {fileID: 0}
+  groundCheckDistance: 0
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
+  wallCheck: {fileID: 0}
+  wallCheckDistance: 0
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 0
+  hpImg: {fileID: 0}
   runSpeed: 4
   moveTime: 5
   waitTime: 0.5
-  detectRange: 5
+  detectRange: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  attackDamage: 25
+  attackDamage: 13
   attackCenter: {fileID: 5997555679387952478}
   attackRadius: 1.2
   attackCooldown: 0.8
-  maxHp: 500
-  currentHp: 0
-  move: {fileID: 8300000, guid: a9d466d9eb11f294eb7dbf878f9c4fee, type: 3}
+  maxHp: 65
+  currentHp: 65
+  move: {fileID: 0}
   hit: {fileID: 0}
-  attack: {fileID: 8300000, guid: 809cea1f4bc326f4d92808ed4af84bd0, type: 3}
+  attack: {fileID: 0}
   death: {fileID: 0}
 --- !u!1 &6568706143511174688
 GameObject:
