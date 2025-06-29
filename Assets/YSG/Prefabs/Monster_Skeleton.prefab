@@ -558,7 +558,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -723,4 +723,4 @@ MonoBehaviour:
   moveSound: {fileID: 8300000, guid: 987501c3610c159438e443979d4d62a6, type: 3}
   hitSound: {fileID: 8300000, guid: 74557b347897b5849b2913798c73d577, type: 3}
   attackSound: {fileID: 8300000, guid: 254444d67418bd0469c7cad606f2b7d9, type: 3}
-  deathSound: {fileID: 8300000, guid: b20b188a351ebbb47b7e146f68805da9, type: 3}
+  death: {fileID: 0}
