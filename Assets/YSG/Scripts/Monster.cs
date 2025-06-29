@@ -14,7 +14,7 @@ public class Monster : MonoBehaviour
     private bool isWaiting = false;
     private bool isRunning = false;
     private bool isAttacking = false;
-    private bool isHit = false;
+    private bool isHitting = false;
     private bool isDead = false;
 
     [Header("이동")]
@@ -66,8 +66,9 @@ public class Monster : MonoBehaviour
     {
         if (isDead) return;
 
-        if (isHit)
+        if (isHitting)
         {
+            if (agent.enabled) agent.enabled = false;
             anim.SetFloat("Speed", 0);
             return;
         }
@@ -83,7 +84,6 @@ public class Monster : MonoBehaviour
         if (isAttacking)
         {
             if (agent.enabled) agent.enabled = false;
-
             anim.SetFloat("Speed", 0);
             return;
         }
@@ -240,7 +240,7 @@ public class Monster : MonoBehaviour
             player.GetDamage(attackDamage);
         }
 
-        Debug.Log($"플레이어 {attackDamage} 데미지 > 플레이어 체력 : {target.GetComponent<Player>().currentHp}");
+        Debug.Log($"플레이어 {attackDamage} 데미지");
 
         attackTimer = attackCooldown;
     }
@@ -251,7 +251,7 @@ public class Monster : MonoBehaviour
 
         anim?.SetTrigger("Hit");
 
-        isHit = true;
+        isHitting = true;
         isRunning = true;
 
         if (target == null)
@@ -272,14 +272,14 @@ public class Monster : MonoBehaviour
     }
 
     public void EndAttack() => isAttacking = false;
-    public void EndHit() => isHit = false;
+    public void EndHit() => isHitting = false;
 
     private void Die()
     {
         anim?.SetTrigger("Death");
 
         isAttacking = false;
-        isHit = false;
+        isHitting = false;
         isRunning = false;
         isDead = true;
 
