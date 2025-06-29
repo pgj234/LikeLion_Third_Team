@@ -161,9 +161,12 @@ MonoBehaviour:
   shotAmount: 1
   nextShotTime: 0
   shotDamage: 100
+  range: 0
   shotSpreadMin: {x: 0, y: 0}
   shotSpreadMax: {x: 0, y: 0}
   reloadStepNum: 0
+  shotEffect: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
   reload: 0
   shootPoint: {fileID: 6279242928531207454}
   scopeUI: {fileID: 8921875170102450004}
