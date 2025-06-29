@@ -1,12 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.AI;
 
-public class Monster : MonoBehaviour
+public class Monster : Entity
 {
-    private Animator anim;
     private CharacterController character;
     private NavMeshAgent agent;
-    private Transform target;
     private AudioSource sfx;
 
     private float timer;
@@ -17,38 +15,39 @@ public class Monster : MonoBehaviour
     private bool isHit = false;
     private bool isDead = false;
 
-    [Header("ÀÌµ¿")]
-    public float walkSpeed = 1.5f;
+    [Header("ì´ë™")]
+    //public float walkSpeed = 1.5f;
     public float runSpeed = 4;
     public float moveTime = 5;
     public float waitTime = 1;
     private Vector3 moveDirection;
 
-    [Header("°¨Áö")]
+    [Header("ê°ì§€")]
     [SerializeField] private float detectRange = 5;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private LayerMask groundLayer;
 
-    [Header("°ø°İ")]
+    [Header("ê³µê²©")]
     [SerializeField] private int attackDamage = 10;
     [SerializeField] private Transform attackCenter;
     [SerializeField] private float attackRadius = 1;
     [SerializeField] private float attackCooldown = 1.5f;
     private float attackTimer = 0;
 
-    [Header("Ã¼·Â")]
+    [Header("ì²´ë ¥")]
     [SerializeField] private float maxHp = 100;
     [SerializeField] private float currentHp;
 
-    [Header("È¿°úÀ½")]
+    [Header("íš¨ê³¼ìŒ")]
     [SerializeField] private AudioClip move;
     [SerializeField] private AudioClip hit;
     [SerializeField] private AudioClip attack;
     [SerializeField] private AudioClip death;
 
-    private void Start()
+    protected override void Start()
     {
-        anim = GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
+        base.Start();
+
         character = GetComponent<CharacterController>();
         agent = GetComponent<NavMeshAgent>();
         sfx = GetComponent<AudioSource>();
@@ -62,8 +61,10 @@ public class Monster : MonoBehaviour
         currentHp = maxHp;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (isDead) return;
 
         if (isHit)
@@ -96,7 +97,7 @@ public class Monster : MonoBehaviour
             Walk();
     }
 
-    #region ÀÌµ¿
+    #region ì´ë™
     private void Walk()
     {
         if (agent.enabled) agent.enabled = false;
@@ -146,7 +147,7 @@ public class Monster : MonoBehaviour
         if (!agent.enabled) agent.enabled = true;
 
         agent.speed = runSpeed;
-        agent.SetDestination(target.position);
+        agent.SetDestination(target.transform.position);
 
         if (agent.hasPath && agent.remainingDistance > agent.stoppingDistance)
         {
@@ -165,7 +166,7 @@ public class Monster : MonoBehaviour
     }
     #endregion
 
-    #region °¨Áö
+    #region ê°ì§€
     private void DetectPlayer()
     {
         if (target != null) return;
@@ -176,7 +177,7 @@ public class Monster : MonoBehaviour
         {
             if (hit.CompareTag("Player"))
             {
-                target = hit.transform;
+                //target = hit.transform;
                 break;
             }
         }
@@ -217,30 +218,32 @@ public class Monster : MonoBehaviour
     }
     #endregion
 
-    #region ÀüÅõ
-    private void Attack()
+    #region ì „íˆ¬
+    protected override void Attack()
     {
+        base.Attack();
+
         if (attackTimer > 0) return;
 
         isAttacking = true;
 
         anim?.SetTrigger("Attack");
 
-        if (target == null)
-        {
-            GameObject goPlayer = GameObject.FindGameObjectWithTag("Player");
-            if (goPlayer != null)
-            {
-                this.target = goPlayer.transform;
-            }
-        }
+        //if (target == null)
+        //{
+        //    GameObject goPlayer = GameObject.FindGameObjectWithTag("Player");
+        //    if (goPlayer != null)
+        //    {
+        //        target = goPlayer;
+        //    }
+        //}
 
         if (target.TryGetComponent(out Player player))
         {
             player.GetDamage(attackDamage);
         }
 
-        Debug.Log($"ÇÃ·¹ÀÌ¾î {attackDamage} µ¥¹ÌÁö > ÇÃ·¹ÀÌ¾î Ã¼·Â : {target.GetComponent<Player>().currentHp}");
+        Debug.Log($"í”Œë ˆì´ì–´ {attackDamage} ë°ë¯¸ì§€ > í”Œë ˆì´ì–´ ì²´ë ¥ : {target.GetComponent<Player>().currentHp}");
 
         attackTimer = attackCooldown;
     }
@@ -254,18 +257,18 @@ public class Monster : MonoBehaviour
         isHit = true;
         isRunning = true;
 
-        if (target == null)
-        {
-            GameObject target = GameObject.FindGameObjectWithTag("Player");
-            if (target != null)
-            {
-                this.target = target.transform;
-            }
-        }
+        //if (target == null)
+        //{
+        //    GameObject target = GameObject.FindGameObjectWithTag("Player");
+        //    if (target != null)
+        //    {
+        //        this.target = target.transform;
+        //    }
+        //}
 
         if (currentHp <= 0)
         {
-            Debug.Log("»ç¸Á");
+            //Debug.Log("ì‚¬ë§");
 
             Die();
         }
@@ -274,7 +277,7 @@ public class Monster : MonoBehaviour
     public void EndAttack() => isAttacking = false;
     public void EndHit() => isHit = false;
 
-    private void Die()
+    protected override void Die()
     {
         anim?.SetTrigger("Death");
 
@@ -288,7 +291,7 @@ public class Monster : MonoBehaviour
     }
     #endregion
 
-    #region »ç¿îµå
+    #region ì‚¬ìš´ë“œ
     private void MoveSound() => sfx.PlayOneShot(move);
     private void HitSound() => sfx.PlayOneShot(hit);
     private void AttackSound() => sfx.PlayOneShot(attack);

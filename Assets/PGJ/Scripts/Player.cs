@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     [Header("Player")]
     public int maxHp;
-    int currentHp;
+    internal int currentHp { get; private set; }
 
     [Space(5)]
     public float moveSpeed;

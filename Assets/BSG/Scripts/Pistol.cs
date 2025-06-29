@@ -131,36 +131,36 @@ public class Pistol : WeaponBase
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        if (Application.isPlaying)
-        {
-            Gizmos.color = Color.red;
+    //private void OnDrawGizmos()
+    //{
+    //    if (Application.isPlaying)
+    //    {
+    //        Gizmos.color = Color.red;
 
-            Vector3 origin = cameraTr.position;
-            Vector3 dir = cameraTr.forward;
+    //        Vector3 origin = cameraTr.position;
+    //        Vector3 dir = cameraTr.forward;
 
-            // 충돌 궤적 시각화
-            Gizmos.DrawLine(origin, origin + dir * range);
-            DrawWireSphere(origin, 0.1f); // 시작점
-            DrawWireSphere(origin + dir * range, 0.1f); // 끝점
+    //        // 충돌 궤적 시각화
+    //        Gizmos.DrawLine(origin, origin + dir * range);
+    //        DrawWireSphere(origin, 0.1f); // 시작점
+    //        DrawWireSphere(origin + dir * range, 0.1f); // 끝점
 
-            // 중간을 따라 원 그려서 "터널"처럼 시각화 가능
-            int segments = 10;
-            for (int i = 1; i < segments; i++)
-            {
-                float t = i / (float)segments;
-                Vector3 pos = origin + dir * range * t;
-                DrawWireSphere(pos, 0.1f);
-            }
-        }
-    }
+    //        // 중간을 따라 원 그려서 "터널"처럼 시각화 가능
+    //        int segments = 10;
+    //        for (int i = 1; i < segments; i++)
+    //        {
+    //            float t = i / (float)segments;
+    //            Vector3 pos = origin + dir * range * t;
+    //            DrawWireSphere(pos, 0.1f);
+    //        }
+    //    }
+    //}
 
-    // 구를 그리는 헬퍼
-    private void DrawWireSphere(Vector3 position, float radius)
-    {
-        Gizmos.DrawWireSphere(position, radius);
-    }
+    //// 구를 그리는 헬퍼
+    //private void DrawWireSphere(Vector3 position, float radius)
+    //{
+    //    Gizmos.DrawWireSphere(position, radius);
+    //}
 
     protected override void Update()
     {
