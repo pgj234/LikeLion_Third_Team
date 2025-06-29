@@ -7,6 +7,7 @@ public class Monster : MonoBehaviour
     private CharacterController character;
     private NavMeshAgent agent;
     private Transform target;
+    private AudioSource sfx;
 
     private float timer;
 
@@ -39,11 +40,18 @@ public class Monster : MonoBehaviour
     [SerializeField] private float maxHp = 100;
     [SerializeField] private float currentHp;
 
+    [Header("효과음")]
+    [SerializeField] private AudioClip move;
+    [SerializeField] private AudioClip hit;
+    [SerializeField] private AudioClip attack;
+    [SerializeField] private AudioClip death;
+
     private void Start()
     {
         anim = GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
         character = GetComponent<CharacterController>();
         agent = GetComponent<NavMeshAgent>();
+        sfx = GetComponent<AudioSource>();
 
         agent.updatePosition = true;
         agent.updateRotation = true;
@@ -278,6 +286,12 @@ public class Monster : MonoBehaviour
         if (agent != null) agent.enabled = false;
         if (character != null) character.enabled = false;
     }
+    #endregion
 
+    #region 사운드
+    private void MoveSound() => sfx.PlayOneShot(move);
+    private void HitSound() => sfx.PlayOneShot(hit);
+    private void AttackSound() => sfx.PlayOneShot(attack);
+    private void DeathSound() => sfx.PlayOneShot(death);
     #endregion
 }
