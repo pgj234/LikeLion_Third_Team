@@ -7,8 +7,10 @@ public class Monster : MonoBehaviour
     private Animator anim;
     private CharacterController character;
     private NavMeshAgent agent;
-    private Transform target;
     private AudioSource sfx;
+
+    private Transform player;
+    private Transform target;
     [SerializeField] private GameObject grave;
 
     private float timer;
@@ -49,7 +51,7 @@ public class Monster : MonoBehaviour
     [SerializeField] private AudioClip moveSound;
     [SerializeField] private AudioClip hitSound;
     [SerializeField] private AudioClip attackSound;
-    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip death;
 
     private void Start()
     {
@@ -57,6 +59,8 @@ public class Monster : MonoBehaviour
         character = GetComponent<CharacterController>();
         agent = GetComponent<NavMeshAgent>();
         sfx = GetComponent<AudioSource>();
+
+        player = GameObject.FindGameObjectWithTag("Player").transform;
 
         agent.updatePosition = true;
         agent.updateRotation = true;
@@ -323,10 +327,24 @@ public class Monster : MonoBehaviour
     }
 
     #region »ç¿îµå
-    private void SpawnSound() => sfx.PlayOneShot(spawnSound);
-    private void MoveSound() => sfx.PlayOneShot(moveSound);
-    private void HitSound() => sfx.PlayOneShot(hitSound);
-    private void AttackSound() => sfx.PlayOneShot(attackSound);
-    private void DeathSound() => sfx.PlayOneShot(deathSound);
+    private void SpawnSound() => sfx.PlayOneShot(spawnSound, GetVolume());
+    private void MoveSound() => sfx.PlayOneShot(moveSound, GetVolume());
+    private void HitSound() => sfx.PlayOneShot(hitSound, GetVolume());
+    private void AttackSound() => sfx.PlayOneShot(attackSound, GetVolume());
+    private void DeathSound() => sfx.PlayOneShot(death, GetVolume());
     #endregion
+
+    private float GetVolume()
+    {
+        float max = 20;
+
+        if (player == null) return 1;
+
+        float dist = Vector3.Distance(transform.position, player.position);
+
+        if (dist > max) return 0;
+
+        float volume = 1 - (dist / max);
+        return Mathf.Clamp01(volume);
+    }
 }
