@@ -740,7 +740,7 @@ MonoBehaviour:
   anim: {fileID: 2829917917779058644}
   rb: {fileID: 0}
   col:
-  - {fileID: 5503199366270775857}
+  - {fileID: 8276785554984837389}
   groundCheck: {fileID: 0}
   groundCheckDistance: 0
   whatIsGround:
@@ -762,12 +762,12 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  attackDamage: 7
+  attackDamage: 5
   attackCenter: {fileID: 1582615829231290225}
   attackRadius: 0.7
   attackCooldown: 1.5
-  maxHp: 30
-  currentHp: 30
+  maxHp: 25
+  currentHp: 25
   move: {fileID: 0}
   hit: {fileID: 0}
   attack: {fileID: 0}

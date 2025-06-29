@@ -91,6 +91,8 @@ public class Player : MonoBehaviour
     bool playerDie = false;
     int remainRevival = 1;
 
+    bool portalUse = false;
+
     void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -111,9 +113,28 @@ public class Player : MonoBehaviour
         Init();
     }
 
+    internal void PortalUse()
+    {
+        portalUse = true;
+
+        StartCoroutine(PortalEnd());
+    }
+
+    IEnumerator PortalEnd()
+    {
+        yield return new WaitForSeconds(1);
+
+        portalUse = false;
+    }
+
     void Update()
     {
         weaponSwapTimer -= Time.deltaTime;
+
+        if (true == portalUse)
+        {
+            return;
+        }
 
         DashGaugeProc();
 

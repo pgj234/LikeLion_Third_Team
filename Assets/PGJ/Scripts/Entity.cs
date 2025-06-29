@@ -46,7 +46,7 @@ public class Entity : MonoBehaviour
 
     int attackCnt;
 
-    protected bool isDie;
+    protected bool isDie = false;
 
     protected NavMeshAgent navAgent;
 
@@ -120,7 +120,7 @@ public class Entity : MonoBehaviour
         }
 
         hp -= dmg;
-        Debug.Log(name + " 체력 : " + hp + " / " + maxHP);
+        
         if (null != hpImg)
         {
             hpImg.fillAmount = (float)hp / maxHP;
@@ -130,6 +130,11 @@ public class Entity : MonoBehaviour
         {
             Die();
         }
+    }
+
+    internal bool GetIsDie()
+    {
+        return isDie;
     }
 
     // 움직임 멈춤
@@ -168,6 +173,8 @@ public class Entity : MonoBehaviour
         {
             col[i].enabled = false;
         }
+
+        isDie = true;
 
         anim.SetTrigger("Die");
     }

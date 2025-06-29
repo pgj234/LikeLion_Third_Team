@@ -1551,12 +1551,12 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  attackDamage: 13
+  attackDamage: 8
   attackCenter: {fileID: 5997555679387952478}
   attackRadius: 1.2
   attackCooldown: 0.8
-  maxHp: 65
-  currentHp: 65
+  maxHp: 52
+  currentHp: 52
   move: {fileID: 0}
   hit: {fileID: 0}
   attack: {fileID: 0}
