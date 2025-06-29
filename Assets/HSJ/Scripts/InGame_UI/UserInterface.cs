@@ -12,7 +12,7 @@ public class UserInterface : MonoBehaviour
     [SerializeField] TextMeshProUGUI ammoLabel;                 // 탄약 레이블
     [SerializeField] RectTransform hp;                          // 체력 이미지
     [SerializeField] float hpMaxRect = 650f;                    // 체력 이미지 최대 크기
-    [SerializeField] RectTransform dash;                        // 대쉬 이미지
+    [SerializeField] RectTransform[] dash;                      // 대쉬 이미지
     [SerializeField] float dashMaxRect = 170f;                  // 대쉬 이미지 최대 크기
 
     [SerializeField] GameObject[] weaponSlot;                   // 무기 슬롯 오브젝트 배열
@@ -27,7 +27,7 @@ public class UserInterface : MonoBehaviour
     UserSettingManager settingManager;                          // UserSettingManager 인스턴스
     GameManager gameManager;                                    // GameManager 인스턴스
     [SerializeField] int nowWeaponNum = 0;
-
+    [SerializeField] Player player;
     #endregion
 
     #region ItemPickup Interface Variables
@@ -59,7 +59,7 @@ public class UserInterface : MonoBehaviour
     [SerializeField] GameObject resurrectionPanel;              // 부활 창
     [SerializeField] TextMeshProUGUI resurrectionCountLabel;    // 부활 카운트 레이블
     [SerializeField] GameObject gameOverPanel;                  // 게임오버 창
-    [SerializeField] int resurrectionCount = 3;                 // 부활 횟수
+    [SerializeField] int resurrectionCount = 1;                 // 부활 횟수
     [SerializeField] float resurrectionTime = 10f;               // 부활 대기 시간
     Coroutine resurrectionCoroutine; // 부활 카운트 코루틴
 
@@ -71,6 +71,8 @@ public class UserInterface : MonoBehaviour
         inputManager = InputManager.Instance;                  // InputManager 인스턴스 초기화
         eventManager = EventManager.Instance;                  // EventManager 인스턴스 초기화
         settingManager = UserSettingManager.Instance;          // UserSettingManager 인스턴스 초기화
+        if(player == null)
+            player = FindFirstObjectByType<Player>();                // Player 인스턴스 초기화 (씬에 Player가 없을 경우)
 
         for (int i = 0; i < weaponSlot.Length; i++)
         {
@@ -92,11 +94,19 @@ public class UserInterface : MonoBehaviour
 
 
         eventManager.OnPlayerDamageAction += UpdateHP;                      // 플레이어 데미지 이벤트 등록
-        eventManager.OnPlayerDieAction += SelectDie;                        // 플레이어 사망 이벤트 등록
-        eventManager.OnPlayerRevivalAction += SelectResurrection;           // 플레이어 부활 이벤트 등록
+        eventManager.OnPlayerDieAction += ShowDeathPanel;                        // 플레이어 사망 이벤트 등록
+        //eventManager.OnPlayerRevivalAction += SelectResurrection;           // 플레이어 부활 이벤트 등록
 
         foreach (Transform trf in itemPickupViewport)
             Destroy(trf.gameObject);
+
+        for(int i=0;i<player.weaponArray.Length; i++)
+        {
+            if (player.weaponArray[i].useAble)
+                AcquireWeapon(i); // 플레이어가 가진 무기 슬롯 활성화
+            else if (weaponSlot[i].activeSelf)
+                weaponSlot[i].SetActive(false); // 플레이어가 가진 무기 슬롯 비활성화
+        }
     }
 
     private void OnDisable()
@@ -168,6 +178,8 @@ public class UserInterface : MonoBehaviour
         {
             TogglePausePanel();
         }
+
+        Dash(player.GetDashGauge());
     }
 
 
@@ -179,13 +191,29 @@ public class UserInterface : MonoBehaviour
 
     void UpdateHP(int health)
     {
-        hp.sizeDelta = new Vector2(hpMaxRect * (health / 100f), hp.sizeDelta.y); // 체력 이미지 크기 업데이트
+        hp.sizeDelta = new Vector2(hpMaxRect * ((float)health / player.maxHp), hp.sizeDelta.y); // 체력 이미지 크기 업데이트
     }
 
-    // TODO 대쉬부분
-    void Dash(int stack)
+    void Dash(float stack)
     {
-        //2���� Max
+        if(stack < 1f)
+        {
+            if (dash[1].GetComponent<Image>().enabled == true)
+                dash[1].GetComponent<Image>().enabled = false; // 대쉬 이미지 비활성화
+            dash[0].sizeDelta = new Vector2(dashMaxRect * stack, dash[0].sizeDelta.y); // 대쉬 이미지 크기 업데이트
+        }
+        else if(stack < 2f)
+        {
+            dash[0].sizeDelta = new Vector2(dashMaxRect, dash[0].sizeDelta.y); // 대쉬 이미지 크기 업데이트
+            if (dash[1].GetComponent<Image>().enabled == false)
+                dash[1].GetComponent<Image>().enabled = true; // 대쉬 이미지 활성화
+            dash[1].sizeDelta = new Vector2(dashMaxRect * (stack - 1f), dash[1].sizeDelta.y); // 두번째 대쉬 이미지 크기 업데이트
+        }
+        else
+        {
+            dash[0].sizeDelta = new Vector2(dashMaxRect, dash[0].sizeDelta.y); // 대쉬 이미지 크기 업데이트
+            dash[1].sizeDelta = new Vector2(dashMaxRect, dash[1].sizeDelta.y); // 두번째 대쉬 이미지 크기 업데이트
+        }
     }
 
     void UpdateScore(int score)
@@ -218,6 +246,8 @@ public class UserInterface : MonoBehaviour
 
     void EnableWeaponSlot(GameObject go)
     {
+        go.SetActive(true);
+
         Image enableImg = go.transform.GetChild(0).GetComponent<Image>();
         RectTransform enableRect = enableImg.GetComponent<RectTransform>();
         Image disableImg = go.transform.GetChild(1).GetComponent<Image>();
@@ -374,8 +404,8 @@ public class UserInterface : MonoBehaviour
             eventManager.PauseWindowOpen(true);
 
             //Time.timeScale = 0f; // 게임 일시 정지
-            inputManager.cursorInputForLook = false; // 마우스 커서 잠금 해제
-            inputManager.cursorLocked = false; // 커서 잠금 해제
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true; // 커서 보이기
             // 슬라이더 값 초기화
             bgmSlider.maxValue = 1f; // BGM 슬라이더 최대값 설정
             bgmSlider.value = settingManager.BGM; // BGM 슬라이더 값 초기화
@@ -394,8 +424,8 @@ public class UserInterface : MonoBehaviour
             eventManager.PauseWindowOpen(false);
 
             //Time.timeScale = 1f; // 게임 재개
-            inputManager.cursorInputForLook = true; // 마우스 커서 잠금
-            inputManager.cursorLocked = true; // 커서 잠금
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false; // 커서 보이기
             //SoundManager.Instance.PlayBGM(BGM.Test_Bgm); // BGM 재생
         }
     }
@@ -427,22 +457,19 @@ public class UserInterface : MonoBehaviour
         comboLabel.DOColor(redEnd, 10f).SetEase(Ease.OutQuad);
     }
 
-    public void ShowDeathPanel(int resurrectionCount)
+    public void ShowDeathPanel()
     {
         //deathPanel.SetActive(!deathPanel.activeSelf); // Death 패널의 활성화 상태를 토글
-
+        eventManager.PauseWindowOpen(true); // Pause 패널 열기
         if (resurrectionCount > 0)
         {
-            Time.timeScale = 0f; // 게임 일시 정지
             resurrectionPanel.SetActive(true); // 부활 패널 활성화
             gameOverPanel.SetActive(false); // 게임오버 패널 비활성화
             resurrectionCoroutine = StartCoroutine(ResurrectionCounter()); // 부활 카운트 시작
         }
         else
         {
-            Time.timeScale = 0f; // 게임 재개
-            gameOverPanel.SetActive(true); // 게임오버 패널 활성화
-            resurrectionPanel.SetActive(false); // 부활 패널 비활성화
+            SelectDie(); // 부활 횟수가 0이면 죽음 선택
         }
     }
 
@@ -465,17 +492,19 @@ public class UserInterface : MonoBehaviour
     public void SelectResurrection()
     {
         StopCoroutine(resurrectionCoroutine);
+        resurrectionCount--; // 부활 횟수 감소
         resurrectionPanel.SetActive(false); // 부활 패널 비활성화
-        Time.timeScale = 1f; // 게임 시간 재개
+        eventManager.PauseWindowOpen(false); // Pause 패널 닫기
+        eventManager.PlayerRevivalEvent();
     }
 
     public void SelectDie()
     {
+        eventManager.PauseWindowOpen(true); // Pause 패널 닫기
         if (resurrectionCoroutine != null)
             StopCoroutine(resurrectionCoroutine);
         resurrectionPanel.SetActive(false); // 부활 패널 비활성화
         gameOverPanel.SetActive(true); // 게임오버 패널 활성화
-        Time.timeScale = 0f;
     }
     #endregion
 

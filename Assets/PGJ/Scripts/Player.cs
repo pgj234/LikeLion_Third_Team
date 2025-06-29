@@ -184,6 +184,8 @@ public class Player : MonoBehaviour
         currentHp = maxHp;
         eventManager.PlayerMaxHpEvent(maxHp);
 
+        GetWeapon(1);
+
         playerDie = false;
         isDash = false;
         weaponArray[startWeaponNum].useAble = true;

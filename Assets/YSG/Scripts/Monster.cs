@@ -65,6 +65,12 @@ public class Monster : Entity
     {
         base.Update();
 
+        if (true == pause || true == isDie)
+        {
+            agent.speed = 0;
+            return;
+        }
+
         if (isDead) return;
 
         if (isHit)
@@ -145,7 +151,7 @@ public class Monster : Entity
     private void Run()
     {
         if (!agent.enabled) agent.enabled = true;
-
+        
         agent.speed = runSpeed;
         agent.SetDestination(target.transform.position);
 
@@ -292,9 +298,9 @@ public class Monster : Entity
     #endregion
 
     #region 사운드
-    //private void MoveSound() => sfx.PlayOneShot(move);
-    //private void HitSound() => sfx.PlayOneShot(hit);
-    //private void AttackSound() => sfx.PlayOneShot(attack);
-    //private void DeathSound() => sfx.PlayOneShot(death);
+    private void MoveSound() => sfx.PlayOneShot(move);
+    private void HitSound() => sfx.PlayOneShot(hit);
+    private void AttackSound() => sfx.PlayOneShot(attack);
+    private void DeathSound() => sfx.PlayOneShot(death);
     #endregion
 }

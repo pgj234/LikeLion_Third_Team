@@ -70,11 +70,13 @@ public class Bullet : MonoBehaviour
     }
 
     /// <summary>  벽에 부딪치면 삭제 </summary>
-    protected virtual void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collider)
     {
-        if (collision.transform.GetComponent<Entity>() != null)
+        Debug.Log("뭥");
+        if (collider.GetComponent<Entity>() != null)
         {
-            Entity entity = collision.transform.GetComponent<Entity>();
+            Debug.Log(collider.name);
+            Entity entity = collider.GetComponent<Entity>();
             entity.GetDamage(damage); // 데미지 적용
         }
 
