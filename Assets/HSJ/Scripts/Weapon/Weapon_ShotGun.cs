@@ -16,7 +16,7 @@ public class Weapon_ShotGun : WeaponBase
     [SerializeField] AudioSource audio;
     Player player;
 
-    Dictionary<string, AnimationClip> animDic = new();
+    [field:SerializeField] Dictionary<string, AnimationClip> animDic = new();
 
     protected override void Awake()
     {
@@ -83,58 +83,83 @@ public class Weapon_ShotGun : WeaponBase
             Debug.Log("재장전이 필요 없습니다!"); // 재장전이 필요 없으면 에러 로그 출력
             return; 
         }
-        if(anim.GetBool("Reload") == true)
+
+        int reloadStep = anim.GetInteger("Reload");
+
+        string animName1 = "PumpShotgun_01_DropedBullet 1";
+        if (animDic.ContainsKey(animName1) == false)
         {
-            Debug.Log("이미 재장전 중입니다!"); // 이미 재장전 중이면 에러 로그 출력
-            return;
+            AnimationClip clip = GetAnimClip(animName1, false);
+            if (clip != null)
+                animDic.Add(animName1, clip);
+            
+        }
+
+        string animName2 = "PumpShotgun_01_Reload 1";
+        if (animDic.ContainsKey(animName2) == false)
+        {
+            AnimationClip clip = GetAnimClip(animName2, false);
+            if (clip != null)
+                animDic.Add(animName2, clip);
+
         }
 
         int beat = gameManager.RhythmCheck(); // 현재 박자 체크
         Debug.Log($"Beat: {beat}"); // 현재 박자 로그 출력
+        var stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-        //if (currentReloadStepNum >= reloadStepNum)
-        //{
-        //    return; // 현재 장전 단계가 최대 단계에 도달했으면 리턴
-        //}
+        if (reloadStep == 0)
+        {
+            if (stateInfo.IsName(animName2) && stateInfo.normalizedTime < 1f)
+            {
+                Debug.Log("이미 재장전 중입니다!"); // 이미 재장전 중이면 에러 로그 출력
+                return;
+            }
+
+            audio.PlayOneShot(gunSound[beat == 0 ? 2 : 3]);
+            anim.SetInteger("Reload", 1); // 애니메이터 트리거 설정
+
+            anim.speed = beat == 0 ? 2 : 1;
+
+            float delay = (animDic[animName1].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // 애니메이션 딜레이 계산
+            StartCoroutine(ActionDelay(() =>
+            {
+                anim.speed = 1; // 애니메이션 속도 초기화
+            }, delay)); // 재장전 애니메이션 딜레이
+                        //base.Reload();
+        }
+        else if (reloadStep == 1)
+        {
+            //애니메이션 플레이중인지
+            if (stateInfo.IsName(animName1) && stateInfo.normalizedTime < 1f)
+            {
+                Debug.Log("이미 재장전 중입니다!"); // 이미 재장전 중이면 에러 로그 출력
+                return;
+            }
+
+            anim.SetInteger("Reload", 2); // 애니메이터 트리거 설정
+            audio.PlayOneShot(gunSound[beat == 0 ? 2 : 3]);
+
+            anim.speed = beat == 0 ? 2 : 1;
+
+            float delay = (animDic[animName2].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // 애니메이션 딜레이 계산
+            StartCoroutine(ActionDelay(() =>
+            {
+                anim.SetInteger("Reload", 0);
+                anim.speed = 1; // 애니메이션 속도 초기화
+            }, delay)); // 재장전 애니메이션 딜레이
+                        //base.Reload();
+        }
 
         gameManager.NotePush(); // 노트 푸시 호출
         nowAmmo += 1; // 발사 준비된 탄환 증가
-
-        if(animDic.ContainsKey("Reload") == false)
-        {
-            AnimationClip clip = GetAnimClip("Reload", false);
-            if (clip != null)
-                animDic.Add("Reload", clip);
-            
-        }
-
-        audio.PlayOneShot(gunSound[beat == 0 ? 2 : 3]);
-        anim.SetBool("Reload", true); // 애니메이터 트리거 설정
-        
-
-        var stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-
-        anim.speed = beat == 0 ? 2 : 1;
-
-        float delay = (animDic["Reload"].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // 애니메이션 딜레이 계산
-        StartCoroutine(ActionDelay(() =>
-        {
-            anim.SetBool("Reload", false);
-            anim.speed = 1; // 애니메이션 속도 초기화
-        }, delay)); // 재장전 애니메이션 딜레이
-        //base.Reload();
     }
 
     protected override void Shoot()
     {
-        if(anim.GetBool("Reload") == true)
+        if(anim.GetInteger("Reload") > 0)
         {
             Debug.Log("재장전 중에는 발사할 수 없습니다!"); // 재장전 중이면 에러 로그 출력
-            return;
-        }
-        if (anim.GetBool("Fire") == true)
-        {
-            Debug.Log("이미 발사 중입니다!"); // 이미 발사 중이면 에러 로그 출력
             return;
         }
         if (nowAmmo <= 0)
@@ -142,6 +167,14 @@ public class Weapon_ShotGun : WeaponBase
             Debug.Log("발사 준비된 탄환이 없습니다!"); // 발사 준비된 탄환이 없으면 에러 로그 출력
             return;            
         }
+        var stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        string animName = "PumpShotgun_01_Fire 1";
+        if (stateInfo.IsName(animName) && stateInfo.normalizedTime < 1f)
+        {
+            Debug.Log("이미 발사 중입니다!"); // 이미 발사 중이면 에러 로그 출력
+            return;
+        }
+
 
         int beat = gameManager.RhythmCheck(); // 현재 박자 체크
         Debug.Log($"Beat: {beat}"); // 현재 박자 로그 출력
@@ -159,12 +192,12 @@ public class Weapon_ShotGun : WeaponBase
     IEnumerator Fire(int beat)
     {
         audio.PlayOneShot(gunSound[beat == 0 ? 1 : 0]); // 발사 사운드 재생
-        anim.SetBool("Fire", true); // 애니메이터 트리거 설정
+        anim.SetTrigger("Fire"); // 애니메이터 트리거 설정
         Transform trf = Camera.main.transform;
 
         //beat == 0 ? gunSound[0] : gunSound[1]
-
-        if (animDic.ContainsKey("Fire") == false)
+        string animName = "PumpShotgun_01_Fire 1";
+        if (animDic.ContainsKey(animName) == false)
         {
             AnimationClip clip = GetAnimClip("Fire", false);
             if (clip != null)
@@ -199,10 +232,9 @@ public class Weapon_ShotGun : WeaponBase
 
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
         
-        float delay = (animDic["Fire"].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // 애니메이션 딜레이 계산
+        float delay = (animDic[animName].length - stateInfo.normalizedTime) / Mathf.Max(stateInfo.speed, 0.01f); // 애니메이션 딜레이 계산
         StartCoroutine(ActionDelay(() =>
         {
-            anim.SetBool("Fire", false);
             anim.speed = 1f;
         }, delay)); // 재장전 애니메이션 딜레이
     }

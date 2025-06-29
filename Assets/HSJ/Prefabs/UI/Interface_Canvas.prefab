@@ -3006,7 +3006,9 @@ MonoBehaviour:
   ammoLabel: {fileID: 7766566056676225796}
   hp: {fileID: 3554727616191959368}
   hpMaxRect: 650
-  dash: {fileID: 4274712646893639088}
+  dash:
+  - {fileID: 4274712646893639088}
+  - {fileID: 8543836324862722634}
   dashMaxRect: 170
   weaponSlot:
   - {fileID: 6187110075858297182}
@@ -3018,6 +3020,7 @@ MonoBehaviour:
   comboBar: {fileID: 1039513553914012603}
   comboCountLabel: {fileID: 3400185101203507954}
   nowWeaponNum: 0
+  player: {fileID: 0}
   itemPickupPanel: {fileID: 6838533946737316328}
   itemPickupViewport: {fileID: 3340973705772420082}
   itemPickupPrefab: {fileID: 1262735681519370262, guid: e260cf239d9b4cf4b85246b01bbfdecf, type: 3}
