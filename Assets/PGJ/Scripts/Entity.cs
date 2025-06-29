@@ -86,7 +86,7 @@ public class Entity : MonoBehaviour
 
         gameManager = GameManager.Instance;
 
-        monsterState = MonsterState.Idle;
+        monsterState = MonsterState.Chase;
         attackCnt = 0;
 
         currentTime = 0d;

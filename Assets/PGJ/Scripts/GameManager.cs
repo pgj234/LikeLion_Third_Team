@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening.Core.Easing;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 enum PlayType
@@ -54,6 +55,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         eventManager = EventManager.Instance;
 
         score = 0;
+        combo = 0;
 
         bpm = 90;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
         for (int i=0; i<20; i++)
@@ -159,7 +161,6 @@ public class GameManager : SingletonBehaviour<GameManager>
         {
             combo++;
         }
-        Debug.Log("콤보 : " + combo);
 
         eventManager.PlayerComboRefreshEvent(combo);
     }
@@ -171,7 +172,6 @@ public class GameManager : SingletonBehaviour<GameManager>
         {
             combo /= 2;
         }
-        Debug.Log("콤보 : " + combo);
 
         eventManager.PlayerComboRefreshEvent(combo);
     }

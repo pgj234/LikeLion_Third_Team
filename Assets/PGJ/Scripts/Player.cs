@@ -183,6 +183,7 @@ public class Player : MonoBehaviour
     {
         currentHp = maxHp;
         eventManager.PlayerMaxHpEvent(maxHp);
+        eventManager.PlayerComboRefreshEvent(gameManager.GetCombo());
 
         GetWeapon(1);
 
@@ -197,6 +198,11 @@ public class Player : MonoBehaviour
 
         jumpTimeoutDelta = JumpTimeout;
         fallTimeoutDelta = FallTimeout;
+    }
+
+    internal bool GetIsDash()
+    {
+        return isDash;
     }
 
     internal void GetDamage(int _dmg)
@@ -344,6 +350,8 @@ public class Player : MonoBehaviour
 
                         dashTimer = dashCoolTime;
                         isDash = true;
+
+                        gameManager.NotePush();
                     }
                 }
                 else
@@ -362,6 +370,8 @@ public class Player : MonoBehaviour
 
                         dashTimer = dashCoolTime;
                         isDash = true;
+
+                        gameManager.NotePush();
                     }
                 }
             }

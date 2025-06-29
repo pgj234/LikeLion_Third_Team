@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using DG.Tweening.Core.Easing;
 using UnityEngine;
 
 public class Boss : Entity
@@ -12,6 +11,12 @@ public class Boss : Entity
 
     float curtime;
     Quaternion d_angle;
+
+    Coroutine Co_Attack;
+
+    int shootMaxCnt = 6;
+    int shootCnt = 0;
+    Boss_Bullet[] shoot_3_Array = new Boss_Bullet[3];
 
     WaitForSeconds patternIntervalTime = new WaitForSeconds(5);
     WaitForSeconds patternTime = new WaitForSeconds(3);
@@ -26,6 +31,8 @@ public class Boss : Entity
         base.Start();
 
         StartCoroutine(StateTimer());
+
+        shootCnt = 0;
 
         curtime = 0;
     }
@@ -44,7 +51,10 @@ public class Boss : Entity
 
         if (currentTime >= 30d / gameManager.bpm)
         {
-            StateProc();
+            if (shootCnt < shootMaxCnt)
+            {
+                Co_Attack = StartCoroutine(AttackProc());
+            }
 
             currentTime -= 30d / gameManager.bpm;
         }
@@ -53,6 +63,8 @@ public class Boss : Entity
         Vector3 angle = Quaternion.RotateTowards(transform.rotation, dir, 1200 * Time.deltaTime).eulerAngles;
         transform.rotation = Quaternion.Euler(0, angle.y, 0);
         d_angle = Quaternion.Euler(0, dir.eulerAngles.y, 0);
+        
+        MoveProc();
     }
 
     IEnumerator StateTimer()
@@ -66,54 +78,71 @@ public class Boss : Entity
                 break;
             }
 
-            switch (Random.Range(0, 2))
-            {
-                case 0:             // 3연사 패턴
-                    monsterState = MonsterState.Shoot_Attack;
-                    break;
-
-                case 1:             // 점프 패턴
-                    monsterState = MonsterState.Jump_Attack;
-                    break;
-            }
+            monsterState = MonsterState.Shoot_Attack;
 
             yield return patternTime;
 
-            if (10 > Vector3.Distance(transform.position, target.transform.position))
-            {
-                monsterState = MonsterState.Chase;
-            }
+            shootCnt = 0;
+
+            monsterState = MonsterState.Chase;
         }
     }
 
-    void StateProc()
+    IEnumerator AttackProc()
     {
-        if (isDie)
-        {
-            return;
-        }
-
-        // 보스의 상태에 따라 행동
         switch (monsterState)
         {
-            case MonsterState.Idle:
-                Idle();
-                break;
-
-            case MonsterState.Chase:
-                // 플레이어를 추적
-                Chase();
-                break;
-
             case MonsterState.Shoot_Attack:
-                // 플레이어에게 총알 발사
+                anim.SetBool("Shoot", true);
+
+                yield return null;
+
                 Shoot();
+
+                yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length * 0.66f);
+                anim.SetBool("Shoot", false);
+
                 break;
 
-            case MonsterState.Die:
-                // 죽음 처리
-                Die();
+            case MonsterState.Jump_Attack:
+                anim.SetBool("jump", true);
                 break;
+
+            default:
+                anim.SetBool("Shoot", false);
+                anim.SetBool("Jump", false);
+                break;
+        }
+    }
+
+    void MoveProc()
+    {
+        if (MonsterState.Shoot_Attack == monsterState || MonsterState.Jump_Attack == monsterState)
+        {
+            navAgent.speed = 0;
+
+            anim.SetBool("Run", false);
+        }
+        else
+        {
+            if (10 < Vector3.Distance(transform.position, target.transform.position))
+            {
+                navAgent.SetDestination(target.transform.position);
+
+                navAgent.speed = walkSpeed;
+
+                anim.SetBool("Run", true);
+                anim.SetBool("Shoot", false);
+                anim.SetBool("Jump", false);
+            }
+            else
+            {
+                navAgent.speed = 0;
+
+                anim.SetBool("Run", false);
+                anim.SetBool("Shoot", false);
+                anim.SetBool("Jump", false);
+            }
         }
     }
 
@@ -124,33 +153,23 @@ public class Boss : Entity
         //anim.SetBool("Idle", true);
     }
 
-    void Chase()
-    {
-        navAgent.SetDestination(target.transform.position);
-        if (Vector3.Distance(transform.position, target.transform.position) < 20f)
-        {
-            monsterState = MonsterState.Shoot_Attack;
-        }
-    }
-
     void Shoot()
     {
-        int attackCount = 3;
-
-        if (0 < attackCount)
+        if (shootCnt < shootMaxCnt)
         {
-            attackCount--;
-
-            if (Quaternion.Angle(transform.rotation, d_angle) < differ_angle)
+            if (0 == shootCnt % 2)
             {
-                curtime -= Time.deltaTime;
-                if (curtime <= 0)
-                {
-                    GameObject go = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
-                    //go.
-                    curtime = max_time;
-                }
+                SoundManager.Instance.PlaySFX(SFX.BossBulletStartSparkle);    // 처음 발사 소리 삥~
+                GameObject go = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+                shoot_3_Array[shootCnt / 2] = go.GetComponent<Boss_Bullet>();
             }
+            else
+            {
+                SoundManager.Instance.PlaySFX(SFX.BossBulletShoot);    // 공격 발사 소리 피슝~
+                shoot_3_Array[shootCnt / 2].RealShot(target);
+            }
+
+            shootCnt++;
         }
     }
 
