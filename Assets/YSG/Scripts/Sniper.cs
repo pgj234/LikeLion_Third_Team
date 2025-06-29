@@ -120,8 +120,6 @@ public class Sniper : WeaponBase
         Ray ray = new Ray(shootPoint.position, shootDir);
         if (Physics.Raycast(ray, out RaycastHit hit, 100))
         {
-            Debug.Log("충돌 대상 : " + hit.collider.name);
-
             if (hit.collider.CompareTag("Enemy"))
             {
                 Debug.Log("명중");

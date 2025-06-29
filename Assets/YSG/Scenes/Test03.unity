@@ -1657,10 +1657,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5729168775652039576, guid: a184a59c3d95bf244ba8e7890d531a62, type: 3}
-      propertyPath: waitTime
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8189179709687727534, guid: a184a59c3d95bf244ba8e7890d531a62, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3
@@ -1704,10 +1700,6 @@ PrefabInstance:
     - target: {fileID: 8858051749441068820, guid: a184a59c3d95bf244ba8e7890d531a62, type: 3}
       propertyPath: m_Name
       value: Monster_Skeleton
-      objectReference: {fileID: 0}
-    - target: {fileID: 8858051749441068820, guid: a184a59c3d95bf244ba8e7890d531a62, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5256,7 +5248,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
-  currentHp: 0
   moveSpeed: 7
   dashSpeed: 40
   RotationSmoothTime: 0.12

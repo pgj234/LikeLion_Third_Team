@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,6 +9,7 @@ public class Monster : MonoBehaviour
     private NavMeshAgent agent;
     private Transform target;
     private AudioSource sfx;
+    [SerializeField] private GameObject grave;
 
     private float timer;
 
@@ -41,11 +43,13 @@ public class Monster : MonoBehaviour
     [SerializeField] private float maxHp = 100;
     [SerializeField] private float currentHp;
 
+    [Header("이펙트")]
     [Header("효과음")]
-    [SerializeField] private AudioClip move;
-    [SerializeField] private AudioClip hit;
-    [SerializeField] private AudioClip attack;
-    [SerializeField] private AudioClip death;
+    [SerializeField] private AudioClip spawnSound;
+    [SerializeField] private AudioClip moveSound;
+    [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip attackSound;
+    [SerializeField] private AudioClip deathSound;
 
     private void Start()
     {
@@ -248,6 +252,8 @@ public class Monster : MonoBehaviour
 
     public void Hit(float damage)
     {
+        if (isSpawning) return;
+
         currentHp -= damage;
 
         anim?.SetTrigger("Hit");
@@ -287,15 +293,40 @@ public class Monster : MonoBehaviour
     #endregion
 
     #region 애니메이션
+    public void EndSpawn()
+    {
+        isSpawning = false;
+        if (grave != null)
+        {
+            grave.transform.SetParent(null);
+            StartCoroutine(SinkAndDestroy(grave, 3));
+        }
+    }
     public void EndAttack() => isAttacking = false;
     public void EndHit() => isHitting = false;
-    public void EndSpawn() => isSpawning = false;
     #endregion
 
+    private IEnumerator SinkAndDestroy(GameObject obj, float duration)
+    {
+        Vector3 startPos = obj.transform.position;
+        Vector3 endPos = startPos + Vector3.down * 8;
+        float time = 0;
+
+        while (time < duration)
+        {
+            obj.transform.position = Vector3.Lerp(startPos, endPos, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(obj);
+    }
+
     #region 사운드
-    private void MoveSound() => sfx.PlayOneShot(move);
-    private void HitSound() => sfx.PlayOneShot(hit);
-    private void AttackSound() => sfx.PlayOneShot(attack);
-    private void DeathSound() => sfx.PlayOneShot(death);
+    private void SpawnSound() => sfx.PlayOneShot(spawnSound);
+    private void MoveSound() => sfx.PlayOneShot(moveSound);
+    private void HitSound() => sfx.PlayOneShot(hitSound);
+    private void AttackSound() => sfx.PlayOneShot(attackSound);
+    private void DeathSound() => sfx.PlayOneShot(deathSound);
     #endregion
 }
