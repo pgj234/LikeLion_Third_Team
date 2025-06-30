@@ -732,8 +732,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc73830d59939e4c95cdc3358778e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 25
-  maxHP: 25
+  hp: 10
+  maxHP: 10
   walkSpeed: 1.5
   jumpPower: 0
   isFly: 0

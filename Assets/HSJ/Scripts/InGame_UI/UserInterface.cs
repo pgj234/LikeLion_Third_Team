@@ -50,6 +50,8 @@ public class UserInterface : MonoBehaviour
     [SerializeField] Slider mouseSlider;
     [SerializeField] TextMeshProUGUI mouseLabel;
 
+    [SerializeField] GameObject clearPanel;
+
     #endregion
 
     #region Death Interface Variables
@@ -86,6 +88,7 @@ public class UserInterface : MonoBehaviour
         //eventManager.OnPlayerDashUIRefreshAction += Dash;                   // 대쉬 UI 새로고침 이벤트 등록
         eventManager.OnPlayerCurrentBulletUIRefreshAction += UpdateAmmo;    // 플레이어 현재 장전 탄 수 UI 새로고침 이벤트 등록
         //eventManager.OnPlayerMaxBulletUIRefreshAction += (maxBullet) => ammoLabel.text = maxBullet.ToString(); // 플레이어 최대 장전 탄 수 UI 새로고침 이벤트 등록
+        eventManager.OnPlayerDieAction += () => { deathPanel.SetActive(true); };
 
         eventManager.OnPlayerWeaponUIRefreshAction += ChangeWeaponAnimation;// 플레이어 사용가능 무기 UI 새로고침 이벤트 등록
         eventManager.OnPlayerComboRefreshAction += PlayComboAnimation;      // 콤보 새로고침 이벤트 등록
@@ -96,6 +99,8 @@ public class UserInterface : MonoBehaviour
         eventManager.OnPlayerDamageAction += UpdateHP;                      // 플레이어 데미지 이벤트 등록
         eventManager.OnPlayerDieAction += ShowDeathPanel;                        // 플레이어 사망 이벤트 등록
         //eventManager.OnPlayerRevivalAction += SelectResurrection;           // 플레이어 부활 이벤트 등록
+
+        eventManager.OnClearAction += () => { clearPanel.SetActive(true); eventManager.PauseWindowOpen(true); };
 
         foreach (Transform trf in itemPickupViewport)
             Destroy(trf.gameObject);

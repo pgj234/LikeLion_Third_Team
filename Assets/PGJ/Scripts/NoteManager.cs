@@ -9,11 +9,19 @@ public class NoteManager : MonoBehaviour
             if (false == GameManager.Instance.musicStart)
             {
                 SoundManager.Instance.StopBGM();
-                SoundManager.Instance.PlayBGM(BGM.Test_Bgm);
+
+                if (1 == GameManager.Instance.currentStage)
+                {
+                    SoundManager.Instance.PlayBGM(BGM.Test_Bgm);
+                }
+                else
+                {
+                    SoundManager.Instance.PlayBGM(BGM.LastStage_BGM);
+                }
+
                 GameManager.Instance.musicStart = true;
 
                 col.gameObject.SetActive(false);
-
             }
         }
 

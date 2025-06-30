@@ -21,6 +21,7 @@ public class Portal : MonoBehaviour
                 col.GetComponent<Player>().PortalUse();
                 col.transform.position = stage2_Start_Tr.position;
                 stageManager.levelStart = true;
+                stageManager.FirstSpawn(2);
 
                 Destroy(gameObject);
             }
@@ -32,6 +33,12 @@ public class Portal : MonoBehaviour
                 col.GetComponent<Player>().PortalUse();
                 col.transform.position = stage3_Start_Tr.position;
                 stageManager.levelStart = true;
+                stageManager.FirstSpawn(3);
+
+                GameManager.Instance.musicStart = false;
+
+                GameManager.Instance.SetBPM(128);
+                GameManager.Instance.BGM_Change();
 
                 Destroy(gameObject);
             }

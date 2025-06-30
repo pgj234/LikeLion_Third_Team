@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening.Core.Easing;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
@@ -33,6 +34,9 @@ public class GameManager : SingletonBehaviour<GameManager>
     [SerializeField] GameObject leftHalfNoteObj = null;
     [SerializeField] GameObject rightHalfNoteObj = null;
 
+    internal int currentStage;
+    bool isBGM_Change_Ing = false;
+
     internal bool musicStart = false;
 
     int rhythmTimingNum = 0;        // 0 : 박자 타이밍 X, 1 : 정박 타이밍, 2 : 반박 타이밍
@@ -57,8 +61,14 @@ public class GameManager : SingletonBehaviour<GameManager>
         score = 0;
         combo = 0;
 
-        bpm = 90;      // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
-        for (int i=0; i<20; i++)
+        SetBPM(90);
+
+        CreateNote();
+    }
+
+    void CreateNote()
+    {
+        for (int i = 0; i < 20; i++)
         {
             if (1 == i % 2)     // 반박 생성
             {
@@ -89,10 +99,10 @@ public class GameManager : SingletonBehaviour<GameManager>
         }
     }
 
-    //void Start()
-    //{
-    //    setting   // fps 고정
-    //}
+    internal void BGM_Change()
+    {
+        isBGM_Change_Ing = true;
+    }
 
     internal void AddScore(int addScore)
     {
@@ -198,6 +208,16 @@ public class GameManager : SingletonBehaviour<GameManager>
         rightNoteQueue.Enqueue(noteObj);
         noteObj.transform.position = rightNoteAppearTr.position;
         noteObj.SetActive(true);
+
+        if (true == isBGM_Change_Ing)
+        {
+            if (0 < noteObj.transform.childCount)
+            {
+                noteObj.transform.Find("OffsetTimingNote").gameObject.GetComponent<BoxCollider2D>().offset = new Vector2(40, 1);
+                noteObj.transform.Find("OffsetTimingNote").gameObject.SetActive(true);
+                isBGM_Change_Ing = false;
+            }
+        }
     }
 
     internal void NotePush()

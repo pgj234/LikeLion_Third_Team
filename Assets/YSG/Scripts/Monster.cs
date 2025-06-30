@@ -246,10 +246,13 @@ public class Monster : Entity
 
         if (target.TryGetComponent(out Player player))
         {
-            player.GetDamage(attackDamage);
+            if (false == player.GetIsDash())
+            {
+                player.GetDamage(attackDamage);
+            }
         }
 
-        Debug.Log($"플레이어 {attackDamage} 데미지 > 플레이어 체력 : {target.GetComponent<Player>().currentHp}");
+        //Debug.Log($"플레이어 {attackDamage} 데미지 > 플레이어 체력 : {target.GetComponent<Player>().currentHp}");
 
         attackTimer = attackCooldown;
     }

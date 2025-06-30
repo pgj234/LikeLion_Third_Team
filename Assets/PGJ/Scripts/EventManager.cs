@@ -27,12 +27,21 @@ public class EventManager : SingletonBehaviour<EventManager>
     // 부활 이벤트
     public Action OnPlayerRevivalAction;
 
+    // 클리어 이벤트
+    public Action OnClearAction;
+
     // 콤보 새로고침 이벤트
     public Action<int> OnPlayerComboRefreshAction;
 
     protected override void Init()
     {
         base.Init();
+    }
+
+    // 클리어
+    public void ClearEvent()
+    {
+        OnClearAction?.Invoke();
     }
 
     // Puase 윈도우 오픈 여부

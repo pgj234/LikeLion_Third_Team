@@ -1013,9 +1013,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dceb881dd25b314791f9f29a8593b05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 600
-  maxHP: 600
-  walkSpeed: 0
+  hp: 500
+  maxHP: 500
+  walkSpeed: 7
   jumpPower: 5
   isFly: 0
   anim: {fileID: 2009450103656515637}
@@ -1036,7 +1036,7 @@ MonoBehaviour:
   hpImg: {fileID: 8985296173529798976}
   bulletPrefab: {fileID: 3195716631388365644, guid: ebfc2c7e02f342a4a83509e82142dbd8, type: 3}
   bulletSpawnPoint: {fileID: 1881588713190542707}
-  bulletSpeed: 200
+  bulletSpeed: 300
   differ_angle: 0
   max_time: 0.5
 --- !u!54 &2585647233604527132

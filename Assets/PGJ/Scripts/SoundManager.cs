@@ -4,7 +4,7 @@
 public enum BGM
 {
     Test_Bgm,
-
+    LastStage_BGM
 }
 
 // SFX 목록 enum
@@ -26,7 +26,10 @@ public enum SFX
     DashRhythmFailed,
     SwordSlash,
     BossBulletStartSparkle,
-    BossBulletShoot
+    BossBulletShoot,
+    PlayerHit01,
+    PlayerHit02,
+    PlayerHit03
 }
 
 public class SoundManager : SingletonBehaviour<SoundManager>

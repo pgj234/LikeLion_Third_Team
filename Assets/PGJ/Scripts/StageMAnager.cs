@@ -35,7 +35,6 @@ public class StageManager : MonoBehaviour
     [Header("3스테이지 중간 보상")]
     [SerializeField] GameObject stage3_Reward;
 
-    int currentStage;
     int currentWaveIdx;
 
     float checkDelayTime = 3;
@@ -51,7 +50,7 @@ public class StageManager : MonoBehaviour
 
     void Init()
     {
-        currentStage = 1;
+        GameManager.Instance.currentStage = 1;
         currentWaveIdx = 0;
 
         checkTimer = 0;
@@ -80,7 +79,7 @@ public class StageManager : MonoBehaviour
     {
         bool nextLevelGo = true;
 
-        switch (currentStage)
+        switch (GameManager.Instance.currentStage)
         {
             case 1:
                 switch (currentWaveIdx)
@@ -229,7 +228,7 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    void FirstSpawn(int stageNum)
+    internal void FirstSpawn(int stageNum)
     {
         switch (stageNum)
         {
@@ -265,9 +264,9 @@ public class StageManager : MonoBehaviour
         }
 
         // 1 스테이지 끝
-        if (currentStage == 1 && currentWaveIdx == 1)
+        if (GameManager.Instance.currentStage == 1 && currentWaveIdx == 1)
         {
-            currentStage++;
+            GameManager.Instance.currentStage++;
             currentWaveIdx = 0;
 
             levelStart = false;
@@ -276,9 +275,9 @@ public class StageManager : MonoBehaviour
 
             stage1_Exit_Obj.SetActive(true);
         }
-        else if (currentStage == 2 && currentWaveIdx == 2)
+        else if (GameManager.Instance.currentStage == 2 && currentWaveIdx == 2)
         {
-            currentStage++;
+            GameManager.Instance.currentStage++;
             currentWaveIdx = 0;
 
             levelStart = false;
@@ -292,7 +291,7 @@ public class StageManager : MonoBehaviour
             currentWaveIdx++;
         }
 
-        switch (currentStage)
+        switch (GameManager.Instance.currentStage)
         {
             case 1:
                 switch (currentWaveIdx)

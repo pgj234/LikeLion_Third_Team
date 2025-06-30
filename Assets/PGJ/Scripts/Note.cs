@@ -6,9 +6,24 @@ public class Note : MonoBehaviour
 
     [SerializeField] bool isLeftNote = true;
 
+    BoxCollider2D col;
+
+    void Awake()
+    {
+        if (isLeftNote)
+        {
+            col = GetComponent<BoxCollider2D>();
+        }
+    }
+
     void OnEnable()
     {
         noteSpd = 300 / (60f / GameManager.Instance.GetBPM());
+
+        if (isLeftNote)
+        {
+            col.size = new Vector2((GameManager.Instance.GetBPM() / 1.8f) + 5, 1);
+        }
     }
 
     void Update()

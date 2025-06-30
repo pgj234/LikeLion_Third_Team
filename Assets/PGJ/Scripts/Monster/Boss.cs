@@ -176,7 +176,7 @@ public class Boss : Entity
     protected override void Die()
     {
         base.Die();
-
+        EventManager.Instance.ClearEvent();
         isDie = true;
     }
 }

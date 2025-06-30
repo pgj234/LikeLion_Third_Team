@@ -230,6 +230,21 @@ public class Player : MonoBehaviour
     {
         currentHp -= _dmg;
 
+        switch (Random.Range(0, 4))
+        {
+            case 0:
+                SoundManager.Instance.PlaySFX(SFX.PlayerHit01);
+                break;
+
+            case 1:
+                SoundManager.Instance.PlaySFX(SFX.PlayerHit02);
+                break;
+
+            case 2:
+                SoundManager.Instance.PlaySFX(SFX.PlayerHit03);
+                break;
+        }
+
         if (currentHp <= 0)
         {
             SetPlayerDie(true);
